@@ -9,11 +9,11 @@ import retrofit2.http.POST
 //TODO: Fill in the blank
 interface AuthApiService {
     @POST("/api/v1/auth/login")
-    fun login( userLogin: UserLogin ): Response<Token>
+    suspend fun login( userLogin: UserLogin ): Response<Token>
 
     @POST("/api/v1/auth/refresh")
-    fun refresh( refreshToken: RefreshToken): Response<Token>
+    suspend fun refresh( refreshToken: RefreshToken): Response<Token>
 
     @POST("/api/v1/auth/logout")
-    fun logout(): Response<Unit>
+    suspend fun logout(): Response<Unit>
 }
