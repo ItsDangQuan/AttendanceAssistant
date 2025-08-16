@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.kttq.attendassist.core.navigation.AppNavHost
+import com.kttq.attendassist.core.navigation.login.loginNavigationRoute
 
 @Composable
 fun App(

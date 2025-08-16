@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.kttq.attendassist.core.navigation.login.loginScreen
 
 @Composable
 fun AppNavHost(
@@ -17,6 +18,6 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-
+        loginScreen({}, {})
     }
 }
