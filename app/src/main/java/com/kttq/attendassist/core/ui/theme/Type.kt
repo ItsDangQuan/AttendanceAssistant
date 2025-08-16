@@ -1,4 +1,4 @@
-package com.kttq.attendassist.ui.theme
+package com.kttq.attendassist.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
