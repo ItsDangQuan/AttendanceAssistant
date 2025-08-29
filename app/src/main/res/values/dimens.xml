@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Master dimens file
+        - Spacing scale (dp) : space_X where X is the dp value for quick numeric use
+        - Semantic spacing : space_xxs..space_xl for readable conventions
+        - Padding/margin: padding_* and margin_*
+        - Text sizes (sp): text_* including headline/body/caption/button
+        - Component / utility dims: icon sizes, avatar sizes, radii, touch targets, heights
+    -->
+
+
+    <!-- Base numeric spacing scale (dp). Use like @dimen/space_8 or @dimen/space_16 -->
+    <dimen name="space_1">1dp</dimen>
+    <dimen name="space_2">2dp</dimen>
+    <dimen name="space_4">4dp</dimen>
+    <dimen name="space_6">6dp</dimen>
+    <dimen name="space_8">8dp</dimen>
+    <dimen name="space_10">10dp</dimen>
+    <dimen name="space_12">12dp</dimen>
+    <dimen name="space_14">14dp</dimen>
+    <dimen name="space_16">16dp</dimen>
+    <dimen name="space_18">18dp</dimen>
+    <dimen name="space_20">20dp</dimen>
+    <dimen name="space_24">24dp</dimen>
+    <dimen name="space_28">28dp</dimen>
+    <dimen name="space_32">32dp</dimen>
+    <dimen name="space_36">36dp</dimen>
+    <dimen name="space_40">40dp</dimen>
+    <dimen name="space_48">48dp</dimen>
+    <dimen name="space_56">56dp</dimen>
+    <dimen name="space_64">64dp</dimen>
+
+    <!-- Semantic spacing (for readability) -->
+    <dimen name="space_xxs">4dp</dimen>
+    <dimen name="space_xs">8dp</dimen>
+    <dimen name="space_sm">12dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">24dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
+    <dimen name="space_xxl">48dp</dimen>
+
+    <!-- Padding presets -->
+    <dimen name="padding_tiny">2dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_xlarge">32dp</dimen>
+
+    <!-- Component specific paddings -->
+    <dimen name="padding_card">16dp</dimen>
+    <dimen name="padding_list_item">12dp</dimen>
+    <dimen name="padding_dialog">20dp</dimen>
+    <dimen name="padding_toolbar">16dp</dimen>
+
+    <!-- Margin presets (can reuse padding values as needed) -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+
+    <!-- Text sizes (sp): body / small / caption / headings -->
+    <dimen name="text_xxs">10sp</dimen>
+    <dimen name="text_xs">12sp</dimen>
+    <dimen name="text_sm">13sp</dimen>
+    <dimen name="text_base">14sp</dimen> <!-- default body -->
+    <dimen name="text_md">15sp</dimen>
+    <dimen name="text_lg">16sp</dimen>
+    <dimen name="text_xl">18sp</dimen>
+    <dimen name="text_xxl">20sp</dimen>
+    <dimen name="text_h1">32sp</dimen>
+    <dimen name="text_h2">28sp</dimen>
+    <dimen name="text_h3">24sp</dimen>
+    <dimen name="text_h4">20sp</dimen>
+    <dimen name="text_h5">16sp</dimen>
+    <dimen name="text_h6">14sp</dimen>
+
+    <!-- Text roles -->
+    <dimen name="text_button">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_overline">10sp</dimen>
+    <dimen name="text_label">12sp</dimen>
+
+    <!-- Optional line-heights (if you use fixed line heights) -->
+    <dimen name="line_height_small">16sp</dimen>
+    <dimen name="line_height_base">20sp</dimen>
+    <dimen name="line_height_large">24sp</dimen>
+
+    <!-- Button heights / touch targets -->
+    <dimen name="button_height_compact">36dp</dimen>    <!-- visual height for compact buttons -->
+    <dimen name="button_height_regular">48dp</dimen>    <!-- regular visual height / also common touch size -->
+    <dimen name="button_height_large">56dp</dimen>      <!-- prominent action (FAB-like) -->
+    <dimen name="button_touch_target">48dp</dimen>      <!-- minimum touch target to use for accessibility -->
+    <dimen name="button_horizontal_padding">16dp</dimen>
+    <dimen name="button_vertical_padding">8dp</dimen>
+
+    <!-- Icon & avatar sizes (dp) -->
+    <dimen name="icon_xs">12dp</dimen>
+    <dimen name="icon_sm">16dp</dimen>
+    <dimen name="icon_md">24dp</dimen> <!-- standard material icon -->
+    <dimen name="icon_lg">32dp</dimen>
+    <dimen name="icon_xl">48dp</dimen>
+
+    <dimen name="avatar_xs">24dp</dimen>
+    <dimen name="avatar_sm">32dp</dimen>
+    <dimen name="avatar_md">40dp</dimen>
+    <dimen name="avatar_lg">56dp</dimen>
+    <dimen name="avatar_xl">72dp</dimen>
+
+    <!-- Radii / corner rounding -->
+    <dimen name="radius_tiny">2dp</dimen>
+    <dimen name="radius_small">4dp</dimen>
+    <dimen name="radius_medium">8dp</dimen>
+    <dimen name="radius_large">12dp</dimen>
+    <dimen name="radius_circle">999dp</dimen>
+
+    <!-- Touch & hit targets -->
+    <dimen name="min_touch_target">48dp</dimen>
+    <dimen name="button_height">48dp</dimen>
+    <dimen name="chip_height">32dp</dimen>
+
+    <!-- Common component heights / widths -->
+    <dimen name="app_bar_height">56dp</dimen>
+    <dimen name="bottom_nav_height">56dp</dimen>
+    <dimen name="fab_min_size">56dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="card_elevation">4dp</dimen> <!-- if you represent elevation with dp dimen -->
+
+    <dimen name="dialog_max_width">560dp</dimen>
+    <dimen name="dialog_margin">24dp</dimen>
+
+    <!-- Grid & layout helpers -->
+    <dimen name="grid_gutter">16dp</dimen>
+    <dimen name="grid_margin">16dp</dimen>
+
+    <!-- Misc / animation distances -->
+    <dimen name="anim_small_move">8dp</dimen>
+    <dimen name="anim_medium_move">16dp</dimen>
+
+    <!-- Accessibility / scaling helpers: use these if you want to scale entire UI easily -->
+    <!-- Example: multiply or override in other resource qualifiers if needed -->
+    <dimen name="scale_factor_small">0.875</dimen>
+    <dimen name="scale_factor_default">1.0</dimen>
+    <dimen name="scale_factor_large">1.125</dimen>
+
+</resources>

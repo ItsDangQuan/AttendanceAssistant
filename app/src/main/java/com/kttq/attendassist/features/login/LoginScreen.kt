@@ -2,7 +2,6 @@ package com.kttq.attendassist.features.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,10 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,24 +17,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.dimensionResource
+import com.kttq.attendassist.R
 
 @Composable
 fun LoginRoute(
@@ -67,39 +58,39 @@ fun LoginScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(dimensionResource(R.dimen.padding_large)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Logo / Icon placeholder
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .padding(bottom = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(android.R.drawable.ic_menu_manage), // Replace with your logo
-                contentDescription = "App Logo",
-                tint = Color.Gray,
-                modifier = Modifier.size(72.dp)
-            )
-        }
+        // // Logo / Icon placeholder
+        // Box(
+        //     modifier = Modifier
+        //         .padding(bottom = dimensionResource(R.dimen.padding_medium)),
+        //     contentAlignment = Alignment.Center
+        // ) {
+        //     Icon(
+        //         painter = painterResource(android.R.drawable.ic_menu_manage), // Replace with your logo
+        //         contentDescription = "App Logo",
+        //         tint = Color.Gray,
+        //         modifier = Modifier.size(dimensionResource(R.dimen.avatar_lg))
+        //     )
+        // }
 
         Text(
             text = "Sign in",
-            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.headlineMedium
+                .copy(fontWeight = FontWeight.Bold)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_xs)))
 
-        Text(
-            text = "Sign in to continue to your account",
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
+        // Text(
+        //     text = "Sign in to continue to your account",
+        //     style = MaterialTheme.typography.bodyMedium,
+        //     textAlign = TextAlign.Center
+        // )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        // Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_xl)))
 
         // Email Field
         OutlinedTextField(
@@ -107,14 +98,14 @@ fun LoginScreen(
             onValueChange = onEmailChange,
             label = { Text("Email") },
             leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = null)
+                Icon(painterResource(R.drawable.ic_mail), contentDescription = null)
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_xs)))
 
         // Password Field
         OutlinedTextField(
@@ -122,12 +113,19 @@ fun LoginScreen(
             onValueChange = onPasswordChange,
             label = { Text("Password") },
             leadingIcon = {
-                Icon(Icons.Default.Lock, contentDescription = null)
+                Icon(painterResource(R.drawable.ic_lock), contentDescription = null)
             },
             trailingIcon = {
-                val image = if (loginState.isPasswordVisible) Icons.Default.Lock else Icons.Filled.Lock
+                val painter = if (loginState.isPasswordVisible) {
+                    painterResource(R.drawable.ic_visibility)
+                } else {
+                    painterResource(R.drawable.ic_visibility_off)
+                }
                 IconButton(onClick = onPasswordVisibilityChange ) {
-                    Icon(image, contentDescription = if (loginState.isPasswordVisible) "Hide password" else "Show password")
+                    Icon(
+                        painter,
+                        contentDescription = if (loginState.isPasswordVisible) "Hide password" else "Show password"
+                    )
                 }
             },
             singleLine = true,
@@ -136,31 +134,34 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_xs)))
 
         // Forgot password
         Text(
             text = "Forgot password?",
-            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.primary),
+            style = MaterialTheme.typography.bodySmall
+                .copy(color = MaterialTheme.colorScheme.primary),
             modifier = Modifier
                 .align(Alignment.End)
-                .clickable { }
+                .clickable {
+                    // What to do when clicked?
+                }
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_sm)))
 
         // Sign In button
         Button(
             onClick = onLogin,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp),
+                .height(dimensionResource(R.dimen.button_height)),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text("Sign In", fontSize = 16.sp)
+            Text("Sign In", fontSize = dimensionResource(R.dimen.text_xl).value.sp)
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_md)))
 
         // Sign up link
         Row(
@@ -170,7 +171,8 @@ fun LoginScreen(
             Text("Don’t have an account? ")
             Text(
                 text = "Sign up",
-                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                style = MaterialTheme.typography.bodyMedium
+                    .copy(color = MaterialTheme.colorScheme.primary),
                 modifier = Modifier.clickable { }
             )
         }
