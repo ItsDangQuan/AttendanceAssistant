@@ -8,7 +8,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -43,6 +46,7 @@ object NetworkModule {
     ): Retrofit {
         val authInterceptor = AuthInterceptor(tokenRepository)
         val tokenAuthenticator = TokenAuthenticator(tokenRepository, baseAuthService)
+        val contentType = "application/json".toMediaType()
 
         val okHttpClient = okhttp3.OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
@@ -51,6 +55,7 @@ object NetworkModule {
 
         return retrofit.newBuilder()
             .client(okHttpClient)
+            .addConverterFactory(Json.asConverterFactory(contentType))
             .build()
     }
 
