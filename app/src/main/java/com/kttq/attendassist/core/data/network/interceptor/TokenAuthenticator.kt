@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 class TokenAuthenticator @Inject constructor(
     private val tokenRepository: TokenRepository,
-    private val authService: dagger.Lazy<AuthService>
+    private val authService: dagger.Lazy<AuthService>,
+    // private val authService: dagger.Lazy<AuthService>
 ) : Authenticator {
     private val refreshTokenMutex = Mutex()
 
