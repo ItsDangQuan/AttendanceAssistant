@@ -1,5 +1,7 @@
 package com.kttq.attendassist.injection.modules
 
+import com.kttq.attendassist.core.data.repositories.auth.AuthRepository
+import com.kttq.attendassist.core.data.repositories.auth.AuthRepositoryImpl
 import com.kttq.attendassist.core.data.repositories.token.TokenRepository
 import com.kttq.attendassist.core.data.repositories.token.TokenRepositoryImpl
 import dagger.Binds
@@ -16,4 +18,10 @@ abstract class RepositoryModule {
     abstract fun bindTokenRepository(
         tokenRepositoryImpl: TokenRepositoryImpl
     ): TokenRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
 }

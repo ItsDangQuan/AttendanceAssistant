@@ -29,7 +29,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthApiService(retrofit: Retrofit): AuthService {
+    fun provideBaseAuthApiService(@Named("BaseRetrofit") retrofit: Retrofit): AuthService {
         return retrofit.create(AuthService::class.java)
     }
 
@@ -39,10 +39,10 @@ object NetworkModule {
     fun provideAuthRetrofit(
         @Named("BaseRetrofit") retrofit: Retrofit,
         tokenRepository: TokenRepository,
-        @Named("BaseAuthService") authService: dagger.Lazy<AuthService>
+        baseAuthService: dagger.Lazy<AuthService>
     ): Retrofit {
         val authInterceptor = AuthInterceptor(tokenRepository)
-        val tokenAuthenticator = TokenAuthenticator(tokenRepository, authService)
+        val tokenAuthenticator = TokenAuthenticator(tokenRepository, baseAuthService)
 
         val okHttpClient = okhttp3.OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
@@ -56,7 +56,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthService(@Named("AuthRetrofit") retrofit: Retrofit): AuthService {
+    fun provideAuthApiService(@Named("AuthRetrofit") retrofit: Retrofit): AuthService {
         return retrofit.create(AuthService::class.java)
     }
 }

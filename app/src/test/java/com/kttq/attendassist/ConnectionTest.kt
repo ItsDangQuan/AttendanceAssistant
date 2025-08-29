@@ -11,7 +11,7 @@ import retrofit2.Retrofit
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class ConnectionTest {
     private val api = Retrofit.Builder()
         .baseUrl("http://0.0.0.0:8000") // emulator to localhost
         .build()
@@ -24,3 +24,4 @@ class ExampleUnitTest {
         println(response.raw())
     }
 }
+
