@@ -1,11 +1,9 @@
 package com.kttq.attendassist
 
-import androidx.compose.animation.Animatable
-import com.kttq.attendassist.core.data.network.AuthApiService
+import com.kttq.attendassist.core.data.network.AuthService
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertTrue
 import org.junit.Test
-
-import org.junit.Assert.*
 import retrofit2.Retrofit
 
 /**
@@ -17,7 +15,7 @@ class ExampleUnitTest {
     private val api = Retrofit.Builder()
         .baseUrl("http://0.0.0.0:8000") // emulator to localhost
         .build()
-        .create(AuthApiService::class.java)
+        .create(AuthService::class.java)
 
     @Test
     fun testConnection() = runBlocking {

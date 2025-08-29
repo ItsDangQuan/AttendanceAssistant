@@ -2,11 +2,11 @@ package com.kttq.attendassist.core.data.repositories.auth
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.kttq.attendassist.core.data.network.AuthApiService
+import com.kttq.attendassist.core.data.network.AuthService
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val authApiService: AuthApiService,
+    private val authService: AuthService,
     private val dataStore: DataStore<Preferences>
 ) : AuthRepository {
     override suspend fun login(email: String, password: String): Result<Unit> {
