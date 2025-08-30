@@ -25,8 +25,10 @@ object NetworkModule {
     @Singleton
     @Named("BaseRetrofit")
     fun provideRetrofit(): Retrofit {
+        val contentType = "application/json".toMediaType()
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .addConverterFactory(Json.asConverterFactory(contentType))
             .build()
     }
 
@@ -46,7 +48,6 @@ object NetworkModule {
     ): Retrofit {
         val authInterceptor = AuthInterceptor(tokenRepository)
         val tokenAuthenticator = TokenAuthenticator(tokenRepository, baseAuthService)
-        val contentType = "application/json".toMediaType()
 
         val okHttpClient = okhttp3.OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
@@ -55,13 +56,12 @@ object NetworkModule {
 
         return retrofit.newBuilder()
             .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory(contentType))
             .build()
     }
 
-    @Provides
-    @Singleton
-    fun provideAuthApiService(@Named("AuthRetrofit") retrofit: Retrofit): AuthService {
-        return retrofit.create(AuthService::class.java)
-    }
+    // @Provides
+    // @Singleton
+    // fun provideAuthApiService(@Named("AuthRetrofit") retrofit: Retrofit): AuthService {
+    //     return retrofit.create(AuthService::class.java)
+    // }
 }
