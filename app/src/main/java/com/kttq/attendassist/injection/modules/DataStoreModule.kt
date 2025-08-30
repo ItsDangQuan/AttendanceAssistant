@@ -12,11 +12,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-private const val USER_PREFERENCES = "user_preferences"
-
 @InstallIn(SingletonComponent::class)
 @Module
 class DataStoreModule {
+    companion object {
+        private const val USER_PREFERENCES = "user_preferences"
+    }
+
     @Singleton
     @Provides
     fun providePreferencesDataStore(

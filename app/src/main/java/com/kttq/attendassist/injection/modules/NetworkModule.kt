@@ -1,67 +1,76 @@
 package com.kttq.attendassist.injection.modules
 
-import com.kttq.attendassist.core.data.network.AuthService
+import com.kttq.attendassist.BuildConfig
 import com.kttq.attendassist.core.data.network.interceptor.AuthInterceptor
 import com.kttq.attendassist.core.data.network.interceptor.TokenAuthenticator
-import com.kttq.attendassist.core.data.repositories.token.TokenRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
-private val BASE_URL = "localhost:8000"
-
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+class NetworkModule {
+    @Provides
+    @Singleton
+    fun provideJson(): Json {
+        return Json
+    }
 
     @Provides
     @Singleton
-    @Named("BaseRetrofit")
-    fun provideRetrofit(): Retrofit {
-        val contentType = "application/json".toMediaType()
+    @Named("PublicOkHttpClient")
+    fun providePublicOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("PublicRetrofit")
+    fun providePublicRetrofit(
+        @Named("PublicOkHttpClient") okHttpClient: OkHttpClient,
+        json: Json
+    ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(Json.asConverterFactory(contentType))
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(
+                json.asConverterFactory(
+                    "application/json".toMediaType()
+                )
+            )
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideBaseAuthApiService(@Named("BaseRetrofit") retrofit: Retrofit): AuthService {
-        return retrofit.create(AuthService::class.java)
-    }
-
-    @Provides
-    @Named("AuthRetrofit")
-    @Singleton
-    fun provideAuthRetrofit(
-        @Named("BaseRetrofit") retrofit: Retrofit,
-        tokenRepository: TokenRepository,
-        baseAuthService: dagger.Lazy<AuthService>
-    ): Retrofit {
-        val authInterceptor = AuthInterceptor(tokenRepository)
-        val tokenAuthenticator = TokenAuthenticator(tokenRepository, baseAuthService)
-
-        val okHttpClient = okhttp3.OkHttpClient.Builder()
+    @Named("AuthOkHttpClient")
+    fun provideAuthOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .authenticator(tokenAuthenticator)
             .build()
+    }
 
+    @Provides
+    @Singleton
+    @Named("AuthRetrofit")
+    fun provideAuthRetrofit(
+        @Named("AuthOkHttpClient") okHttpClient: OkHttpClient,
+        @Named("PublicRetrofit") retrofit: Retrofit,
+    ): Retrofit {
         return retrofit.newBuilder()
             .client(okHttpClient)
             .build()
     }
-
-    // @Provides
-    // @Singleton
-    // fun provideAuthApiService(@Named("AuthRetrofit") retrofit: Retrofit): AuthService {
-    //     return retrofit.create(AuthService::class.java)
-    // }
 }
