@@ -1,5 +1,6 @@
 package com.kttq.attendassist
 
+import android.util.Log
 import com.kttq.attendassist.core.data.repositories.token.TokenRepository
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kttq.attendassist.core.data.network.AuthService
@@ -97,7 +98,7 @@ class NetworkModuleHiltTest {
 
         // Enqueue sequence:
         mockWebServer.enqueue(MockResponse().setResponseCode(401).setBody("unauthorized"))
-        val refreshJson = """{"access_token":"new-token-456","refresh_token":"new-refresh-789"}"""
+        val refreshJson = """{"access_token":"new-token-456","refresh_token":"new-refresh-789", "token_type":"Bearer"}"""
         mockWebServer.enqueue(MockResponse().setResponseCode(200).setBody(refreshJson))
         mockWebServer.enqueue(MockResponse().setResponseCode(200).setBody("{}"))
 
@@ -110,24 +111,34 @@ class NetworkModuleHiltTest {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
 
+
         val baseAuthService = baseRetrofit.create(AuthService::class.java)
 
         val authRetrofit = NetworkModule.provideAuthRetrofit(
             baseRetrofit,
             tokenRepository,
-            object : dagger.Lazy<AuthService> { override fun get() = baseAuthService }
+            object : dagger.Lazy<AuthService> {
+                override fun get() = baseAuthService
+            }
         )
+
 
         val testApi = authRetrofit.create(TestApi::class.java)
 
         // Act
         val resp = testApi.getProtected().execute()
+        Log.d("Test", "Final response: $resp")
         assertTrue(resp.isSuccessful)
 
         // Consume requests in order
         val original = mockWebServer.takeRequest()   // original -> 401
         val refreshCall = mockWebServer.takeRequest()// token refresh call by TokenAuthenticator
         val retried = mockWebServer.takeRequest()    // retried original request
+
+        Log.d("Test", "Original request: $original")
+        Log.d("Test", "Refresh call: $refreshCall")
+        Log.d("Test", "Retried request: $retried")
+
 
         // The retried request should contain the NEW token
         assertEquals("Bearer new-token-456", retried.getHeader("Authorization"))

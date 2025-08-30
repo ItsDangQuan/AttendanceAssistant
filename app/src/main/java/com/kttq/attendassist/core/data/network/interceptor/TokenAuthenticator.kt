@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.data.network.interceptor
 
+import android.util.Log
 import com.kttq.attendassist.core.data.network.AuthService
 import com.kttq.attendassist.core.data.network.dtos.RefreshToken
 import com.kttq.attendassist.core.data.repositories.token.TokenRepository
@@ -16,7 +17,6 @@ import javax.inject.Inject
 class TokenAuthenticator @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val authService: dagger.Lazy<AuthService>,
-    // private val authService: dagger.Lazy<AuthService>
 ) : Authenticator {
     private val refreshTokenMutex = Mutex()
 
@@ -26,6 +26,7 @@ class TokenAuthenticator @Inject constructor(
 
         return runBlocking {
             val currentRefreshToken = tokenRepository.refreshToken.first()
+            Log.d("Auth", "authenticate called. tokenInFailedRequest=$tokenInFailedRequest, resp.code=${response.code}")
 
             if (currentRefreshToken == null) {
                 tokenRepository.clearTokens()
@@ -34,6 +35,7 @@ class TokenAuthenticator @Inject constructor(
 
             refreshTokenMutex.withLock {
                 val latestAccessToken = tokenRepository.accessToken.first()
+                Log.d("Auth","latestAccessToken=$latestAccessToken")
                 if (latestAccessToken != null && latestAccessToken != tokenInFailedRequest) {
                     return@withLock response.request.newBuilder()
                         .header("Authorization", "Bearer $latestAccessToken")
@@ -41,9 +43,10 @@ class TokenAuthenticator @Inject constructor(
                 }
 
                 try {
+                    Log.d("Auth", "Calling authService.refresh(...) now")
                     val newTokensResponse =
                         authService.get().refresh(RefreshToken(currentRefreshToken))
-
+                    Log.d("Auth","refresh response body: ${newTokensResponse.body()}")
                     if (!newTokensResponse.isSuccessful || newTokensResponse.body() == null) {
                         tokenRepository.clearTokens()
                         return@withLock null
@@ -58,7 +61,9 @@ class TokenAuthenticator @Inject constructor(
                     response.request.newBuilder()
                         .header("Authorization", "Bearer ${tokens.accessToken}")
                         .build()
-                } catch (_: Exception) {
+                } catch (e: Exception) {
+                    Log.e("Auth", "Error during token refresh", e)
+                    Log.d("Auth", "Exception during token refresh")
                     tokenRepository.clearTokens()
                     null
                 }
