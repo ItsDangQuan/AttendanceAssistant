@@ -21,8 +21,8 @@ fun AppButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: Color = MaterialTheme.colorScheme.primary,
-    text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
+    text: @Composable () -> Unit,
 ) {
     Button(
         onClick = onClick,

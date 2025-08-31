@@ -9,6 +9,7 @@ import com.kttq.attendassist.core.navigation.login.loginScreen
 @Composable
 fun AppNavHost(
     navController: NavHostController,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     onBackClick: () -> Unit,
     startDestination: String,
     modifier: Modifier = Modifier,
@@ -18,6 +19,6 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        loginScreen({}, {})
+        loginScreen(onShowSnackbar, {}, {})
     }
 }

@@ -10,7 +10,9 @@ class AuthRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : AuthRepository {
     override suspend fun login(email: String, password: String): Result<Unit> {
-        TODO("Not yet implemented")
+        // TODO: Not yet implemented. Now just a placeholder to avoid errors.
+        return Result.failure("Not yet implemented".let { Throwable(it) })
+
     }
 
     override suspend fun logout(): Result<Unit> {

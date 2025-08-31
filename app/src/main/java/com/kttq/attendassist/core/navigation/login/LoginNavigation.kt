@@ -15,6 +15,7 @@ fun NavController.navigateToLogin(
 }
 
 fun NavGraphBuilder.loginScreen(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     navigateToStudentHome: () -> Unit,
     navigateToTeacherHome: () -> Unit,
 ) {
@@ -22,6 +23,6 @@ fun NavGraphBuilder.loginScreen(
         // Defined for each features.
         // The routes handle how traffic is directed.
         // This allow for DI, as LoginRoute can be injected with View Model.
-        LoginRoute()
+        LoginRoute(onShowSnackbar)
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -31,14 +32,17 @@ import com.kttq.attendassist.core.ui.components.AppTextButton
 
 @Composable
 fun LoginRoute(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     LoginScreen(
         loginViewModel.loginUIInfo.collectAsState().value,
+        onShowSnackbar,
         loginViewModel::login,
         loginViewModel::onEmailChanged,
         loginViewModel::onPasswordChanged,
+        loginViewModel::onStatusChanged,
         loginViewModel::onPasswordVisibilityChanged,
         modifier
     )
@@ -47,12 +51,32 @@ fun LoginRoute(
 @Composable
 fun LoginScreen(
     loginState: LoginUIInfo,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     onLogin: () -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
+    onStatusChange:(LoginStatus) -> Unit,
     onPasswordVisibilityChange: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    LaunchedEffect(loginState.status) {
+        when (loginState.status) {
+            LoginStatus.ERROR -> {
+                // Show snackbar for error
+                // The result indicates whether the action was performed (i.e., the user clicked the action button)
+                // However, we don't need to do anything with the result in this case,
+                //      as we just want to inform the user of the error,
+                //      and reset the status to NONE afterwards.
+                // Therefore, we can ignore the result.
+                val result = onShowSnackbar("Login failed. Please try again", "OK")
+                onStatusChange(LoginStatus.NONE)
+            }
+            else -> {
+                // No action
+            }
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -86,7 +110,6 @@ fun LoginScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_xs)))
-
         AppOutlineTextField(
             label = "Password",
             value = loginState.password,
@@ -145,8 +168,10 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     MaterialTheme {
         LoginScreen(
-            LoginUIInfo("", ""), {},
-            {}, {}, {}
+            LoginUIInfo("", ""),{
+                _, _ -> true
+            }, {},
+            {}, {}, {}, {}
         )
     }
 }
