@@ -71,7 +71,9 @@ fun LoginScreen(
                 val result = onShowSnackbar("Login failed. Please try again.", "OK")
                 onStatusChange(LoginStatus.NONE)
             }
-
+            LoginStatus.LOADING -> {
+                onShowSnackbar("Logging in...", null)
+            }
             else -> {
                 // No action
             }

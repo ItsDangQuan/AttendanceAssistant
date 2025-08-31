@@ -44,7 +44,7 @@ fun App(
                 appState.snackbarHostState.showSnackbar(
                     message = message,
                     actionLabel = action,
-                    duration = SnackbarDuration.Short
+                    duration = if (action != null) SnackbarDuration.Short else SnackbarDuration.Indefinite
                 ) == SnackbarResult.ActionPerformed
             },
             onBackClick = appState::onBackClick,
