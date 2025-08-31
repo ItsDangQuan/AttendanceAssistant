@@ -12,20 +12,20 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.dimensionResource
 import com.kttq.attendassist.R
+import com.kttq.attendassist.core.ui.components.AppBodySecondary
 import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppOutlineTextField
+import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.components.AppTextButton
 
 @Composable
@@ -74,11 +74,7 @@ fun LoginScreen(
         // }
 
         // Normal Text with special font style,
-        Text(
-            text = "Sign in",
-            style = MaterialTheme.typography.headlineMedium
-                .copy(fontWeight = FontWeight.Bold)
-        )
+        AppScreenTitle("Sign In")
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_xs)))
         AppOutlineTextField(
             label = "Email",
@@ -134,7 +130,7 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Don’t have an account? ")
+            AppBodySecondary("Don't have an account?")
             AppTextButton(
                 onClick = { /* TODO: Handle sign up navigation */ },
                 text = "Sign up",

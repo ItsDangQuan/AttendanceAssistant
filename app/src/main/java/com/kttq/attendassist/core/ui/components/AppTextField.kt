@@ -45,7 +45,6 @@ fun AppOutlineTextField(
             },
             modifier = modifier
         )
-        return
     }
     else {
         OutlinedTextField(
