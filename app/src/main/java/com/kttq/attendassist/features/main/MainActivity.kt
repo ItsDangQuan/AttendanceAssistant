@@ -1,6 +1,7 @@
 package com.kttq.attendassist.features.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -36,10 +37,13 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val authState by viewModel.authState.collectAsStateWithLifecycle()
+            // Noting here: authState collect the value only once, while first created.
+            // As nothing touch this, it will not recollect again
+            // Since the function getAuthState is cold flow.
             var startDestination by remember { mutableStateOf<String?>(null) }
-
+            val authState by viewModel.authState.collectAsStateWithLifecycle()
             LaunchedEffect(authState) {
+                Log.d("Login", "LaunchedEffect restarted with state = $authState")
                 when (authState) {
                     AuthState.UNAUTHENTICATED -> {
                         startDestination = loginNavigationRoute

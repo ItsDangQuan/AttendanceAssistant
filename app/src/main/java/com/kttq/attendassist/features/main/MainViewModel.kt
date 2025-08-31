@@ -18,7 +18,7 @@ class MainViewModel @Inject constructor(
     val authState: StateFlow<AuthState> = authRepository.getAuthState()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.Lazily,
             initialValue = AuthState.LOADING_ROLE
         )
 
