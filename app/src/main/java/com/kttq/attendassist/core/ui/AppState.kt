@@ -10,8 +10,8 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun rememberAppState(
-   navController: NavHostController = rememberNavController(),
-   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    navController: NavHostController = rememberNavController(),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ): AppState {
     return remember(
         navController,
@@ -23,13 +23,15 @@ fun rememberAppState(
         )
     }
 }
-class AppState (
+
+class AppState(
     val navController: NavHostController,
     val snackbarHostState: SnackbarHostState
 ) {
     fun onBackClick() {
         navController.popBackStack()
     }
+
     val currentDestinationAsState: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 

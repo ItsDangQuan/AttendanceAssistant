@@ -14,8 +14,18 @@ import javax.inject.Singleton
 class ServiceModule {
     @Provides
     @Singleton
-    fun provideAuthService(
+    @Named("PublicAuthService")
+    fun providePublicAuthService(
         @Named("PublicRetrofit") retrofit: Retrofit
+    ): AuthService {
+        return retrofit.create(AuthService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("AuthAuthService")
+    fun provideAuthenticatedAuthService(
+        @Named("AuthRetrofit") retrofit: Retrofit
     ): AuthService {
         return retrofit.create(AuthService::class.java)
     }

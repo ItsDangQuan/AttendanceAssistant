@@ -14,14 +14,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.res.dimensionResource
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.ui.components.AppBodySecondary
 import com.kttq.attendassist.core.ui.components.AppButton
@@ -37,7 +37,7 @@ fun LoginRoute(
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     LoginScreen(
-        loginViewModel.loginUIInfo.collectAsState().value,
+        loginViewModel.loginUiInfo.collectAsState().value,
         onShowSnackbar,
         loginViewModel::login,
         loginViewModel::onEmailChanged,
@@ -50,12 +50,12 @@ fun LoginRoute(
 
 @Composable
 fun LoginScreen(
-    loginState: LoginUIInfo,
+    loginState: LoginUiInfo,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onLogin: () -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onStatusChange:(LoginStatus) -> Unit,
+    onStatusChange: (LoginStatus) -> Unit,
     onPasswordVisibilityChange: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -68,9 +68,10 @@ fun LoginScreen(
                 //      as we just want to inform the user of the error,
                 //      and reset the status to NONE afterwards.
                 // Therefore, we can ignore the result.
-                val result = onShowSnackbar("Login failed. Please try again", "OK")
+                val result = onShowSnackbar("Login failed. Please try again.", "OK")
                 onStatusChange(LoginStatus.NONE)
             }
+
             else -> {
                 // No action
             }
@@ -168,8 +169,8 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     MaterialTheme {
         LoginScreen(
-            LoginUIInfo("", ""),{
-                _, _ -> true
+            LoginUiInfo("", ""), { _, _ ->
+                true
             }, {},
             {}, {}, {}, {}
         )

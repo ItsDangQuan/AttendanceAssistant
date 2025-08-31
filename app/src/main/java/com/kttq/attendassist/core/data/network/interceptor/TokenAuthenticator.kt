@@ -13,10 +13,11 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
+import javax.inject.Named
 
 class TokenAuthenticator @Inject constructor(
     private val tokenRepository: TokenRepository,
-    private val authService: dagger.Lazy<AuthService>,
+    @param:Named("PublicAuthService") private val authService: AuthService,
 ) : Authenticator {
     private val refreshTokenMutex = Mutex()
 
@@ -42,7 +43,7 @@ class TokenAuthenticator @Inject constructor(
 
                 try {
                     val newTokensResponse =
-                        authService.get().refresh(RefreshToken(currentRefreshToken))
+                        authService.refresh(RefreshToken(currentRefreshToken))
                     if (!newTokensResponse.isSuccessful || newTokensResponse.body() == null) {
                         tokenRepository.clearTokens()
                         return@withLock null

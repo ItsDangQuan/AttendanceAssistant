@@ -2,9 +2,12 @@ package com.kttq.attendassist.features.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kttq.attendassist.core.data.network.dtos.UserLogin
 import com.kttq.attendassist.core.data.repositories.auth.AuthRepository
+import com.kttq.attendassist.core.domain.model.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -12,45 +15,55 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    val loginUIInfo by lazy {
+    val loginUiInfo by lazy {
         MutableStateFlow(
-            LoginUIInfo("", "")
+            LoginUiInfo("", "")
         )
     }
 
     fun login() {
+        loginUiInfo.value = loginUiInfo.value.copy(status = LoginStatus.LOADING)
         viewModelScope.launch {
-            loginUIInfo.value = loginUIInfo.value.copy(status = LoginStatus.LOADING)
             val result = authRepository.login(
-                loginUIInfo.value.email,
-                loginUIInfo.value.password
-            )
-            if (result.isSuccess) {
-                onStatusChanged(LoginStatus.SUCCESS)
-            } else {
-                onStatusChanged(LoginStatus.ERROR)
+                UserLogin(
+                    loginUiInfo.value.email,
+                    loginUiInfo.value.password
+                )
+            ).first()
+
+            when (result) {
+                AuthState.UNAUTHENTICATED ->
+                    onStatusChanged(LoginStatus.ERROR)
+
+                AuthState.LOADING_ROLE ->
+                    onStatusChanged(LoginStatus.LOADING)
+
+                AuthState.AUTHENTICATED_STUDENT,
+                AuthState.AUTHENTICATED_TEACHER ->
+                    onStatusChanged(LoginStatus.SUCCESS)
             }
         }
     }
 
     fun onEmailChanged(string: String) {
-        loginUIInfo.value = loginUIInfo.value.copy(email = string)
+        loginUiInfo.value = loginUiInfo.value.copy(email = string)
     }
+
     fun onPasswordChanged(string: String) {
-        loginUIInfo.value = loginUIInfo.value.copy(password = string)
+        loginUiInfo.value = loginUiInfo.value.copy(password = string)
     }
 
     fun onStatusChanged(status: LoginStatus) {
-        loginUIInfo.value = loginUIInfo.value.copy(status = status)
+        loginUiInfo.value = loginUiInfo.value.copy(status = status)
     }
 
     fun onPasswordVisibilityChanged() {
-        loginUIInfo.value = loginUIInfo.value
-            .copy(isPasswordVisible = !loginUIInfo.value.isPasswordVisible)
+        loginUiInfo.value = loginUiInfo.value
+            .copy(isPasswordVisible = !loginUiInfo.value.isPasswordVisible)
     }
 }
 
-data class LoginUIInfo(
+data class LoginUiInfo(
     val email: String,
     val password: String,
     val isPasswordVisible: Boolean = false,

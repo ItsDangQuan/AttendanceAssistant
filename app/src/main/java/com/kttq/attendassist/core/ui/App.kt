@@ -1,7 +1,15 @@
 package com.kttq.attendassist.core.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -9,15 +17,16 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.kttq.attendassist.core.navigation.AppNavHost
-import com.kttq.attendassist.core.navigation.login.loginNavigationRoute
 
 @Composable
 fun App(
     appState: AppState,
+    startDestination: String,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        bottomBar = { /* TODO: Adding the bottom bar later */},
+        modifier = modifier,
+        bottomBar = { /* TODO: Adding the bottom bar later */ },
         snackbarHost = {
             SnackbarHost(
                 hostState = appState.snackbarHostState,
@@ -38,8 +47,8 @@ fun App(
                     duration = SnackbarDuration.Short
                 ) == SnackbarResult.ActionPerformed
             },
-            onBackClick = {}, // I do not understand what is he going to do with this
-            startDestination = loginNavigationRoute, // Do not ask me, he said that
+            onBackClick = appState::onBackClick,
+            startDestination = startDestination,
             modifier = Modifier
                 .padding(padding)
                 .consumeWindowInsets(padding)
