@@ -41,13 +41,11 @@ import androidx.compose.ui.text.font.FontWeight
 fun AppScreenTitle(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurface,
     fontWeight: FontWeight = FontWeight.Bold, // ⬅ default, but configurable
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.headlineLarge.copy(fontWeight = fontWeight),
-        color = color,
         modifier = modifier
     )
 }
@@ -59,13 +57,11 @@ fun AppScreenTitle(
 fun AppSectionTitle(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurface,
     fontWeight: FontWeight = FontWeight.SemiBold,
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.headlineMedium.copy(fontWeight = fontWeight),
-        color = color,
         modifier = modifier
     )
 }
@@ -77,13 +73,11 @@ fun AppSectionTitle(
 fun AppSubsectionTitle(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurface,
     fontWeight: FontWeight = FontWeight.Medium,
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = fontWeight),
-        color = color,
         modifier = modifier
     )
 }
@@ -95,13 +89,11 @@ fun AppSubsectionTitle(
 fun AppBodyPrimary(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurface,
     fontWeight: FontWeight = FontWeight.Normal,
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = fontWeight),
-        color = color,
         modifier = modifier
     )
 }
@@ -113,13 +105,11 @@ fun AppBodyPrimary(
 fun AppBodySecondary(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurface,
     fontWeight: FontWeight = FontWeight.Normal,
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = fontWeight),
-        color = color,
         modifier = modifier
     )
 }
@@ -131,13 +121,11 @@ fun AppBodySecondary(
 fun AppBodyCaption(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     fontWeight: FontWeight = FontWeight.Light,
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodySmall.copy(fontWeight = fontWeight),
-        color = color,
         modifier = modifier
     )
 }
@@ -149,13 +137,11 @@ fun AppBodyCaption(
 fun AppLabelPrimary(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurface,
     fontWeight: FontWeight = FontWeight.Medium,
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.labelLarge.copy(fontWeight = fontWeight),
-        color = color,
         modifier = modifier
     )
 }
@@ -167,13 +153,11 @@ fun AppLabelPrimary(
 fun AppLabelSecondary(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     fontWeight: FontWeight = FontWeight.Normal,
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.labelSmall.copy(fontWeight = fontWeight),
-        color = color,
         modifier = modifier
     )
 }

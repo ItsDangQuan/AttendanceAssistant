@@ -1,41 +1,67 @@
 package com.kttq.attendassist.core.ui.components
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.kttq.attendassist.R
 
 @Composable
 fun AppButton(
-    text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    color: Color = MaterialTheme.colorScheme.primary,
+    text: @Composable () -> Unit,
+    leadingIcon: @Composable (() -> Unit)? = null,
 ) {
-    // Sign In button
     Button(
         onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(dimensionResource(R.dimen.button_height)),
-        shape = MaterialTheme.shapes.medium
+        modifier = modifier,
+        enabled = enabled,
+        colors = ButtonDefaults.buttonColors(containerColor = color),
+        contentPadding = if (leadingIcon != null) {
+            ButtonDefaults.ButtonWithIconContentPadding
+        } else {
+            ButtonDefaults.ContentPadding
+        },
     ) {
-        Text(
+        AppButtonContent(
             text = text,
-            fontSize = dimensionResource(R.dimen.text_xl).value.sp
+            leadingIcon = leadingIcon,
         )
+    }
+}
+
+@Composable
+private fun AppButtonContent(
+    text: @Composable () -> Unit,
+    leadingIcon: @Composable (() -> Unit)? = null,
+) {
+    if (leadingIcon != null) {
+        Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
+            leadingIcon()
+        }
+    }
+    Box(
+        Modifier.padding(
+                start = if (leadingIcon != null) {
+                    ButtonDefaults.IconSpacing
+                } else {
+                    0.dp
+                },
+            ),
+    ) {
+        text()
     }
 }
 
@@ -44,34 +70,25 @@ fun AppButton(
 private fun AppButtonPreview() {
     AppButton(
         onClick = {},
-        text = "Log In",
+        text = { Text("Log in") },
+        color = MaterialTheme.colorScheme.secondary
     )
 }
 
 @Composable
 fun AppTextButton(
-    text: String,
     onClick: () -> Unit,
+    content: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.primary,
-    size: Dp = dimensionResource(R.dimen.text_base),
+    enabled: Boolean = true,
 ) {
     TextButton(
         onClick = onClick,
-        modifier = modifier.defaultMinSize(minWidth = 0.dp, minHeight = 0.dp),
-        contentPadding = PaddingValues(0.dp) // ⬅ removes button padding
-    ) {
-        Text(
-            text = text,
-            color = color,
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontSize = size.value.sp,
-                lineHeight = size.value.sp
-            ),
-        )
-    }
+        modifier = modifier,
+        enabled = enabled,
+        content = content,
+    )
 }
-
 
 
 @Preview(showBackground = true)
@@ -79,6 +96,6 @@ fun AppTextButton(
 private fun AppTextButtonPreview() {
     AppTextButton(
         onClick = {},
-        text = "Forgot password?",
+        content = { Text("Forgot password?") },
     )
 }

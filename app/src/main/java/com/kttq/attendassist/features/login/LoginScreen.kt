@@ -24,6 +24,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.ui.components.AppBodySecondary
 import com.kttq.attendassist.core.ui.components.AppButton
+import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppOutlineTextField
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.components.AppTextButton
@@ -111,16 +112,16 @@ fun LoginScreen(
 
         AppTextButton(
             onClick = { /* TODO: Handle forgot password */ },
-            text = "Forgot password?",
-            modifier = Modifier
-                .align(Alignment.End),
+            content = { AppBodySecondary("Forgot Password?") },
+            modifier = Modifier.align(Alignment.End),
         )
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_sm)))
 
         AppButton(
             onClick = onLogin,
-            text = "Log In"
+            modifier = Modifier.fillMaxWidth(),
+            text = { AppLabelPrimary("Log in") }
         )
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_md)))
@@ -133,7 +134,7 @@ fun LoginScreen(
             AppBodySecondary("Don't have an account?")
             AppTextButton(
                 onClick = { /* TODO: Handle sign up navigation */ },
-                text = "Sign up",
+                content = { AppLabelPrimary("Sign Up") },
             )
         }
     }
