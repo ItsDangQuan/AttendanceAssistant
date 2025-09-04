@@ -20,7 +20,6 @@ fun RedirectRoute(
 
     LaunchedEffect(auth) {
         when (auth) {
-            AuthState.LOADING_ROLE -> TODO("This state is to be removed")
             AuthState.UNAUTHENTICATED -> navigateToLogin()
             AuthState.AUTHENTICATED_STUDENT -> navigateToStudent()
             AuthState.AUTHENTICATED_TEACHER -> navigateToTeacher()

@@ -177,7 +177,7 @@ private fun LoginScreenPreview() {
         LoginScreen(
             LoginUiInfo("", ""), { _, _ ->
                 true
-            }, {},
+            }, {}, {},
             {}, {}, {}, {}
         )
     }

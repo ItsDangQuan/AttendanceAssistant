@@ -1,5 +1,9 @@
 package com.kttq.attendassist.features.main
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.data.repositories.auth.AuthRepository
@@ -15,16 +19,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    val authState: StateFlow<AuthState> = authRepository.getAuthState()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = AuthState.LOADING_ROLE
-        )
-
-    fun logout() {
-        viewModelScope.launch {
-            authRepository.logout()
-        }
+    suspend fun sync() {
+        authRepository.sync()
     }
+    var ready by mutableStateOf(false)
 }

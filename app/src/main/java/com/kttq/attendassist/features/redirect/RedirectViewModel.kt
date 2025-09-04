@@ -7,5 +7,5 @@ import javax.inject.Inject
 class RedirectViewModel @Inject constructor(
     authRepository: AuthRepository
 ) : ViewModel() {
-    val authState = authRepository.getAuthState()
+    val authState = authRepository.authState
 }

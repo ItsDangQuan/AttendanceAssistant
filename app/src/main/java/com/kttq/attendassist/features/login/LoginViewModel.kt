@@ -29,19 +29,11 @@ class LoginViewModel @Inject constructor(
                     loginUiInfo.value.email,
                     loginUiInfo.value.password
                 )
-            ).collect { result ->
-                when (result) {
-                    AuthState.UNAUTHENTICATED ->
-                        onStatusChanged(LoginStatus.ERROR)
-
-                    AuthState.LOADING_ROLE ->
-                        onStatusChanged(LoginStatus.LOADING)
-
-                    AuthState.AUTHENTICATED_STUDENT,
-                    AuthState.AUTHENTICATED_TEACHER -> {
-                        onStatusChanged(LoginStatus.SUCCESS)
-                    }
-                }
+            )
+            if (result) {
+                loginUiInfo.value = loginUiInfo.value.copy(status = LoginStatus.SUCCESS)
+            } else {
+                loginUiInfo.value = loginUiInfo.value.copy(status = LoginStatus.ERROR)
             }
         }
     }

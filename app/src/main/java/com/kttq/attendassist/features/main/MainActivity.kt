@@ -19,6 +19,8 @@ import com.kttq.attendassist.core.ui.App
 import com.kttq.attendassist.core.ui.rememberAppState
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,47 +32,27 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
-        var ready by mutableStateOf(false)
-
         splashScreen.setKeepOnScreenCondition {
-            !ready
+            !viewModel.ready
         }
 
         setContent {
             // Noting here: authState collect the value only once, while first created.
             // As nothing touch this, it will not recollect again
             // Since the function getAuthState is cold flow.
-            var startDestination by remember { mutableStateOf<Destination?>(null) }
-            val authState by viewModel.authState.collectAsStateWithLifecycle()
-            LaunchedEffect(authState) {
-                Log.d("Login", "LaunchedEffect restarted with state = $authState")
-                when (authState) {
-                    AuthState.UNAUTHENTICATED -> {
-                        startDestination = Destination.Login
-                        ready = true
-                    }
 
-                    AuthState.AUTHENTICATED_STUDENT -> {
-                        TODO("Add destination here")
-                    }
-
-                    AuthState.AUTHENTICATED_TEACHER -> {
-                        TODO("Add destination here")
-                    }
-
-                    AuthState.LOADING_ROLE -> {}
-                }
+            LaunchedEffect(Unit) {
+                viewModel.sync()
+                viewModel.ready = true
             }
 
-            if (ready && startDestination != null) {
+            if(viewModel.ready) {
                 AttendanceAssistantTheme {
                     App(
                         appState = rememberAppState(),
                     )
                 }
             }
-
-
         }
     }
 }
