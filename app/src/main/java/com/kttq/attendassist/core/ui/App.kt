@@ -22,7 +22,6 @@ import com.kttq.attendassist.core.navigation.Destination
 @Composable
 fun App(
     appState: AppState,
-    startDestination: Destination,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -49,7 +48,7 @@ fun App(
                 ) == SnackbarResult.ActionPerformed
             },
             onBackClick = appState::onBackClick,
-            startDestination = startDestination,
+            startDestination = Destination.Redirect,
             modifier = Modifier
                 .padding(padding)
                 .consumeWindowInsets(padding)

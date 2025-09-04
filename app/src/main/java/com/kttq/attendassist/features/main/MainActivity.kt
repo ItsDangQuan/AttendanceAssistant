@@ -66,7 +66,6 @@ class MainActivity : ComponentActivity() {
                 AttendanceAssistantTheme {
                     App(
                         appState = rememberAppState(),
-                        startDestination = startDestination!!
                     )
                 }
             }
