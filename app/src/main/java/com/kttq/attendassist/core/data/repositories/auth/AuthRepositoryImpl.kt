@@ -1,21 +1,12 @@
 package com.kttq.attendassist.core.data.repositories.auth
 
-import android.util.Log
-import androidx.compose.runtime.collectAsState
 import com.kttq.attendassist.core.data.network.AuthService
 import com.kttq.attendassist.core.data.network.dtos.UserLogin
 import com.kttq.attendassist.core.data.repositories.token.TokenRepository
 import com.kttq.attendassist.core.domain.model.AuthState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -26,7 +17,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun getAuthState(): Flow<AuthState> =
         tokenRepository.accessToken
-            .mapLatest { token ->        // mapLatest allows suspend
+            .map { token ->        // mapLatest allows suspend
                 if (token.isNullOrEmpty()) {
                     AuthState.UNAUTHENTICATED
                 } else {

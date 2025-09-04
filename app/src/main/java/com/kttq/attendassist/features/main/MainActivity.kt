@@ -14,7 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.core.domain.model.AuthState
-import com.kttq.attendassist.core.navigation.login.loginNavigationRoute
+import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.core.ui.App
 import com.kttq.attendassist.core.ui.rememberAppState
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
@@ -40,13 +40,13 @@ class MainActivity : ComponentActivity() {
             // Noting here: authState collect the value only once, while first created.
             // As nothing touch this, it will not recollect again
             // Since the function getAuthState is cold flow.
-            var startDestination by remember { mutableStateOf<String?>(null) }
+            var startDestination by remember { mutableStateOf<Destination?>(null) }
             val authState by viewModel.authState.collectAsStateWithLifecycle()
             LaunchedEffect(authState) {
                 Log.d("Login", "LaunchedEffect restarted with state = $authState")
                 when (authState) {
                     AuthState.UNAUTHENTICATED -> {
-                        startDestination = loginNavigationRoute
+                        startDestination = Destination.Login
                         ready = true
                     }
 

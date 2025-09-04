@@ -11,7 +11,7 @@ fun AppNavHost(
     navController: NavHostController,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onBackClick: () -> Unit,
-    startDestination: String,
+    startDestination: Destination,
     modifier: Modifier = Modifier,
 ) {
     NavHost(

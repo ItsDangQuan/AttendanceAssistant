@@ -17,11 +17,12 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.kttq.attendassist.core.navigation.AppNavHost
+import com.kttq.attendassist.core.navigation.Destination
 
 @Composable
 fun App(
     appState: AppState,
-    startDestination: String,
+    startDestination: Destination,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
