@@ -9,7 +9,6 @@ import com.kttq.attendassist.core.data.preferences.auth.AuthPreferencesKeys
 import com.kttq.attendassist.core.data.repositories.token.TokenRepository
 import com.kttq.attendassist.core.domain.model.AuthState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Named
@@ -84,38 +83,38 @@ class AuthRepositoryImpl @Inject constructor(
         tokenRepository.clearTokens()
         sync()
     }
+
     override suspend fun sync() {
-        tokenRepository.accessToken.collect { token ->
-            try {
-                val response = authService.role() // suspend call
-                if (response.isSuccessful) {
-                    when (response.body()?.role?.lowercase()) {
-                        "student" -> dataStore.edit {
-                            it[AuthPreferencesKeys.AUTH_STATE] = "AUTHENTICATED_STUDENT"
-                        }
-                        "teacher" -> dataStore.edit {
-                            it[AuthPreferencesKeys.AUTH_STATE] = "AUTHENTICATED_TEACHER"
-                        }
-                        else -> {
-                            tokenRepository.clearTokens()
-                            dataStore.edit {
-                                it[AuthPreferencesKeys.AUTH_STATE] = "UNAUTHENTICATED"
-                            }
-                        }
+        try {
+            val response = authService.role() // suspend call
+            if (response.isSuccessful) {
+                when (response.body()?.role?.lowercase()) {
+                    "student" -> dataStore.edit {
+                        it[AuthPreferencesKeys.AUTH_STATE] = "AUTHENTICATED_STUDENT"
                     }
-                } else {
-                    tokenRepository.clearTokens()
-                    dataStore.edit {
-                        it[AuthPreferencesKeys.AUTH_STATE] = "UNAUTHENTICATED"
+
+                    "teacher" -> dataStore.edit {
+                        it[AuthPreferencesKeys.AUTH_STATE] = "AUTHENTICATED_TEACHER"
+                    }
+
+                    else -> {
+                        tokenRepository.clearTokens()
+                        dataStore.edit {
+                            it[AuthPreferencesKeys.AUTH_STATE] = "UNAUTHENTICATED"
+                        }
                     }
                 }
-            } catch (e: Exception) {
+            } else {
                 tokenRepository.clearTokens()
                 dataStore.edit {
                     it[AuthPreferencesKeys.AUTH_STATE] = "UNAUTHENTICATED"
                 }
             }
+        } catch (e: Exception) {
+            tokenRepository.clearTokens()
+            dataStore.edit {
+                it[AuthPreferencesKeys.AUTH_STATE] = "UNAUTHENTICATED"
+            }
         }
     }
-
 }

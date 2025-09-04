@@ -14,14 +14,16 @@ sealed class Destination {
     object Login : Destination()
 
     @Serializable
-    sealed class Student : Destination() {
-        object Home : Student()
+    object Student : Destination() {
+        @Serializable
+        object Home : Destination()
     }
 
     @Serializable
-    sealed class Teacher : Destination() {
-        object Home : Teacher()
-        object Stats : Student()
+    object Teacher : Destination() {
+
+        @Serializable
+        object Home : Destination()
     }
 }
 

@@ -21,7 +21,7 @@ fun NavGraphBuilder.teacherNavigation(
     navigation<Destination.Teacher>(
         startDestination = Destination.Teacher.Home
     ) {
-        composable<Destination.Teacher.Home>{
+        composable<Destination.Teacher.Home> {
             TeacherHomeRoute(onBackClick)
         }
     }
