@@ -2,6 +2,7 @@ package com.kttq.attendassist.core.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.kttq.attendassist.R
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -59,10 +60,13 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
     Destination.Teacher.Home::class to UiMeta(
         isTopLevel = true,
         showNavigation = true,
-        showTopBar = true
+        showTopBar = true,
+        selectedIconRes = R.drawable.ic_home,
+        unselectedIconRes = R.drawable.ic_home,
     )
 )
 
+fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
 // OLD CODE KEEP FOR REFERENCES
 
 //enum class Destination(
