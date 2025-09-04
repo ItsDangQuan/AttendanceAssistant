@@ -33,12 +33,14 @@ import com.kttq.attendassist.core.ui.components.AppTextButton
 @Composable
 fun LoginRoute(
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    onNavigateToRedirect: () -> Unit,
     modifier: Modifier = Modifier,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     LoginScreen(
         loginViewModel.loginUiInfo.collectAsState().value,
         onShowSnackbar,
+        onNavigateToRedirect,
         loginViewModel::login,
         loginViewModel::onEmailChanged,
         loginViewModel::onPasswordChanged,
@@ -52,6 +54,7 @@ fun LoginRoute(
 fun LoginScreen(
     loginState: LoginUiInfo,
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    onNavigateToRedirect: () -> Unit,
     onLogin: () -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
@@ -74,9 +77,10 @@ fun LoginScreen(
             LoginStatus.LOADING -> {
                 onShowSnackbar("Logging in...", null)
             }
-            else -> {
-                // No action
+            LoginStatus.SUCCESS -> {
+                onNavigateToRedirect()
             }
+            else -> {}
         }
     }
 

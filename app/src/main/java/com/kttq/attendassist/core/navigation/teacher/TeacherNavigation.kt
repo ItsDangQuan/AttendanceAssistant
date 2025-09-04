@@ -1,0 +1,29 @@
+package com.kttq.attendassist.core.navigation.teacher
+
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import com.kttq.attendassist.core.navigation.Destination
+import com.kttq.attendassist.features.teacher.home.TeacherHomeRoute
+
+fun NavController.navigateToTeacherHome(
+    navOptions: NavOptions? = null
+) {
+    this.navigate(Destination.Teacher, navOptions)
+}
+
+fun NavGraphBuilder.teacherNavigation(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
+    onBackClick: () -> Unit
+) {
+    navigation<Destination.Teacher>(
+        startDestination = Destination.Teacher.Home
+    ) {
+        composable<Destination.Teacher.Home>{
+            TeacherHomeRoute(onBackClick)
+        }
+    }
+
+}

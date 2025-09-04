@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.kttq.attendassist.core.navigation.login.loginScreen
+import com.kttq.attendassist.core.navigation.teacher.teacherNavigation
 
 @Composable
 fun AppNavHost(
@@ -19,6 +20,8 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        loginScreen(onShowSnackbar, {}, {})
+        // TODO: Implementing `navigateToRedirect`
+        loginScreen(onShowSnackbar, {})
+        teacherNavigation(onShowSnackbar,onBackClick)
     }
 }
