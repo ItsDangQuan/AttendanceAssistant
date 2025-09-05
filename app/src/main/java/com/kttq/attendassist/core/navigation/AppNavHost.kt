@@ -18,6 +18,7 @@ fun AppNavHost(
     navController: NavHostController,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onBackClick: () -> Unit,
+    onSentToBack: () -> Unit,
     startDestination: Destination,
     modifier: Modifier = Modifier,
 ) {
@@ -34,6 +35,6 @@ fun AppNavHost(
         )
         loginScreen(onShowSnackbar, navController::navigateToRedirect)
         teacherNavigation(onShowSnackbar, onBackClick)
-        studentNavigation()
+        studentNavigation(onSentToBack)
     }
 }

@@ -15,13 +15,13 @@ fun NavController.navigateToStudent(
 }
 
 fun NavGraphBuilder.studentNavigation(
-
+    onSentToBack: () -> Unit
 ) {
     navigation<Destination.Student.Graph>(
         startDestination = Destination.Student.Home
     ) {
         composable<Destination.Student.Home> {
-            StudentHomeRoute()
+            StudentHomeRoute(onSentToBack)
         }
     }
 }

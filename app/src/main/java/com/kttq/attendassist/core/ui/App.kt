@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -27,6 +26,7 @@ import com.kttq.attendassist.core.ui.components.AppBottomBar
 @Composable
 fun App(
     appState: AppState,
+    onSentToBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -42,6 +42,7 @@ fun App(
                         appState.navController.navigate(it)
                     }
                 )
+
                 appState.isStudent() -> AppBottomBar(
                     TopLevelTeacherDest,
                     isSelected = {
@@ -51,6 +52,7 @@ fun App(
                         appState.navController.navigate(it)
                     }
                 )
+
                 else -> {}
             }
         },
@@ -75,6 +77,7 @@ fun App(
                 ) == SnackbarResult.ActionPerformed
             },
             onBackClick = appState::onBackClick,
+            onSentToBack = onSentToBack,
             startDestination = Destination.Redirect,
             modifier = Modifier
                 .padding(padding)

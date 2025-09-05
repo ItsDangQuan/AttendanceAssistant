@@ -41,12 +41,12 @@ class AppState(
     @Composable
     fun isTeacher(): Boolean =
         currentDestinationAsState?.hierarchy?.any {
-            it.hasRoute(Destination.Teacher::class)
+            it.hasRoute(Destination.Teacher.Graph::class)
         } == true
 
     @Composable
     fun isStudent(): Boolean =
         currentDestinationAsState?.hierarchy?.any {
-            it.hasRoute(Destination.Student::class)
+            it.hasRoute(Destination.Student.Graph::class)
         } == true
 }
