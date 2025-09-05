@@ -9,6 +9,7 @@ import com.kttq.attendassist.core.navigation.login.navigateToLogin
 import com.kttq.attendassist.core.navigation.redirect.navigateToRedirect
 import com.kttq.attendassist.core.navigation.redirect.redirect
 import com.kttq.attendassist.core.navigation.student.navigateToStudent
+import com.kttq.attendassist.core.navigation.student.studentNavigation
 import com.kttq.attendassist.core.navigation.teacher.navigateToTeacher
 import com.kttq.attendassist.core.navigation.teacher.teacherNavigation
 
@@ -26,8 +27,13 @@ fun AppNavHost(
         modifier = modifier,
     ) {
         // TODO: Implementing `navigateToRedirect`
-        redirect(navController::navigateToLogin, navController::navigateToStudent, navController::navigateToTeacher)
+        redirect(
+            navController::navigateToLogin,
+            navController::navigateToStudent,
+            navController::navigateToTeacher
+        )
         loginScreen(onShowSnackbar, navController::navigateToRedirect)
         teacherNavigation(onShowSnackbar, onBackClick)
+        studentNavigation()
     }
 }

@@ -39,7 +39,7 @@ class AppState(
 
     @Composable
     fun isTeacher(): Boolean =
-      currentDestinationAsState?.hasRoute(Destination.Teacher::class) ?: false
+        currentDestinationAsState?.hasRoute(Destination.Teacher::class) ?: false
 
     @Composable
     fun isStudent(): Boolean =

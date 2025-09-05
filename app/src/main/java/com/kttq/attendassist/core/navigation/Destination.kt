@@ -4,9 +4,11 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.kttq.attendassist.R
 import kotlinx.serialization.Serializable
+import javax.inject.Singleton
 import kotlin.reflect.KClass
 
 @Serializable
+@Singleton
 sealed class Destination {
     @Serializable
     object Redirect : Destination()
@@ -15,16 +17,21 @@ sealed class Destination {
     object Login : Destination()
 
     @Serializable
-    object Student : Destination() {
+    sealed class Student : Destination() {
         @Serializable
-        object Home : Destination()
+        object Graph : Destination()
+
+        @Serializable
+        object Home : Student()
     }
 
     @Serializable
-    object Teacher : Destination() {
+    sealed class Teacher : Destination() {
+        @Serializable
+        object Graph : Destination()
 
         @Serializable
-        object Home : Destination()
+        object Home : Teacher()
     }
 }
 

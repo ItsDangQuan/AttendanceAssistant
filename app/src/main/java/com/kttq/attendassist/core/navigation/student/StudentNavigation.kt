@@ -11,14 +11,14 @@ import com.kttq.attendassist.features.student.home.StudentHomeRoute
 fun NavController.navigateToStudent(
     navOptions: NavOptions? = null
 ) {
-   TODO("Not yet implemented")
+    this.navigate(Destination.Student.Graph, navOptions)
 }
 
 fun NavGraphBuilder.studentNavigation(
 
 ) {
-    navigation<Destination.Student>(
-       startDestination = Destination.Student.Home
+    navigation<Destination.Student.Graph>(
+        startDestination = Destination.Student.Home
     ) {
         composable<Destination.Student.Home> {
             StudentHomeRoute()

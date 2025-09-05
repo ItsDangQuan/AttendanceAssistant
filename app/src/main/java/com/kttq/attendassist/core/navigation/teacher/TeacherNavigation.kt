@@ -11,14 +11,14 @@ import com.kttq.attendassist.features.teacher.home.TeacherHomeRoute
 fun NavController.navigateToTeacher(
     navOptions: NavOptions? = null
 ) {
-    this.navigate(Destination.Teacher, navOptions)
+    this.navigate(Destination.Teacher.Graph, navOptions)
 }
 
 fun NavGraphBuilder.teacherNavigation(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onBackClick: () -> Unit
 ) {
-    navigation<Destination.Teacher>(
+    navigation<Destination.Teacher.Graph>(
         startDestination = Destination.Teacher.Home
     ) {
         composable<Destination.Teacher.Home> {
