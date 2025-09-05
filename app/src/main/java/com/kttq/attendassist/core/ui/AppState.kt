@@ -4,9 +4,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.kttq.attendassist.core.navigation.Destination
 
 @Composable
 fun rememberAppState(
@@ -35,4 +37,11 @@ class AppState(
     val currentDestinationAsState: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
+    @Composable
+    fun isTeacher(): Boolean =
+      currentDestinationAsState?.hasRoute(Destination.Teacher::class) ?: false
+
+    @Composable
+    fun isStudent(): Boolean =
+        currentDestinationAsState?.hasRoute(Destination.Student::class) ?: false
 }

@@ -54,7 +54,9 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
     Destination.Student.Home::class to UiMeta(
         isTopLevel = true,
         showNavigation = true,
-        showTopBar = true
+        showTopBar = true,
+        selectedIconRes = R.drawable.ic_home,
+        unselectedIconRes = R.drawable.ic_home,
     ),
 
     Destination.Teacher.Home::class to UiMeta(
@@ -67,6 +69,11 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
 )
 
 fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
+
+// TODO: Using these for testing. These should be moved to somewhere in the future.
+val TopLevelTeacherDest = listOf(Destination.Teacher.Home)
+val TopLevelStudentDest = listOf(Destination.Student.Home)
+
 // OLD CODE KEEP FOR REFERENCES
 
 //enum class Destination(

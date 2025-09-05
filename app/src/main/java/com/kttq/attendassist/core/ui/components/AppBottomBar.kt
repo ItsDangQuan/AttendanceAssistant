@@ -28,9 +28,7 @@ fun AppBottomBar(
         destinations.forEach { destination ->
             val meta = destination.uiMeta()
             val selected = destination == selectedDestination
-
             val contentDescription = meta.titleTextRes?.let { stringResource(it) }
-
             NavigationBarItem(
                 selected = selected,
                 onClick = { onDestinationSelected(destination) },
