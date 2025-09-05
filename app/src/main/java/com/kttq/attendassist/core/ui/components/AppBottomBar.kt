@@ -17,7 +17,7 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 @Composable
 fun AppBottomBar(
     destinations: List<Destination>,
-    selectedDestination: Destination?,
+    isSelected: (Destination) -> Boolean,
     onDestinationSelected: (Destination) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -27,7 +27,7 @@ fun AppBottomBar(
     ) {
         destinations.forEach { destination ->
             val meta = destination.uiMeta()
-            val selected = destination == selectedDestination
+            val selected = isSelected(destination)
             val contentDescription = meta.titleTextRes?.let { stringResource(it) }
             NavigationBarItem(
                 selected = selected,
@@ -51,7 +51,7 @@ private fun AppBottomBarPreview() {
     AttendanceAssistantTheme {
         AppBottomBar(
             destinations = listOf(Destination.Teacher.Home),
-            selectedDestination = Destination.Teacher.Home,
+            isSelected = { true },
             onDestinationSelected = {}
         )
     }

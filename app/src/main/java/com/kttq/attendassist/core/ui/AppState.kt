@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -39,9 +40,13 @@ class AppState(
 
     @Composable
     fun isTeacher(): Boolean =
-        currentDestinationAsState?.hasRoute(Destination.Teacher::class) ?: false
+        currentDestinationAsState?.hierarchy?.any {
+            it.hasRoute(Destination.Teacher::class)
+        } == true
 
     @Composable
     fun isStudent(): Boolean =
-        currentDestinationAsState?.hasRoute(Destination.Student::class) ?: false
+        currentDestinationAsState?.hierarchy?.any {
+            it.hasRoute(Destination.Student::class)
+        } == true
 }
