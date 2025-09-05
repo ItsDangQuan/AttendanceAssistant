@@ -6,10 +6,27 @@ import com.kttq.attendassist.R
 import kotlinx.serialization.Serializable
 import javax.inject.Singleton
 import kotlin.reflect.KClass
+import kotlin.reflect.full.findAnnotation
+
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Subgraph
 
 @Serializable
 @Singleton
 sealed class Destination {
+    companion object {
+        private fun collectObjects(kClass: KClass<out Destination>): List<Destination> {
+            kClass.objectInstance?.let { return listOf(it) }
+            return kClass.sealedSubclasses.flatMap { collectObjects(it) }
+        }
+
+        fun listDestinations(): List<Destination> =
+            Destination::class.sealedSubclasses
+                .flatMap { collectObjects(it) }
+                .filter { it::class.findAnnotation<Subgraph>() == null }
+    }
+
     @Serializable
     object Redirect : Destination()
 
@@ -19,6 +36,7 @@ sealed class Destination {
     @Serializable
     sealed class Student : Destination() {
         @Serializable
+        @Subgraph
         object Graph : Destination()
 
         @Serializable
@@ -28,6 +46,7 @@ sealed class Destination {
     @Serializable
     sealed class Teacher : Destination() {
         @Serializable
+        @Subgraph
         object Graph : Destination()
 
         @Serializable
