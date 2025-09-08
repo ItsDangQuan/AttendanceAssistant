@@ -42,17 +42,17 @@ class AppState(
     val currentDestinationAsState: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    @Composable
-    fun isTeacher(): Boolean =
-        currentDestinationAsState?.hierarchy?.any {
-            it.hasRoute(Destination.Teacher.Graph::class)
-        } == true
-
-    @Composable
-    fun isStudent(): Boolean =
-        currentDestinationAsState?.hierarchy?.any {
-            it.hasRoute(Destination.Student.Graph::class)
-        } == true
+//    @Composable
+//    fun isTeacher(): Boolean =
+//        currentDestinationAsState?.hierarchy?.any {
+//            it.hasRoute(Destination.Teacher.Graph::class)
+//        } == true
+//
+//    @Composable
+//    fun isStudent(): Boolean =
+//        currentDestinationAsState?.hierarchy?.any {
+//            it.hasRoute(Destination.Student.Graph::class)
+//        } == true
 
     val currentDestinationObjectAsState: Destination?
         @Composable get() = Destination.listDestinations().firstOrNull {

@@ -41,39 +41,47 @@ fun App(
             val currentDest = appState.currentDestinationObjectAsState
             if (currentDest != null) {
                 val uiMeta = currentDest.uiMeta()
-                AppCenterAlignedTopBar(
-                    title = if (uiMeta.titleTextRes != null) {
-                        stringResource(uiMeta.titleTextRes)
-                    } else {
-                        null
-                    },
-                    navigationIconRes = R.drawable.ic_arrow_back
-                )
+                if (uiMeta.showTopBar) {
+                    AppCenterAlignedTopBar(
+                        title = if (uiMeta.titleTextRes != null) {
+                            stringResource(uiMeta.titleTextRes)
+                        } else {
+                            null
+                        },
+                        navigationIconRes = R.drawable.ic_arrow_back
+                    )
+                }
             }
         },
         bottomBar = {
-            when {
-                appState.isStudent() -> AppBottomBar(
-                    TopLevelStudentDest,
-                    isSelected = {
-                        appState.navController.currentDestination?.hasRoute(it::class) == true
-                    },
-                    onDestinationSelected = {
-                        appState.navigate(it)
-                    }
-                )
+            val currentDest = appState.currentDestinationObjectAsState
+            if (currentDest != null) {
+                val uiMeta = currentDest.uiMeta()
+                if (uiMeta.showNavigation) {
+                    when(currentDest) {
+                         is Destination.Student-> AppBottomBar(
+                            TopLevelStudentDest,
+                            isSelected = {
+                                appState.navController.currentDestination?.hasRoute(it::class) == true
+                            },
+                            onDestinationSelected = {
+                                appState.navigate(it)
+                            }
+                        )
 
-                appState.isTeacher() -> AppBottomBar(
-                    TopLevelTeacherDest,
-                    isSelected = {
-                        appState.navController.currentDestination?.hasRoute(it::class) == true
-                    },
-                    onDestinationSelected = {
-                        appState.navigate(it)
-                    }
-                )
+                        is Destination.Teacher -> AppBottomBar(
+                            TopLevelTeacherDest,
+                            isSelected = {
+                                appState.navController.currentDestination?.hasRoute(it::class) == true
+                            },
+                            onDestinationSelected = {
+                                appState.navigate(it)
+                            }
+                        )
 
-                else -> {}
+                        else -> {}
+                    }
+                }
             }
         },
         snackbarHost = {
