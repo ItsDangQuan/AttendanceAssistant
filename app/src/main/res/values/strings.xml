@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Attendance Assistant</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="teacher_create_lesson">Create lesson</string>
+    <string name="summary">Summary</string>
+    <string name="lesson_info">Lesson Information</string>
 </resources>

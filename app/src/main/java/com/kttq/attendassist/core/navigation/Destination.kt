@@ -83,6 +83,7 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         showTopBar = true,
         selectedIconRes = R.drawable.ic_home,
         unselectedIconRes = R.drawable.ic_home,
+        titleTextRes = R.string.home
     ),
 
     Destination.Teacher.Home::class to UiMeta(
@@ -91,6 +92,7 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         showTopBar = true,
         selectedIconRes = R.drawable.ic_home,
         unselectedIconRes = R.drawable.ic_home,
+        titleTextRes = R.string.home
     )
 )
 
