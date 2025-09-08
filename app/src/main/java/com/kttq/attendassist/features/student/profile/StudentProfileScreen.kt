@@ -7,13 +7,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.ui.App
+// Removed App import as it's unused after changes
 import com.kttq.attendassist.core.ui.components.AppAvatarImage
 import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
@@ -26,57 +28,59 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 @Composable
 fun StudentProfileScreen(
     modifier: Modifier = Modifier,
-    studentProfileViewModel: StudentProfileViewModel = hiltViewModel()
+    viewModel: StudentProfileViewModel = hiltViewModel() // Renamed for clarity
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxWidth().padding(dimensionResource(R.dimen.padding_large))
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_large))
     ) {
-        AppAvatarImage()
+        AppAvatarImage() // Assuming this doesn't need data from ViewModel for now
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_8)))
 
-        // TODO: Replace username by real username
-        AppScreenTitle("Tu Thanh")
+        AppScreenTitle(uiState.name.ifEmpty { "Loading..." }) // Display name from uiState
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_24)))
 
         // Personal Information Section
-        AppSectionTitle("Personal Information",
-            modifier = Modifier
-                .fillMaxWidth()
+        AppSectionTitle(
+            "Personal Information",
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_12)))
 
-
         AppSubsectionTitle("Name", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
-            label = "",
-            value = "Tu Thanh",
-            onValueChange = {},
+            label = "", // Label can be empty if AppSubsectionTitle serves as label
+            value = uiState.name,
+            onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readable = true
         )
         AppSubsectionTitle("Student ID", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
-            value = "23125018",
-            onValueChange = {},
+            value = uiState.studentId,
+            onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readable = true
         )
         AppSubsectionTitle("Email", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
-            value = "tuthanh10825@gmail.com",
-            onValueChange = {},
+            value = uiState.email,
+            onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readable = true
         )
         AppSubsectionTitle("Phone", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
-            label = "Phone",
-            value = "0123456789",
-            onValueChange = {},
+            label = "", // Changed from "Phone" as AppSubsectionTitle is present
+            value = uiState.phone,
+            onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readable = true
         )
@@ -89,7 +93,7 @@ fun StudentProfileScreen(
             AppLabelPrimary("Change password", Modifier.weight(1f))
             AppIconButton(
                 iconId = R.drawable.ic_arrow_forward,
-                onClick = {}
+                onClick = { viewModel.onChangePasswordClicked() } // Call ViewModel function
             )
         }
     }
@@ -99,6 +103,8 @@ fun StudentProfileScreen(
 @Composable
 private fun StudentProfileScreenPreview() {
     AttendanceAssistantTheme {
+        // Preview will use Hilt to provide the ViewModel.
+        // For more complex scenarios, consider providing a mock ViewModel or UiState.
         StudentProfileScreen()
     }
 }

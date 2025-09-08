@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
@@ -23,22 +23,24 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 fun StudentHomeRoute(
     onSentToBack: () -> Unit,
     modifier: Modifier = Modifier
-
 ) {
     BackHandler {
         onSentToBack()
     }
-    StudentHomeScreen()
+    StudentHomeScreen(modifier = modifier)
 }
+
 @Composable
 fun StudentHomeScreen(
     modifier: Modifier = Modifier,
-    studentViewModel: StudentHomeViewModel = hiltViewModel()
+    viewModel: StudentHomeViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Column(
         modifier = modifier.fillMaxWidth()
-    ){
-        AppScreenTitle("Hello, User")
+    ) {
+        AppScreenTitle("Hello, ${uiState.userName}")
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -46,13 +48,13 @@ fun StudentHomeScreen(
             AppIconButton(
                 iconId = R.drawable.ic_arrow_forward,
                 onClick = {
-                    // TODO: Handling the navigation to some destination.
+                    viewModel.onIncomingClassSeeAllClicked()
                 },
                 modifier = Modifier.wrapContentSize()
             )
         }
         LazyColumn {
-            //TODO: Add list of current class and incoming classes
+            //TODO: Add list of current class and incoming classes based on uiState
         }
 
         Row(
@@ -62,13 +64,13 @@ fun StudentHomeScreen(
             AppIconButton(
                 iconId = R.drawable.ic_arrow_forward,
                 onClick = {
-                    // TODO: Handling the navigation to some destination.
+                    viewModel.onClassTodaySeeAllClicked()
                 },
                 modifier = Modifier.wrapContentSize()
             )
         }
         LazyColumn {
-            //TODO: Add list of current class and incoming classes
+            //TODO: Add list of current class and incoming classes based on uiState
         }
     }
 }
@@ -77,6 +79,9 @@ fun StudentHomeScreen(
 @Composable
 private fun StudentHomeScreenPreview() {
     AttendanceAssistantTheme {
+        // The preview will attempt to use Hilt to create the ViewModel.
+        // For complex ViewModels, this might require additional Hilt setup for previews
+        // or providing a mock ViewModel/UiState directly to StudentHomeScreen.
         StudentHomeScreen()
     }
 }
