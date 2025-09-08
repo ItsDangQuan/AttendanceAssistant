@@ -1,4 +1,4 @@
-package com.kttq.attendassist.features.student.profile
+package com.kttq.attendassist.features.teacher.profile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-// Removed App import as it's unused after changes
 import com.kttq.attendassist.core.ui.components.AppAvatarImage
 import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
@@ -24,18 +23,20 @@ import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.components.AppSubsectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
+import com.kttq.attendassist.features.student.profile.StudentProfileViewModel
+import kotlin.text.ifEmpty
 
 @Composable
-fun StudentProfileRoute(
+fun TeacherProfileRoute(
     modifier: Modifier = Modifier
 ) {
-    StudentProfileScreen(modifier = modifier)
+    TeacherProfileScreen(modifier = modifier)
 }
 
 @Composable
-fun StudentProfileScreen(
+fun TeacherProfileScreen(
     modifier: Modifier = Modifier,
-    viewModel: StudentProfileViewModel = hiltViewModel() // Renamed for clarity
+    viewModel: TeacherProfileViewModel = hiltViewModel() // Renamed for clarity
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -67,7 +68,7 @@ fun StudentProfileScreen(
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
         )
-        AppSubsectionTitle("Student ID", modifier = Modifier.fillMaxWidth())
+        AppSubsectionTitle("Teacher ID", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
             value = uiState.studentId,
@@ -108,10 +109,10 @@ fun StudentProfileScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun StudentProfileScreenPreview() {
+private fun TeacherProfileScreenPreview() {
     AttendanceAssistantTheme {
         // Preview will use Hilt to provide the ViewModel.
         // For more complex scenarios, consider providing a mock ViewModel or UiState.
-        StudentProfileScreen()
+        TeacherProfileScreen()
     }
 }

@@ -29,6 +29,13 @@ import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
+fun StudentSummaryRoute(
+    modifier: Modifier = Modifier
+) {
+    StudentSummaryScreen(modifier = modifier)
+}
+
+@Composable
 fun StudentSummaryScreen(
     modifier: Modifier = Modifier,
     studentSummaryViewModel: StudentSummaryViewModel = hiltViewModel()

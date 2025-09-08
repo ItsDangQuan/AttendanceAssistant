@@ -1,4 +1,4 @@
-package com.kttq.attendassist.features.student.lesson_info
+package com.kttq.attendassist.features.teacher.lesson_info
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,24 +15,26 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.ui.components.AppBodyPrimary
 import com.kttq.attendassist.core.ui.components.AppButton
+import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
+import com.kttq.attendassist.core.ui.components.AppLabelSecondary
 import com.kttq.attendassist.core.ui.components.AppOutlineTextField
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
+
 @Composable
-fun StudentLessonInfoRoute(
+fun TeacherLessonInfoRoute(
     modifier: Modifier = Modifier
 ) {
-    StudentLessonInfoScreen(modifier = modifier)
+    TeacherLessonInfoScreen(modifier = modifier)
 }
 
 @Composable
-fun StudentLessonInfoScreen(
+fun TeacherLessonInfoScreen(
     modifier: Modifier = Modifier,
-    studentLessonInfoViewModel: StudentLessonInfoViewModel = hiltViewModel()
+    teacherLessonInfoViewModel: TeacherLessonInfoViewModel = hiltViewModel()
 ) {
-    val uiState = studentLessonInfoViewModel.uiState
     Column (
         modifier = Modifier.fillMaxWidth().padding(dimensionResource(R.dimen.padding_medium))
     ){
@@ -50,47 +52,61 @@ fun StudentLessonInfoScreen(
             AppBodyPrimary(text = "Date: ${"Aug 1st"}")
             AppBodyPrimary(text = "Presenter today: ${"Mr.John Doe"}")
 
-            AppSectionTitle(text = "Absent Information")
-            AppOutlineTextField(
-                label = "Reason",
-                value = uiState.reasonToAbsent ?: "",
-                onValueChange = {
-                    studentLessonInfoViewModel.changeReasonToAbsent(it)
-                },
+            AppSectionTitle(text = "Statistics")
+
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                readOnly = !uiState.isWantToAbsent
-            )
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
             ) {
-                RadioButton(
-                    selected = uiState.isWantToAbsent,
-                    onClick = {
-                        studentLessonInfoViewModel.changeWantToAbsent()
-                    }
-                )
-                AppBodyPrimary(text = "I want to be absent from this class", modifier = Modifier.weight(1f))
+                AppCard (
+                    modifier = Modifier.weight(1f)
+                ) {
+                    AppLabelPrimary("Total:")
+                    AppLabelSecondary("N/A")
+                }
+
+                AppCard (
+                    modifier = Modifier.weight(1f)
+                ) {
+                    AppLabelPrimary("Already checked:")
+                    AppLabelSecondary("N/A")
+                }
             }
+
         }
 
-        AppButton(
-            onClick = {
-                //TODO: Handle student click button
-            },
-            enabled = uiState.isWantToAbsent,
-            modifier = Modifier.fillMaxWidth()
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
         ) {
-            AppLabelPrimary("Submit now")
+
+            AppButton(
+                onClick = {
+                    //TODO: Handle student click button
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                AppLabelPrimary("Stop checking")
+            }
+
+            AppButton(
+                onClick = {
+                    //TODO: Handle student click button
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                AppLabelPrimary("Export")
+            }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun StudentLessonInfoScreenPreview() {
+private fun TeacherLessonInfoScreenPreview() {
     AttendanceAssistantTheme {
-        StudentLessonInfoScreen()
+        TeacherLessonInfoScreen()
     }
 }

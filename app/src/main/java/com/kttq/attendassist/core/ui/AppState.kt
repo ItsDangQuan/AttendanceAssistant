@@ -67,6 +67,9 @@ class AppState(
             is Destination.Student.Home -> TODO("Navigate to Student Home not yet implemented")
             is Destination.Teacher.Graph -> navController.navigateToTeacher()
             is Destination.Teacher.Home -> TODO("Navigate to Teacher Home not yet implemented")
+            is Destination.Student.LessonInfo -> TODO("Navigate to Lesson Info not yet implemented")
+            is Destination.Student.Profile -> TODO("Navigate to Student Profile not yet implemented")
+            is Destination.Student.Summary -> TODO("Navigate to Student Summary not yet implemented")
         }
     }
 }
