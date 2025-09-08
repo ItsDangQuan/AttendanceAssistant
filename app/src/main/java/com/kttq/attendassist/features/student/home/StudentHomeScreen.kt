@@ -22,25 +22,33 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 @Composable
 fun StudentHomeRoute(
     onSentToBack: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    BackHandler {
-        onSentToBack()
-    }
-    StudentHomeScreen(modifier = modifier)
-}
-
-@Composable
-fun StudentHomeScreen(
     modifier: Modifier = Modifier,
     viewModel: StudentHomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    BackHandler {
+        onSentToBack()
+    }
+    StudentHomeScreen(
+        userName = uiState.userName,
+        onIncomingClassSeeAllClicked = viewModel::onIncomingClassSeeAllClicked,
+        onClassTodaySeeAllClicked = viewModel::onClassTodaySeeAllClicked,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun StudentHomeScreen(
+    userName: String,
+    onIncomingClassSeeAllClicked: () -> Unit,
+    onClassTodaySeeAllClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        AppScreenTitle("Hello, ${uiState.userName}")
+        AppScreenTitle("Hello, $userName")
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -48,7 +56,7 @@ fun StudentHomeScreen(
             AppIconButton(
                 iconId = R.drawable.ic_arrow_forward,
                 onClick = {
-                    viewModel.onIncomingClassSeeAllClicked()
+                    onIncomingClassSeeAllClicked()
                 },
                 modifier = Modifier.wrapContentSize()
             )
@@ -64,7 +72,7 @@ fun StudentHomeScreen(
             AppIconButton(
                 iconId = R.drawable.ic_arrow_forward,
                 onClick = {
-                    viewModel.onClassTodaySeeAllClicked()
+                    onClassTodaySeeAllClicked()
                 },
                 modifier = Modifier.wrapContentSize()
             )
@@ -82,6 +90,10 @@ private fun StudentHomeScreenPreview() {
         // The preview will attempt to use Hilt to create the ViewModel.
         // For complex ViewModels, this might require additional Hilt setup for previews
         // or providing a mock ViewModel/UiState directly to StudentHomeScreen.
-        StudentHomeScreen()
+        StudentHomeScreen(
+            userName = "",
+            onIncomingClassSeeAllClicked = {},
+            onClassTodaySeeAllClicked = {}
+        )
     }
 }

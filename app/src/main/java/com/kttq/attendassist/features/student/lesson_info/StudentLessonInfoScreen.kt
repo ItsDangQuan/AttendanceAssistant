@@ -22,22 +22,37 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun StudentLessonInfoRoute(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: StudentLessonInfoViewModel = hiltViewModel()
 ) {
-    StudentLessonInfoScreen(modifier = modifier)
+    val uiState = viewModel.uiState
+
+    StudentLessonInfoScreen(
+        reasonToAbsent = uiState.reasonToAbsent,
+        isWantToAbsent = uiState.isWantToAbsent,
+        changeReasonToAbsent = viewModel::changeReasonToAbsent,
+        changeWantToAbsent = viewModel::changeWantToAbsent,
+        modifier = modifier
+    )
 }
 
 @Composable
 fun StudentLessonInfoScreen(
+    reasonToAbsent: String?,
+    isWantToAbsent: Boolean,
+    changeReasonToAbsent: (String) -> Unit,
+    changeWantToAbsent: () -> Unit,
     modifier: Modifier = Modifier,
-    studentLessonInfoViewModel: StudentLessonInfoViewModel = hiltViewModel()
 ) {
-    val uiState = studentLessonInfoViewModel.uiState
-    Column (
-        modifier = Modifier.fillMaxWidth().padding(dimensionResource(R.dimen.padding_medium))
-    ){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium))
+    ) {
         Column(
-            modifier = modifier.fillMaxWidth().weight(1f),
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1f),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
         ) {
@@ -53,25 +68,28 @@ fun StudentLessonInfoScreen(
             AppSectionTitle(text = "Absent Information")
             AppOutlineTextField(
                 label = "Reason",
-                value = uiState.reasonToAbsent ?: "",
+                value = reasonToAbsent ?: "",
                 onValueChange = {
-                    studentLessonInfoViewModel.changeReasonToAbsent(it)
+                    changeReasonToAbsent(it)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                readOnly = !uiState.isWantToAbsent
+                readOnly = !isWantToAbsent
             )
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
-                    selected = uiState.isWantToAbsent,
+                    selected = isWantToAbsent,
                     onClick = {
-                        studentLessonInfoViewModel.changeWantToAbsent()
+                        changeWantToAbsent()
                     }
                 )
-                AppBodyPrimary(text = "I want to be absent from this class", modifier = Modifier.weight(1f))
+                AppBodyPrimary(
+                    text = "I want to be absent from this class",
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
 
@@ -79,7 +97,7 @@ fun StudentLessonInfoScreen(
             onClick = {
                 //TODO: Handle student click button
             },
-            enabled = uiState.isWantToAbsent,
+            enabled = isWantToAbsent,
             modifier = Modifier.fillMaxWidth()
         ) {
             AppLabelPrimary("Submit now")
@@ -91,6 +109,11 @@ fun StudentLessonInfoScreen(
 @Composable
 private fun StudentLessonInfoScreenPreview() {
     AttendanceAssistantTheme {
-        StudentLessonInfoScreen()
+        StudentLessonInfoScreen(
+            reasonToAbsent = null,
+            isWantToAbsent = false,
+            changeReasonToAbsent = {},
+            changeWantToAbsent = {}
+        )
     }
 }

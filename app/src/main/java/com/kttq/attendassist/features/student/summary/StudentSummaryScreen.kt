@@ -13,13 +13,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppFilterChip
@@ -30,17 +30,38 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun StudentSummaryRoute(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: StudentSummaryViewModel = hiltViewModel()
 ) {
-    StudentSummaryScreen(modifier = modifier)
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    StudentSummaryScreen(
+        statSummary = uiState.statSummary,
+        isIncomingSelected = uiState.isIncomingSelected,
+        isAbsentSelected = uiState.isAbsentSelected,
+        isAttendedSelected = uiState.isAttendedSelected,
+        isLoading = uiState.isLoading,
+        displayItems = uiState.displayItems,
+        selectIncoming = viewModel::selectIncoming,
+        selectAbsent = viewModel::selectAbsent,
+        selectAttended = viewModel::selectAttended,
+        modifier = modifier
+    )
 }
 
 @Composable
 fun StudentSummaryScreen(
+    statSummary: List<Pair<String, String>>,
+    isIncomingSelected: Boolean,
+    isAbsentSelected: Boolean,
+    isAttendedSelected: Boolean,
+    isLoading: Boolean,
+    displayItems: List<DisplayItem>,
+    selectIncoming: () -> Unit,
+    selectAbsent: () -> Unit,
+    selectAttended: () -> Unit,
     modifier: Modifier = Modifier,
-    studentSummaryViewModel: StudentSummaryViewModel = hiltViewModel()
 ) {
-    val uiState by studentSummaryViewModel.uiState.collectAsState()
     // val statSummary = listOf( // Replaced with uiState.statSummary
     //     "Total" to "15",
     //     "Total leave" to "0",
@@ -61,10 +82,10 @@ fun StudentSummaryScreen(
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ) {
-            items(uiState.statSummary.size) { index ->
+            items(statSummary.size) { index ->
                 AppCard {
-                    AppLabelPrimary(uiState.statSummary[index].first)
-                    AppLabelSecondary(uiState.statSummary[index].second)
+                    AppLabelPrimary(statSummary[index].first)
+                    AppLabelSecondary(statSummary[index].second)
                 }
             }
         }
@@ -75,18 +96,18 @@ fun StudentSummaryScreen(
             horizontalArrangement = Arrangement.Absolute.SpaceAround
         ) {
             AppFilterChip(
-                selected = uiState.isIncomingSelected,
-                onSelectedChange = { studentSummaryViewModel.selectIncoming() },
+                selected = isIncomingSelected,
+                onSelectedChange = { selectIncoming() },
                 label = { AppLabelPrimary("Incoming") }
             )
             AppFilterChip(
-                selected = uiState.isAbsentSelected,
-                onSelectedChange = { studentSummaryViewModel.selectAbsent() },
+                selected = isAbsentSelected,
+                onSelectedChange = { selectAbsent() },
                 label = { AppLabelPrimary("Absent") }
             )
             AppFilterChip(
-                selected = uiState.isAttendedSelected,
-                onSelectedChange = { studentSummaryViewModel.selectAttended() },
+                selected = isAttendedSelected,
+                onSelectedChange = { selectAttended() },
                 label = { AppLabelPrimary("Attended") }
             )
         }
@@ -96,17 +117,17 @@ fun StudentSummaryScreen(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ) {
             // TODO: Implement the view model to fetch data - ViewModel fetches, UI displays
-            if (uiState.isLoading) {
+            if (isLoading) {
                 item {
                     Text("Loading items...") // Show a loading indicator
                 }
-            } else if (uiState.displayItems.isEmpty()) {
+            } else if (displayItems.isEmpty()) {
                 item {
                     Text("No items to display for the selected filter.")
                 }
             } else {
-                items(uiState.displayItems.size) { index ->
-                    val item = uiState.displayItems[index]
+                items(displayItems.size) { index ->
+                    val item = displayItems[index]
                     // Replace with your actual item composable
                     AppCard(modifier = Modifier.fillMaxWidth()) {
                         Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
@@ -124,6 +145,16 @@ fun StudentSummaryScreen(
 @Composable
 private fun StudentSummaryScreenPreview() {
     AttendanceAssistantTheme {
-        StudentSummaryScreen()
+        StudentSummaryScreen(
+            statSummary = emptyList(),
+            isIncomingSelected = false,
+            isAbsentSelected = false,
+            isAttendedSelected = false,
+            isLoading = false,
+            displayItems = emptyList(),
+            selectIncoming = {},
+            selectAbsent = {},
+            selectAttended = {}
+        )
     }
 }

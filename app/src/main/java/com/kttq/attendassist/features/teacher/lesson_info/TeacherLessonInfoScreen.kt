@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,14 +17,14 @@ import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
-import com.kttq.attendassist.core.ui.components.AppOutlineTextField
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 
 @Composable
 fun TeacherLessonInfoRoute(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: TeacherLessonInfoViewModel = hiltViewModel()
 ) {
     TeacherLessonInfoScreen(modifier = modifier)
 }
@@ -33,13 +32,16 @@ fun TeacherLessonInfoRoute(
 @Composable
 fun TeacherLessonInfoScreen(
     modifier: Modifier = Modifier,
-    teacherLessonInfoViewModel: TeacherLessonInfoViewModel = hiltViewModel()
 ) {
-    Column (
-        modifier = Modifier.fillMaxWidth().padding(dimensionResource(R.dimen.padding_medium))
-    ){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium))
+    ) {
         Column(
-            modifier = modifier.fillMaxWidth().weight(1f),
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1f),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
         ) {
@@ -59,14 +61,14 @@ fun TeacherLessonInfoScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
             ) {
-                AppCard (
+                AppCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     AppLabelPrimary("Total:")
                     AppLabelSecondary("N/A")
                 }
 
-                AppCard (
+                AppCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     AppLabelPrimary("Already checked:")
@@ -76,7 +78,7 @@ fun TeacherLessonInfoScreen(
 
         }
 
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))

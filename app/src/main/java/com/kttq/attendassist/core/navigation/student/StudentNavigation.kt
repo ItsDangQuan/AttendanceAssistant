@@ -3,15 +3,17 @@ package com.kttq.attendassist.core.navigation.student
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.kttq.attendassist.core.navigation.Destination
-import com.kttq.attendassist.features.student.home.StudentHomeRoute
+import com.kttq.attendassist.core.navigation.student.home.studentHome
+import com.kttq.attendassist.core.navigation.student.lesson_info.studentLessonInfo
+import com.kttq.attendassist.core.navigation.student.profile.studentProfile
+import com.kttq.attendassist.core.navigation.student.summary.studentSummary
 
 fun NavController.navigateToStudent(
     navOptions: NavOptions? = navOptions {
-        popUpTo(Destination.Student.Home)
+        popUpTo(Destination.Redirect)
         launchSingleTop = true
     }
 ) {
@@ -24,8 +26,9 @@ fun NavGraphBuilder.studentNavigation(
     navigation<Destination.Student.Graph>(
         startDestination = Destination.Student.Home
     ) {
-        composable<Destination.Student.Home> {
-            StudentHomeRoute(onSentToBack)
-        }
+        studentHome(onSentToBack)
+        studentProfile()
+        studentLessonInfo()
+        studentSummary()
     }
 }

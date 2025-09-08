@@ -22,25 +22,30 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 @Composable
 fun TeacherHomeRoute(
     onSentToBack: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    BackHandler {
-        onSentToBack()
-    }
-    TeacherHomeScreen(modifier = modifier)
-}
-
-@Composable
-fun TeacherHomeScreen(
     modifier: Modifier = Modifier,
     viewModel: TeacherHomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    BackHandler {
+        onSentToBack()
+    }
+    TeacherHomeScreen(
+        userName = uiState.userName,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun TeacherHomeScreen(
+    userName: String,
+    modifier: Modifier = Modifier,
+) {
+
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        AppScreenTitle("Hello, ${uiState.userName}")
+        AppScreenTitle("Hello, $userName")
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -82,7 +87,9 @@ private fun TeacherHomeScreenPreview() {
         // The preview will attempt to use Hilt to create the ViewModel.
         // For complex ViewModels, this might require additional Hilt setup for previews
         // or providing a mock ViewModel/UiState directly to TeacherHomeScreen.
-        TeacherHomeScreen()
+        TeacherHomeScreen(
+            userName = ""
+        )
     }
 }
 

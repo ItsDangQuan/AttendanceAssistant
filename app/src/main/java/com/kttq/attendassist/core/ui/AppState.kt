@@ -5,15 +5,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.core.navigation.login.navigateToLogin
 import com.kttq.attendassist.core.navigation.redirect.navigateToRedirect
+import com.kttq.attendassist.core.navigation.student.home.navigateToStudentHome
+import com.kttq.attendassist.core.navigation.student.lesson_info.navigateToStudentLessonInfo
 import com.kttq.attendassist.core.navigation.student.navigateToStudent
+import com.kttq.attendassist.core.navigation.student.profile.navigateToStudentProfile
+import com.kttq.attendassist.core.navigation.student.summary.navigateToStudentSummary
+import com.kttq.attendassist.core.navigation.teacher.home.navigateToTeacherHome
+import com.kttq.attendassist.core.navigation.teacher.lesson_info.navigateToTeacherLessonInfo
 import com.kttq.attendassist.core.navigation.teacher.navigateToTeacher
+import com.kttq.attendassist.core.navigation.teacher.profile.navigateToTeacherProfile
 
 @Composable
 fun rememberAppState(
@@ -62,14 +68,19 @@ class AppState(
     fun navigate(dest: Destination) {
         when (dest) {
             is Destination.Login -> navController.navigateToLogin()
+
             is Destination.Redirect -> navController.navigateToRedirect()
+
             is Destination.Student.Graph -> navController.navigateToStudent()
-            is Destination.Student.Home -> TODO("Navigate to Student Home not yet implemented")
+            is Destination.Student.Home -> navController.navigateToStudentHome()
+            is Destination.Student.LessonInfo -> navController.navigateToStudentLessonInfo()
+            is Destination.Student.Profile -> navController.navigateToStudentProfile()
+            is Destination.Student.Summary -> navController.navigateToStudentSummary()
+
             is Destination.Teacher.Graph -> navController.navigateToTeacher()
-            is Destination.Teacher.Home -> TODO("Navigate to Teacher Home not yet implemented")
-            is Destination.Student.LessonInfo -> TODO("Navigate to Lesson Info not yet implemented")
-            is Destination.Student.Profile -> TODO("Navigate to Student Profile not yet implemented")
-            is Destination.Student.Summary -> TODO("Navigate to Student Summary not yet implemented")
+            is Destination.Teacher.Home -> navController.navigateToTeacherHome()
+            is Destination.Teacher.LessonInfo -> navController.navigateToTeacherLessonInfo()
+            is Destination.Teacher.Profile -> navController.navigateToTeacherProfile()
         }
     }
 }

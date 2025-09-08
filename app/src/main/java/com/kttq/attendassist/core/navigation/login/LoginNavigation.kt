@@ -17,7 +17,7 @@ fun NavController.navigateToLogin(
     this.navigate(Destination.Login, navOptions)
 }
 
-fun NavGraphBuilder.loginScreen(
+fun NavGraphBuilder.login(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     navigateToRedirect: () -> Unit,
 ) {

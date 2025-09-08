@@ -9,7 +9,7 @@ import javax.inject.Inject
 class StudentLessonInfoViewModel @Inject constructor(
 
 ) : ViewModel() {
-    val _uiState = mutableStateOf(StudentLessonInfoUiState())
+    private val _uiState = mutableStateOf(StudentLessonInfoUiState())
     val uiState = _uiState.value
     fun changeWantToAbsent() {
         _uiState.value = _uiState.value.copy(isWantToAbsent = !_uiState.value.isWantToAbsent)
@@ -17,6 +17,7 @@ class StudentLessonInfoViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(reasonToAbsent = null)
         }
     }
+
     fun changeReasonToAbsent(reason: String) {
         _uiState.value = _uiState.value.copy(reasonToAbsent = reason)
     }

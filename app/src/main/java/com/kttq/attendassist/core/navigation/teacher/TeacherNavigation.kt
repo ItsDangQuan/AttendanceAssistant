@@ -3,11 +3,12 @@ package com.kttq.attendassist.core.navigation.teacher
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.kttq.attendassist.core.navigation.Destination
-import com.kttq.attendassist.features.teacher.home.TeacherHomeRoute
+import com.kttq.attendassist.core.navigation.teacher.home.teacherHome
+import com.kttq.attendassist.core.navigation.teacher.lesson_info.teacherLessonInfo
+import com.kttq.attendassist.core.navigation.teacher.profile.teacherProfile
 
 fun NavController.navigateToTeacher(
     navOptions: NavOptions? = navOptions {
@@ -20,14 +21,13 @@ fun NavController.navigateToTeacher(
 
 fun NavGraphBuilder.teacherNavigation(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    onBackClick: () -> Unit
+    onSentToBack: () -> Unit
 ) {
     navigation<Destination.Teacher.Graph>(
         startDestination = Destination.Teacher.Home
     ) {
-        composable<Destination.Teacher.Home> {
-            TeacherHomeRoute(onBackClick)
-        }
+        teacherHome(onSentToBack)
+        teacherLessonInfo()
+        teacherProfile()
     }
-
 }

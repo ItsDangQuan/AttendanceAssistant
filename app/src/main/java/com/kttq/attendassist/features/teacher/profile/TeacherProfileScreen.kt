@@ -23,23 +23,33 @@ import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.components.AppSubsectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
-import com.kttq.attendassist.features.student.profile.StudentProfileViewModel
-import kotlin.text.ifEmpty
 
 @Composable
 fun TeacherProfileRoute(
-    modifier: Modifier = Modifier
-) {
-    TeacherProfileScreen(modifier = modifier)
-}
-
-@Composable
-fun TeacherProfileScreen(
     modifier: Modifier = Modifier,
     viewModel: TeacherProfileViewModel = hiltViewModel() // Renamed for clarity
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    TeacherProfileScreen(
+        name = uiState.name,
+        studentId = uiState.studentId,
+        email = uiState.email,
+        phone = uiState.phone,
+        onChangePasswordClicked = viewModel::onChangePasswordClicked,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun TeacherProfileScreen(
+    name: String,
+    studentId: String,
+    email: String,
+    phone: String,
+    onChangePasswordClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -50,7 +60,7 @@ fun TeacherProfileScreen(
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_8)))
 
-        AppScreenTitle(uiState.name.ifEmpty { "Loading..." }) // Display name from uiState
+        AppScreenTitle(name.ifEmpty { "Loading..." }) // Display name from uiState
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_24)))
 
         // Personal Information Section
@@ -63,7 +73,7 @@ fun TeacherProfileScreen(
         AppSubsectionTitle("Name", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "", // Label can be empty if AppSubsectionTitle serves as label
-            value = uiState.name,
+            value = name,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -71,7 +81,7 @@ fun TeacherProfileScreen(
         AppSubsectionTitle("Teacher ID", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
-            value = uiState.studentId,
+            value = studentId,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -79,7 +89,7 @@ fun TeacherProfileScreen(
         AppSubsectionTitle("Email", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
-            value = uiState.email,
+            value = email,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -87,7 +97,7 @@ fun TeacherProfileScreen(
         AppSubsectionTitle("Phone", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "", // Changed from "Phone" as AppSubsectionTitle is present
-            value = uiState.phone,
+            value = phone,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -101,7 +111,7 @@ fun TeacherProfileScreen(
             AppLabelPrimary("Change password", Modifier.weight(1f))
             AppIconButton(
                 iconId = R.drawable.ic_arrow_forward,
-                onClick = { viewModel.onChangePasswordClicked() } // Call ViewModel function
+                onClick = { onChangePasswordClicked() } // Call ViewModel function
             )
         }
     }
@@ -113,6 +123,12 @@ private fun TeacherProfileScreenPreview() {
     AttendanceAssistantTheme {
         // Preview will use Hilt to provide the ViewModel.
         // For more complex scenarios, consider providing a mock ViewModel or UiState.
-        TeacherProfileScreen()
+        TeacherProfileScreen(
+            name = "",
+            studentId = "",
+            email = "",
+            phone = "",
+            onChangePasswordClicked = {}
+        )
     }
 }

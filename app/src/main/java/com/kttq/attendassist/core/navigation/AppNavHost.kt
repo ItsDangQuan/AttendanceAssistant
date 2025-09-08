@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.kttq.attendassist.core.navigation.login.loginScreen
+import com.kttq.attendassist.core.navigation.login.login
 import com.kttq.attendassist.core.navigation.login.navigateToLogin
 import com.kttq.attendassist.core.navigation.redirect.navigateToRedirect
 import com.kttq.attendassist.core.navigation.redirect.redirect
@@ -33,8 +33,8 @@ fun AppNavHost(
             navController::navigateToStudent,
             navController::navigateToTeacher
         )
-        loginScreen(onShowSnackbar, navController::navigateToRedirect)
-        teacherNavigation(onShowSnackbar, onBackClick)
+        login(onShowSnackbar, navController::navigateToRedirect)
+        teacherNavigation(onShowSnackbar, onSentToBack)
         studentNavigation(onSentToBack)
     }
 }

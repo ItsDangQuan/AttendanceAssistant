@@ -60,6 +60,12 @@ sealed class Destination {
 
         @Serializable
         object Home : Teacher()
+
+        @Serializable
+        object LessonInfo : Teacher()
+
+        @Serializable
+        object Profile : Teacher()
     }
 }
 
@@ -120,7 +126,19 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         selectedIconRes = R.drawable.ic_home,
         unselectedIconRes = R.drawable.ic_home,
         titleTextRes = R.string.home
-    )
+    ),
+
+    Destination.Teacher.LessonInfo::class to UiMeta(
+        isTopLevel = false,
+        showNavigation = false,
+        showTopBar = true
+    ),
+
+    Destination.Teacher.Profile::class to UiMeta(
+        isTopLevel = true,
+        showNavigation = true,
+        showTopBar = true
+    ),
 )
 
 fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()

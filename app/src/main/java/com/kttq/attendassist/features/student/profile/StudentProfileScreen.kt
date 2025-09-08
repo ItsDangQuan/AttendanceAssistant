@@ -27,18 +27,30 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun StudentProfileRoute(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: StudentProfileViewModel = hiltViewModel(),
 ) {
-    StudentProfileScreen(modifier = modifier)
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    StudentProfileScreen(
+        name = uiState.name,
+        studentId = uiState.studentId,
+        email = uiState.email,
+        phone = uiState.phone,
+        onChangePasswordClicked = viewModel::onChangePasswordClicked,
+        modifier = modifier
+    )
 }
 
 @Composable
 fun StudentProfileScreen(
+    name: String,
+    studentId: String,
+    email: String,
+    phone: String,
+    onChangePasswordClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: StudentProfileViewModel = hiltViewModel() // Renamed for clarity
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -49,7 +61,7 @@ fun StudentProfileScreen(
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_8)))
 
-        AppScreenTitle(uiState.name.ifEmpty { "Loading..." }) // Display name from uiState
+        AppScreenTitle(name.ifEmpty { "Loading..." }) // Display name from uiState
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_24)))
 
         // Personal Information Section
@@ -62,7 +74,7 @@ fun StudentProfileScreen(
         AppSubsectionTitle("Name", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "", // Label can be empty if AppSubsectionTitle serves as label
-            value = uiState.name,
+            value = name,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -70,7 +82,7 @@ fun StudentProfileScreen(
         AppSubsectionTitle("Student ID", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
-            value = uiState.studentId,
+            value = studentId,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -78,7 +90,7 @@ fun StudentProfileScreen(
         AppSubsectionTitle("Email", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
-            value = uiState.email,
+            value = email,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -86,7 +98,7 @@ fun StudentProfileScreen(
         AppSubsectionTitle("Phone", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "", // Changed from "Phone" as AppSubsectionTitle is present
-            value = uiState.phone,
+            value = phone,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -100,7 +112,7 @@ fun StudentProfileScreen(
             AppLabelPrimary("Change password", Modifier.weight(1f))
             AppIconButton(
                 iconId = R.drawable.ic_arrow_forward,
-                onClick = { viewModel.onChangePasswordClicked() } // Call ViewModel function
+                onClick = { onChangePasswordClicked() } // Call ViewModel function
             )
         }
     }
@@ -112,6 +124,12 @@ private fun StudentProfileScreenPreview() {
     AttendanceAssistantTheme {
         // Preview will use Hilt to provide the ViewModel.
         // For more complex scenarios, consider providing a mock ViewModel or UiState.
-        StudentProfileScreen()
+        StudentProfileScreen(
+            name = "",
+            studentId = "",
+            email = "",
+            phone = "",
+            onChangePasswordClicked = {}
+        )
     }
 }
