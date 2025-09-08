@@ -6,7 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.kttq.attendassist.core.navigation.Destination
-import com.kttq.attendassist.features.student.profile.StudentProfileRoute
+import com.kttq.attendassist.features.teacher.profile.TeacherProfileRoute
 
 fun NavController.navigateToTeacherProfile(
     navOptions: NavOptions? = navOptions {
@@ -20,6 +20,6 @@ fun NavController.navigateToTeacherProfile(
 fun NavGraphBuilder.teacherProfile(
 ) {
     composable<Destination.Teacher.Profile> {
-        StudentProfileRoute()
+        TeacherProfileRoute()
     }
 }

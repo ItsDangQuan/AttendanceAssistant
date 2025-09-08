@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -26,12 +28,24 @@ fun TeacherLessonInfoRoute(
     modifier: Modifier = Modifier,
     viewModel: TeacherLessonInfoViewModel = hiltViewModel()
 ) {
-    TeacherLessonInfoScreen(modifier = modifier)
+    val lessonDetailsUiState by viewModel.lessonDetailsUiState.collectAsState()
+    val attendanceStatsUiState by viewModel.attendanceStatsUiState.collectAsState()
+    TeacherLessonInfoScreen(
+        modifier = modifier,
+        lessonDetailsUiState = lessonDetailsUiState,
+        attendanceStatsUiState = attendanceStatsUiState,
+        onStopCheckingClicked = viewModel::onStopCheckingClicked,
+        onExportClicked = viewModel::onExportClicked
+    )
 }
 
 @Composable
 fun TeacherLessonInfoScreen(
-    modifier: Modifier = Modifier,
+    lessonDetailsUiState: LessonDetailsUiState?,
+    attendanceStatsUiState: AttendanceStatsUiState?,
+    onStopCheckingClicked: () -> Unit,
+    onExportClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
@@ -46,13 +60,13 @@ fun TeacherLessonInfoScreen(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
         ) {
             AppSectionTitle(text = "Course Information")
-            AppBodyPrimary(text = "Course ID: ${"Math"}")
-            AppBodyPrimary(text = "Course Name: ${"MTH253"}")
+            AppBodyPrimary(text = "Course ID: ${lessonDetailsUiState?.courseId ?: "N/A"}")
+            AppBodyPrimary(text = "Course Name: ${lessonDetailsUiState?.courseName ?: "N/A"}")
 
             AppSectionTitle(text = "Attendance Information")
-            AppBodyPrimary(text = "Time: ${"9:00"}")
-            AppBodyPrimary(text = "Date: ${"Aug 1st"}")
-            AppBodyPrimary(text = "Presenter today: ${"Mr.John Doe"}")
+            AppBodyPrimary(text = "Time: ${lessonDetailsUiState?.time ?: "N/A"}")
+            AppBodyPrimary(text = "Date: ${lessonDetailsUiState?.date ?: "N/A"}")
+            AppBodyPrimary(text = "Presenter today: ${lessonDetailsUiState?.presenter ?: "N/A"}")
 
             AppSectionTitle(text = "Statistics")
 
@@ -65,14 +79,14 @@ fun TeacherLessonInfoScreen(
                     modifier = Modifier.weight(1f)
                 ) {
                     AppLabelPrimary("Total:")
-                    AppLabelSecondary("N/A")
+                    AppLabelSecondary(attendanceStatsUiState?.totalStudents?.toString() ?: "N/A")
                 }
 
                 AppCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     AppLabelPrimary("Already checked:")
-                    AppLabelSecondary("N/A")
+                    AppLabelSecondary(attendanceStatsUiState?.checkedStudents?.toString() ?: "N/A")
                 }
             }
 
@@ -85,18 +99,14 @@ fun TeacherLessonInfoScreen(
         ) {
 
             AppButton(
-                onClick = {
-                    //TODO: Handle student click button
-                },
+                onClick = onStopCheckingClicked,
                 modifier = Modifier.weight(1f)
             ) {
                 AppLabelPrimary("Stop checking")
             }
 
             AppButton(
-                onClick = {
-                    //TODO: Handle student click button
-                },
+                onClick = onExportClicked,
                 modifier = Modifier.weight(1f)
             ) {
                 AppLabelPrimary("Export")
@@ -109,6 +119,20 @@ fun TeacherLessonInfoScreen(
 @Composable
 private fun TeacherLessonInfoScreenPreview() {
     AttendanceAssistantTheme {
-        TeacherLessonInfoScreen()
+        TeacherLessonInfoScreen(
+            lessonDetailsUiState = LessonDetailsUiState(
+                courseId = "PREVIEW101",
+                courseName = "Preview Course",
+                time = "10:00 AM",
+                date = "Jan 1st",
+                presenter = "Dr. Preview"
+            ),
+            attendanceStatsUiState = AttendanceStatsUiState(
+                totalStudents = 50,
+                checkedStudents = 25
+            ),
+            onStopCheckingClicked = {},
+            onExportClicked = {}
+        )
     }
 }
