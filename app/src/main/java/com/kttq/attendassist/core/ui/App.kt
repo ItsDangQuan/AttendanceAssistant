@@ -53,23 +53,23 @@ fun App(
         },
         bottomBar = {
             when {
-                appState.isTeacher() -> AppBottomBar(
+                appState.isStudent() -> AppBottomBar(
                     TopLevelStudentDest,
                     isSelected = {
                         appState.navController.currentDestination?.hasRoute(it::class) == true
                     },
                     onDestinationSelected = {
-                        appState.navController.navigate(it)
+                        appState.navigate(it)
                     }
                 )
 
-                appState.isStudent() -> AppBottomBar(
+                appState.isTeacher() -> AppBottomBar(
                     TopLevelTeacherDest,
                     isSelected = {
                         appState.navController.currentDestination?.hasRoute(it::class) == true
                     },
                     onDestinationSelected = {
-                        appState.navController.navigate(it)
+                        appState.navigate(it)
                     }
                 )
 

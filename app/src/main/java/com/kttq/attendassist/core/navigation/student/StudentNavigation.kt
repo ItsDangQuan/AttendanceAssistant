@@ -11,7 +11,7 @@ import com.kttq.attendassist.features.student.home.StudentHomeRoute
 
 fun NavController.navigateToStudent(
     navOptions: NavOptions? = navOptions {
-        popUpTo(Destination.Student.Graph)
+        popUpTo(Destination.Student.Home)
         launchSingleTop = true
     }
 ) {
