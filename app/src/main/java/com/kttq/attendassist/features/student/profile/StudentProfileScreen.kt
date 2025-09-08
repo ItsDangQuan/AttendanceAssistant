@@ -58,7 +58,7 @@ fun StudentProfileScreen(
             value = uiState.name,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
-            readable = true
+            readOnly = true
         )
         AppSubsectionTitle("Student ID", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
@@ -66,7 +66,7 @@ fun StudentProfileScreen(
             value = uiState.studentId,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
-            readable = true
+            readOnly = true
         )
         AppSubsectionTitle("Email", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
@@ -74,7 +74,7 @@ fun StudentProfileScreen(
             value = uiState.email,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
-            readable = true
+            readOnly = true
         )
         AppSubsectionTitle("Phone", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
@@ -82,7 +82,7 @@ fun StudentProfileScreen(
             value = uiState.phone,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
-            readable = true
+            readOnly = true
         )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_24)))
         AppSectionTitle("Settings", Modifier.fillMaxWidth())
