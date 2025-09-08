@@ -1,6 +1,7 @@
 package com.kttq.attendassist.injection.modules
 
 import com.kttq.attendassist.core.data.network.AuthService
+import com.kttq.attendassist.core.data.network.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,5 +29,13 @@ class ServiceModule {
         @Named("AuthRetrofit") retrofit: Retrofit
     ): AuthService {
         return retrofit.create(AuthService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthenticatedUserService(
+        @Named("AuthRetrofit") retrofit: Retrofit
+    ): UserService {
+        return retrofit.create(UserService::class.java)
     }
 }
