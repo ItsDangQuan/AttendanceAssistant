@@ -121,7 +121,9 @@ fun AppIconButton(
     enabled: Boolean = true
 ) {
     IconButton(
-        onClick = onClick
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled
     ) {
         Icon (
             painter = painterResource(id = iconId),
