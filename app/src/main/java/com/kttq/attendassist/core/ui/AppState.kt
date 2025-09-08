@@ -49,4 +49,9 @@ class AppState(
         currentDestinationAsState?.hierarchy?.any {
             it.hasRoute(Destination.Student.Graph::class)
         } == true
+
+    val currentDestinationObjectAsState: Destination?
+        @Composable get() = Destination.listDestinations().first {
+            currentDestinationAsState?.hasRoute(it::class) == true
+        }
 }
