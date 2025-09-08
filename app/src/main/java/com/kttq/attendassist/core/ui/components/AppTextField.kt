@@ -23,6 +23,7 @@ fun AppOutlineTextField(
     singleLine: Boolean = true,
     trailingIcon: @Composable (() -> Unit)? = null,
     isVisible: Boolean = true,
+    readable: Boolean = false
 ) {
     if (leadingIconRes != null) {
         OutlinedTextField(
@@ -43,7 +44,8 @@ fun AppOutlineTextField(
             } else {
                 PasswordVisualTransformation()
             },
-            modifier = modifier
+            modifier = modifier,
+            readOnly = readable
         )
     }
     else {
@@ -59,7 +61,8 @@ fun AppOutlineTextField(
             } else {
                 PasswordVisualTransformation()
             },
-            modifier = modifier
+            modifier = modifier,
+            readOnly = readable
         )
     }
 }
