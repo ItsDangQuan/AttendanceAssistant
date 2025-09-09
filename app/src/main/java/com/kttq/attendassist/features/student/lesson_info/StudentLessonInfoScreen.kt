@@ -30,12 +30,16 @@ fun StudentLessonInfoRoute(
     viewModel: StudentLessonInfoViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isScanning by viewModel.isScanning.collectAsState()
 
     StudentLessonInfoScreen(
         uiState = uiState,
         changeReasonToAbsent = viewModel::changeReasonToAbsent,
         changeWantToAbsent = viewModel::changeWantToAbsent,
-        onSubmit = viewModel::submitAbsenceRequest,
+        onSubmitAbsent = viewModel::submitAbsenceRequest,
+        onStopLessonScan = viewModel::stopLessonScan,
+        onStartLessonScan = viewModel::startLessonScan,
+        isScanning = isScanning,
         modifier = modifier
     )
 }
@@ -43,9 +47,12 @@ fun StudentLessonInfoRoute(
 @Composable
 fun StudentLessonInfoScreen(
     uiState: StudentLessonInfoUiState,
+    isScanning: Boolean,
     changeReasonToAbsent: (String) -> Unit,
     changeWantToAbsent: () -> Unit,
-    onSubmit: () -> Unit,
+    onSubmitAbsent: () -> Unit,
+    onStopLessonScan: () -> Unit,
+    onStartLessonScan: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (uiState.isLoading) {
@@ -119,12 +126,26 @@ fun StudentLessonInfoScreen(
             }
         }
 
-        AppButton(
-            onClick = onSubmit,
-            enabled = uiState.isWantToAbsent,
-            modifier = Modifier.fillMaxWidth()
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            AppLabelPrimary("Submit now")
+            AppButton(
+                onClick = if (isScanning) onStopLessonScan else onStartLessonScan,
+                enabled = !uiState.isWantToAbsent,
+                modifier = Modifier.weight(1f)
+            ) {
+                AppLabelPrimary(if (isScanning) "Stop checking" else "Start checking")
+            }
+
+            AppButton(
+                onClick = onSubmitAbsent,
+                enabled = uiState.isWantToAbsent,
+                modifier = Modifier.weight(1f)
+            ) {
+                AppLabelPrimary("Submit absent")
+            }
         }
     }
 }
@@ -145,7 +166,10 @@ private fun StudentLessonInfoScreenPreview() {
             ),
             changeReasonToAbsent = {},
             changeWantToAbsent = {},
-            onSubmit = {}
+            onSubmitAbsent = {},
+            onStopLessonScan = {},
+            onStartLessonScan = {},
+            isScanning = false
         )
     }
 }
@@ -158,7 +182,10 @@ private fun StudentLessonInfoScreenLoadingPreview() {
             uiState = StudentLessonInfoUiState(isLoading = true),
             changeReasonToAbsent = {},
             changeWantToAbsent = {},
-            onSubmit = {}
+            onSubmitAbsent = {},
+            onStopLessonScan = {},
+            onStartLessonScan = {},
+            isScanning = false
         )
     }
 }
@@ -171,7 +198,10 @@ private fun StudentLessonInfoScreenErrorPreview() {
             uiState = StudentLessonInfoUiState(errorMessage = "Failed to load details"),
             changeReasonToAbsent = {},
             changeWantToAbsent = {},
-            onSubmit = {}
+            onSubmitAbsent = {},
+            onStopLessonScan = {},
+            onStartLessonScan = {},
+            isScanning = false
         )
     }
 }
@@ -192,7 +222,10 @@ private fun StudentLessonInfoScreenInitialEmptyPreview() {
             ),
             changeReasonToAbsent = {},
             changeWantToAbsent = {},
-            onSubmit = {}
+            onSubmitAbsent = {},
+            onStopLessonScan = {},
+            onStartLessonScan = {},
+            isScanning = false
         )
     }
 }

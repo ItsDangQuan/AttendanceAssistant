@@ -30,10 +30,13 @@ fun TeacherLessonInfoRoute(
 ) {
     val lessonDetailsUiState by viewModel.lessonDetailsUiState.collectAsState()
     val attendanceStatsUiState by viewModel.attendanceStatsUiState.collectAsState()
+    val isChecking by viewModel.isChecking.collectAsState()
     TeacherLessonInfoScreen(
         modifier = modifier,
         lessonDetailsUiState = lessonDetailsUiState,
         attendanceStatsUiState = attendanceStatsUiState,
+        isChecking = isChecking,
+        onStartCheckingClicked = viewModel::startCheckingAttendance,
         onStopCheckingClicked = viewModel::onStopCheckingClicked,
         onExportClicked = viewModel::onExportClicked
     )
@@ -41,8 +44,11 @@ fun TeacherLessonInfoRoute(
 
 @Composable
 fun TeacherLessonInfoScreen(
+
     lessonDetailsUiState: LessonDetailsUiState?,
     attendanceStatsUiState: AttendanceStatsUiState?,
+    isChecking: Boolean,
+    onStartCheckingClicked: () -> Unit,
     onStopCheckingClicked: () -> Unit,
     onExportClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -99,10 +105,10 @@ fun TeacherLessonInfoScreen(
         ) {
 
             AppButton(
-                onClick = onStopCheckingClicked,
+                onClick = if (isChecking) onStartCheckingClicked else onStopCheckingClicked,
                 modifier = Modifier.weight(1f)
             ) {
-                AppLabelPrimary("Stop checking")
+                AppLabelPrimary(if (isChecking) "Start checking" else "Stop checking")
             }
 
             AppButton(
@@ -131,6 +137,8 @@ private fun TeacherLessonInfoScreenPreview() {
                 totalStudents = 50,
                 checkedStudents = 25
             ),
+            isChecking = false,
+            onStartCheckingClicked = {},
             onStopCheckingClicked = {},
             onExportClicked = {}
         )
