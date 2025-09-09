@@ -150,11 +150,11 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
 fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
 
 // TODO: Using these for testing. These should be moved to somewhere in the future.
-val TopLevelTeacherDest = listOf(
+val TopLevelTeacherDest: List<Destination> = listOf(
     Destination.Teacher.Home,
     Destination.Teacher.Profile
 )
-val TopLevelStudentDest = listOf(
+val TopLevelStudentDest: List<Destination> = listOf(
     Destination.Student.Home,
     Destination.Student.Summary,
     Destination.Student.Profile

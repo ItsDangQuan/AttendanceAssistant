@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
@@ -18,7 +19,6 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavDestination.Companion.hasRoute
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.navigation.AppNavHost
 import com.kttq.attendassist.core.navigation.Destination
@@ -58,29 +58,28 @@ fun App(
             if (currentDest != null) {
                 val uiMeta = currentDest.uiMeta()
                 if (uiMeta.showNavigation) {
-                    when(currentDest) {
-                         is Destination.Student-> AppBottomBar(
-                            TopLevelStudentDest,
-                            isSelected = {
-                                appState.navController.currentDestination?.hasRoute(it::class) == true
-                            },
-                            onDestinationSelected = {
-                                appState.navigate(it)
-                            }
-                        )
+                    AppBottomBar(
+                        when (currentDest) {
+                            is Destination.Student -> TopLevelStudentDest
+                            is Destination.Teacher -> TopLevelTeacherDest
 
-                        is Destination.Teacher -> AppBottomBar(
-                            TopLevelTeacherDest,
-                            isSelected = {
-                                appState.navController.currentDestination?.hasRoute(it::class) == true
-                            },
-                            onDestinationSelected = {
-                                appState.navigate(it)
-                            }
-                        )
-
-                        else -> {}
-                    }
+                            else -> emptyList()
+                        },
+                        isSelected = {
+                            Log.d(
+                                "IS_SELECTED",
+                                appState.navController.currentDestination?.toString() ?: "null"
+                            )
+                            it == currentDest
+                        },
+                        onDestinationSelected = {
+                            Log.d(
+                                "ON_SELECTED",
+                                it.toString()
+                            )
+                            appState.navigate(it)
+                        }
+                    )
                 }
             }
         },
