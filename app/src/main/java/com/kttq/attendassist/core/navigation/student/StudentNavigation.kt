@@ -6,6 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.kttq.attendassist.core.navigation.Destination
+import com.kttq.attendassist.core.navigation.student.class_list.studentClassList
 import com.kttq.attendassist.core.navigation.student.home.studentHome
 import com.kttq.attendassist.core.navigation.student.lesson_info.studentLessonInfo
 import com.kttq.attendassist.core.navigation.student.profile.studentProfile
@@ -21,14 +22,15 @@ fun NavController.navigateToStudent(
 }
 
 fun NavGraphBuilder.studentNavigation(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     onSentToBack: () -> Unit
 ) {
     navigation<Destination.Student.Graph>(
         startDestination = Destination.Student.Home
     ) {
-        studentHome(onSentToBack)
+        studentHome(onShowSnackbar, onSentToBack)
         studentProfile()
         studentLessonInfo()
-        studentSummary()
+        studentClassList()
     }
 }

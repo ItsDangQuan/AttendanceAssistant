@@ -24,6 +24,10 @@ import com.kttq.attendassist.core.ui.components.AppOutlineTextField
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
+// TODO: Create a new Route & Composable, which is nearly similar to this Route
+//  However, I will delegate to "some one", since we this is argument-passing composable
+//  and we have a lot of screen in this app which should be written
+//  If I have enough time, I will do this on my own.
 @Composable
 fun StudentLessonInfoRoute(
     modifier: Modifier = Modifier,

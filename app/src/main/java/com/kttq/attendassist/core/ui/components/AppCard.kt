@@ -99,7 +99,8 @@ fun AppCard(
         Card(
             onClick = onClick,
             modifier = modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_small)),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(4.dp)
         ) {

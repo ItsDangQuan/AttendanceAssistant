@@ -18,9 +18,13 @@ fun NavController.navigateToStudentHome(
 }
 
 fun NavGraphBuilder.studentHome(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     onSentToBack: () -> Unit
 ) {
     composable<Destination.Student.Home> {
-        StudentHomeRoute(onSentToBack)
+        StudentHomeRoute(
+            onSentToBack,
+            onShowSnackbar,
+        )
     }
 }

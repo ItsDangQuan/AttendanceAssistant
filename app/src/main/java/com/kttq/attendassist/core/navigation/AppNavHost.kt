@@ -35,6 +35,6 @@ fun AppNavHost(
         )
         login(onShowSnackbar, navController::navigateToRedirect)
         teacherNavigation(onShowSnackbar, onSentToBack)
-        studentNavigation(onSentToBack)
+        studentNavigation(onShowSnackbar, onSentToBack)
     }
 }
