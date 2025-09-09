@@ -91,20 +91,40 @@ private fun AppHorizontalCardPreview() {
 @Composable
 fun AppCard(
     modifier: Modifier = Modifier,
+    clickable: Boolean = false,
+    onClick: () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            content = content
-        )
+    if (clickable) {
+        Card(
+            onClick = onClick,
+            modifier = modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            elevation = CardDefaults.cardElevation(4.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                content = content
+            )
+        }
+    }
+    else {
+        Card(
+            modifier = modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            elevation = CardDefaults.cardElevation(4.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                content = content
+            )
+        }
     }
 }
 

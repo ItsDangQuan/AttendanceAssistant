@@ -37,7 +37,7 @@ sealed class Destination {
     sealed class Student : Destination() {
         @Serializable
         @Subgraph
-        object Graph : Destination()
+        object Graph : Student() // Changed to inherit from Student
 
         @Serializable
         object Home : Student()
@@ -50,13 +50,16 @@ sealed class Destination {
 
         @Serializable
         object Summary : Student()
+
+        @Serializable
+        object ClassList: Student()
     }
 
     @Serializable
     sealed class Teacher : Destination() {
         @Serializable
         @Subgraph
-        object Graph : Destination()
+        object Graph : Teacher() // Changed to inherit from Teacher
 
         @Serializable
         object Home : Teacher()
@@ -66,6 +69,7 @@ sealed class Destination {
 
         @Serializable
         object Profile : Teacher()
+
     }
 }
 
@@ -123,6 +127,14 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         unselectedIconRes = R.drawable.ic_analytics
     ),
 
+    Destination.Student.ClassList::class to UiMeta(
+        isTopLevel = true,
+        showNavigation = true,
+        showTopBar = true,
+        selectedIconRes = R.drawable.ic_view_kanban,
+        unselectedIconRes = R.drawable.ic_view_kanban
+    ),
+
     Destination.Teacher.Home::class to UiMeta(
         isTopLevel = true,
         showNavigation = true,
@@ -145,6 +157,9 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         selectedIconRes = R.drawable.ic_account_circle,
         unselectedIconRes = R.drawable.ic_account_circle
     ),
+
+
+
 )
 
 fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
@@ -156,7 +171,7 @@ val TopLevelTeacherDest: List<Destination> = listOf(
 )
 val TopLevelStudentDest: List<Destination> = listOf(
     Destination.Student.Home,
-    Destination.Student.Summary,
+    Destination.Student.ClassList,
     Destination.Student.Profile
 )
 // OLD CODE KEEP FOR REFERENCES
