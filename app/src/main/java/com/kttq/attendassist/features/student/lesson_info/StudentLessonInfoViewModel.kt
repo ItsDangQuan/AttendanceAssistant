@@ -2,12 +2,14 @@ package com.kttq.attendassist.features.student.lesson_info
 
 import android.bluetooth.le.ScanFilter
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.ble.scanner.BleScanner
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class StudentLessonInfoUiState(
@@ -42,15 +44,17 @@ class StudentLessonInfoViewModel @Inject constructor(
 
     private fun loadLessonDetails() {
         // TODO: Implement logic to load actual lesson details from a repository
-        _uiState.update {
-            it.copy(
-                courseId = "MTH253", // Example course ID
-                courseName = "Calculus III",
-                time = "9:00 AM",
-                date = "Oct 27th",
-                presenter = "Prof. Newton",
-                isLoading = false
-            )
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    courseId = "MTH253", // Example course ID
+                    courseName = "Calculus III",
+                    time = "9:00 AM",
+                    date = "Oct 27th",
+                    presenter = "Prof. Newton",
+                    isLoading = false
+                )
+            }
         }
     }
 

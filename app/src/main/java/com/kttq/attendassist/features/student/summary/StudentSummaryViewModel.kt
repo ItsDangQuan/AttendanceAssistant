@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
 // TODO: Replace with a more specific data class if needed for items in LazyColumn
 data class DisplayItem(
@@ -37,13 +38,14 @@ class StudentSummaryViewModel @Inject constructor(
     val uiState: StateFlow<StudentSummaryUiState> = _uiState.asStateFlow()
 
     init {
+        // _uiState is already isLoading = true from its constructor, so StudentSummaryScreen will show loading.
         loadInitialData()
     }
 
     private fun loadInitialData() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            // TODO: Fetch actual summary statistics from a repository
+            // First, load and update summary statistics.
+            // The global isLoading state is still true, so the screen continues to show "Loading...".
             val summaryStats = listOf(
                 "Total" to "0",
                 "Total leave" to "0",
@@ -51,9 +53,12 @@ class StudentSummaryViewModel @Inject constructor(
                 "Leave unaccepted" to "0"
             )
             _uiState.update { it.copy(statSummary = summaryStats) }
-            // Initially load items for the default selected filter ("Incoming")
+
+            // Then, fetch the initial filtered display items.
+            // This function will handle setting isLoading = true at its start (if needed for its own logic)
+            // and, importantly, isLoading = false when its items are loaded.
+            // This final isLoading = false from fetchFilteredDisplayItems will then update the screen.
             fetchFilteredDisplayItems()
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -113,6 +118,7 @@ class StudentSummaryViewModel @Inject constructor(
                 _uiState.value.isAttendedSelected -> listOf(DisplayItem("att1", "Attended Class 1", "Details..."))
                 else -> emptyList()
             }
+            // This update will make the screen show the items and stop the loading indicator.
             _uiState.update { it.copy(displayItems = placeholderItems, isLoading = false) }
         }
     }
