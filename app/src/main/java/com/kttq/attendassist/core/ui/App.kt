@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
@@ -16,16 +17,13 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.kttq.attendassist.R
 import com.kttq.attendassist.core.navigation.AppNavHost
 import com.kttq.attendassist.core.navigation.Destination
-import com.kttq.attendassist.core.navigation.TopLevelStudentDest
-import com.kttq.attendassist.core.navigation.TopLevelTeacherDest
-import com.kttq.attendassist.core.navigation.uiMeta
 import com.kttq.attendassist.core.ui.components.AppBottomBar
-import com.kttq.attendassist.core.ui.components.AppCenterAlignedTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,53 +32,33 @@ fun App(
     onSentToBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Log.d("App", "App recomposed")
+
+
+    val currentDestination by appState.currentDestination.collectAsState()
+    val navigateUpdated by rememberUpdatedState(newValue = { d: Destination -> appState.navigate(d) })
+
     Scaffold(
         modifier = modifier,
-        topBar = {
-            val currentDest = appState.currentDestinationObjectAsState
-            if (currentDest != null) {
-                val uiMeta = currentDest.uiMeta()
-                if (uiMeta.showTopBar) {
-                    AppCenterAlignedTopBar(
-                        title = if (uiMeta.titleTextRes != null) {
-                            stringResource(uiMeta.titleTextRes)
-                        } else {
-                            null
-                        },
-                        navigationIconRes = R.drawable.ic_arrow_back
-                    )
-                }
-            }
-        },
         bottomBar = {
-            val currentDest = appState.currentDestinationObjectAsState
-            if (currentDest != null) {
-                val uiMeta = currentDest.uiMeta()
-                if (uiMeta.showNavigation) {
-                    AppBottomBar(
-                        when (currentDest) {
-                            is Destination.Student -> TopLevelStudentDest
-                            is Destination.Teacher -> TopLevelTeacherDest
-
-                            else -> emptyList()
-                        },
-                        isSelected = {
-                            it == currentDest
-                        },
-                        onDestinationSelected = {
-                            appState.navigate(it)
-                        }
-                    )
-                }
+            // Keep the bar visible by default (empty list = no items)
+            if (appState.currentDestinationSubgraph.collectAsState().value != null) {
+                AppBottomBar(
+                    destinations = appState.bottomBarDestinations.collectAsState().value,
+                    isSelected = { destination ->
+                        destination == currentDestination
+                    },
+                    onDestinationSelected = {
+                        navigateUpdated(it)
+                    }
+                )
             }
         },
         snackbarHost = {
             SnackbarHost(
                 hostState = appState.snackbarHostState,
                 modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.exclude(
-                        WindowInsets.ime,
-                    ),
+                    WindowInsets.safeDrawing.exclude(WindowInsets.ime),
                 ),
             )
         }
@@ -106,3 +84,4 @@ fun App(
         )
     }
 }
+
