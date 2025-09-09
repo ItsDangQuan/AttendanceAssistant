@@ -1,6 +1,5 @@
 package com.kttq.attendassist.core.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
@@ -66,17 +65,9 @@ fun App(
                             else -> emptyList()
                         },
                         isSelected = {
-                            Log.d(
-                                "IS_SELECTED",
-                                appState.navController.currentDestination?.toString() ?: "null"
-                            )
                             it == currentDest
                         },
                         onDestinationSelected = {
-                            Log.d(
-                                "ON_SELECTED",
-                                it.toString()
-                            )
                             appState.navigate(it)
                         }
                     )
