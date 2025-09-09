@@ -110,13 +110,17 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
     Destination.Student.Profile::class to UiMeta(
         isTopLevel = true,
         showNavigation = true,
-        showTopBar = true
+        showTopBar = true,
+        selectedIconRes = R.drawable.ic_account_circle,
+        unselectedIconRes = R.drawable.ic_account_circle
     ),
 
     Destination.Student.Summary::class to UiMeta(
         isTopLevel = true,
         showNavigation = true,
-        showTopBar = true
+        showTopBar = true,
+        selectedIconRes = R.drawable.ic_analytics,
+        unselectedIconRes = R.drawable.ic_analytics
     ),
 
     Destination.Teacher.Home::class to UiMeta(
@@ -137,16 +141,24 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
     Destination.Teacher.Profile::class to UiMeta(
         isTopLevel = true,
         showNavigation = true,
-        showTopBar = true
+        showTopBar = true,
+        selectedIconRes = R.drawable.ic_account_circle,
+        unselectedIconRes = R.drawable.ic_account_circle
     ),
 )
 
 fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
 
 // TODO: Using these for testing. These should be moved to somewhere in the future.
-val TopLevelTeacherDest = listOf(Destination.Teacher.Home)
-val TopLevelStudentDest = listOf(Destination.Student.Home)
-
+val TopLevelTeacherDest = listOf(
+    Destination.Teacher.Home,
+    Destination.Teacher.Profile
+)
+val TopLevelStudentDest = listOf(
+    Destination.Student.Home,
+    Destination.Student.Summary,
+    Destination.Student.Profile
+)
 // OLD CODE KEEP FOR REFERENCES
 
 //enum class Destination(
