@@ -22,6 +22,6 @@ interface BleScanner {
         onSuccess: (String) -> Unit,
         onFail: (errorCode: Int) -> Unit = {}
     )
-    fun stopScan();
+    fun stopScan()
     fun isScanning(): Boolean
 }

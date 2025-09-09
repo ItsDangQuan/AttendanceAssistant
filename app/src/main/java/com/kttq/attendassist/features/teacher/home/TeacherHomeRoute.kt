@@ -1,20 +1,33 @@
 package com.kttq.attendassist.features.teacher.home
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
+import com.kttq.attendassist.core.data.network.responses.Session
+import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppIconButton
+import com.kttq.attendassist.core.ui.components.AppLabelPrimary
+import com.kttq.attendassist.core.ui.components.AppLabelSecondary
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
@@ -23,6 +36,7 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 fun TeacherHomeRoute(
     onSentToBack: () -> Unit,
     modifier: Modifier = Modifier,
+    navigateToNewSession: (Session) -> Unit = {},
     viewModel: TeacherHomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -30,8 +44,14 @@ fun TeacherHomeRoute(
     BackHandler {
         onSentToBack()
     }
+    // TeacherHomeScreen(
+    //     userName = uiState.userName,
+    //     modifier = modifier
+    // )
     TeacherHomeScreen(
         userName = uiState.userName,
+        recentSessions = viewModel.recentSession.collectAsStateWithLifecycle().value,
+        navigateToNewSession = navigateToNewSession,
         modifier = modifier
     )
 }
@@ -39,57 +59,112 @@ fun TeacherHomeRoute(
 @Composable
 fun TeacherHomeScreen(
     userName: String,
+    recentSessions: List<Session>,
     modifier: Modifier = Modifier,
+    navigateToNewSession: (Session) -> Unit = {},
 ) {
+   Column(
+       modifier = modifier.fillMaxWidth()
+           .padding(dimensionResource(R.dimen.padding_medium)),
+   ) {
+       AppScreenTitle("Hello, $userName")
+       AppSectionTitle("<Date time>") // TODO: Replace with actual date/time
+       HorizontalDivider(
+           modifier = Modifier
+               .fillMaxWidth()
+               .padding(vertical = dimensionResource(R.dimen.padding_large)), // Added vertical padding
+           thickness = dimensionResource(R.dimen.divider_height),
+       )
+       LazyColumn(
+           modifier = Modifier.fillMaxWidth(),
+           horizontalAlignment = Alignment.CenterHorizontally,
+           verticalArrangement = Arrangement.Top
+       ) {
+           items(
+               recentSessions.size
+           ) {
+               AppCard (
+                   clickable = true,
+                   onClick = {
+                       navigateToNewSession(recentSessions[it])
+                   }
+               ) {
+                   AppLabelPrimary(recentSessions[it].classId)
+                   AppLabelSecondary(
+                       recentSessions[it].courseId + " - " +
+                               recentSessions[it].courseName
+                   )
+               }
+           }
 
-    Column(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        AppScreenTitle("Hello, $userName")
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AppSectionTitle("Current Checking")
-            AppIconButton(
-                iconId = R.drawable.ic_arrow_forward,
-                onClick = {
-
-                },
-                modifier = Modifier.wrapContentSize()
-            )
-        }
-        LazyColumn {
-            //TODO: Add list of current class and incoming classes based on uiState
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AppSectionTitle("Class Today")
-            AppIconButton(
-                iconId = R.drawable.ic_arrow_forward,
-                onClick = {
-
-                },
-                modifier = Modifier.wrapContentSize()
-            )
-        }
-        LazyColumn {
-            //TODO: Add list of current class and incoming classes based on uiState
-        }
-    }
+       }
+   }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun TeacherHomeScreenPreview() {
     AttendanceAssistantTheme {
-        // The preview will attempt to use Hilt to create the ViewModel.
-        // For complex ViewModels, this might require additional Hilt setup for previews
-        // or providing a mock ViewModel/UiState directly to TeacherHomeScreen.
         TeacherHomeScreen(
-            userName = ""
+            userName = "User",
+            recentSessions = emptyList()
         )
     }
 }
+// @Composable
+// fun TeacherHomeScreen(
+//     userName: String,
+//     modifier: Modifier = Modifier,
+// ) {
+// 
+//     Column(
+//         modifier = modifier.fillMaxWidth()
+//     ) {
+//         AppScreenTitle("Hello, $userName")
+//         Row(
+//             verticalAlignment = Alignment.CenterVertically
+//         ) {
+//             AppSectionTitle("Current Checking")
+//             AppIconButton(
+//                 iconId = R.drawable.ic_arrow_forward,
+//                 onClick = {
+// 
+//                 },
+//                 modifier = Modifier.wrapContentSize()
+//             )
+//         }
+//         LazyColumn {
+//             //TODO: Add list of current class and incoming classes based on uiState
+//         }
+// 
+//         Row(
+//             verticalAlignment = Alignment.CenterVertically
+//         ) {
+//             AppSectionTitle("Class Today")
+//             AppIconButton(
+//                 iconId = R.drawable.ic_arrow_forward,
+//                 onClick = {
+// 
+//                 },
+//                 modifier = Modifier.wrapContentSize()
+//             )
+//         }
+//         LazyColumn {
+//             //TODO: Add list of current class and incoming classes based on uiState
+//         }
+//     }
+// }
+// 
+// @Preview(showBackground = true)
+// @Composable
+// private fun TeacherHomeScreenPreview() {
+//     AttendanceAssistantTheme {
+//         // The preview will attempt to use Hilt to create the ViewModel.
+//         // For complex ViewModels, this might require additional Hilt setup for previews
+//         // or providing a mock ViewModel/UiState directly to TeacherHomeScreen.
+//         TeacherHomeScreen(
+//             userName = ""
+//         )
+//     }
+// }
 

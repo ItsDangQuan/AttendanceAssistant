@@ -70,6 +70,8 @@ sealed class Destination {
         @Serializable
         object Profile : Teacher()
 
+        @Serializable
+        object ClassList: Teacher()
     }
 }
 
@@ -159,6 +161,13 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
     ),
 
 
+    Destination.Teacher.ClassList::class to UiMeta(
+        isTopLevel = true,
+        showNavigation = true,
+        showTopBar = true,
+        selectedIconRes = R.drawable.ic_view_kanban,
+        unselectedIconRes = R.drawable.ic_view_kanban
+    ),
 
 )
 
