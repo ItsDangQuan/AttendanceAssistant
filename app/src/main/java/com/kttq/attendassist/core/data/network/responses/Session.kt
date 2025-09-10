@@ -10,7 +10,7 @@ data class Session(
     @SerialName("class_id")
     val classId: String,
     @SerialName("start_time")
-    val startTime: String,
+    val startTime: Long,
     @SerialName("end_time")
     val endTime: String,
     @SerialName("teacher_id")

@@ -77,6 +77,16 @@ sealed class Destination {
         data class ClassDetail(
             val classId: String,
         ) : Teacher()
+
+        @Serializable
+        data class ClassStudentList(
+            val classId: String,
+        ) : Teacher()
+
+        @Serializable
+        data class ClassPastSession(
+            val classId: String,
+        ) : Teacher()
     }
 }
 
@@ -112,11 +122,6 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         titleTextRes = R.string.home
     ),
 
-    Destination.Student.LessonInfo::class to UiMeta(
-        isTopLevel = false,
-        showNavigation = false,
-        showTopBar = true
-    ),
 
     Destination.Student.Profile::class to UiMeta(
         isTopLevel = true,
@@ -126,13 +131,6 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         unselectedIconRes = R.drawable.ic_account_circle
     ),
 
-    Destination.Student.Summary::class to UiMeta(
-        isTopLevel = true,
-        showNavigation = true,
-        showTopBar = true,
-        selectedIconRes = R.drawable.ic_analytics,
-        unselectedIconRes = R.drawable.ic_analytics
-    ),
 
     Destination.Student.ClassList::class to UiMeta(
         isTopLevel = true,
@@ -149,12 +147,6 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         selectedIconRes = R.drawable.ic_home,
         unselectedIconRes = R.drawable.ic_home,
         titleTextRes = R.string.home
-    ),
-
-    Destination.Teacher.LessonInfo::class to UiMeta(
-        isTopLevel = false,
-        showNavigation = false,
-        showTopBar = true
     ),
 
     Destination.Teacher.Profile::class to UiMeta(
