@@ -2,8 +2,12 @@ package com.kttq.attendassist.features.student.class_summary
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.kttq.attendassist.core.data.repositories.student.ClassDetailsRepository
+import com.kttq.attendassist.core.data.repositories.user.UserRepository
+import com.kttq.attendassist.core.data.repositories.user.UserRepositoryRefactor
 import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.navigation.Destination
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +22,8 @@ import javax.inject.Inject
 import kotlin.text.isNotBlank
 import com.kttq.attendassist.core.model.Record
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
 data class ClassSummaryUiState(
     val isLoading: Boolean = false,
@@ -29,6 +35,8 @@ data class ClassSummaryUiState(
 @HiltViewModel
 class ClassSummaryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val classDetailRepository: ClassDetailsRepository,
+    private val userRepository: UserRepositoryRefactor
 ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Student.ClassSummary>().classId
 
@@ -83,7 +91,8 @@ class ClassSummaryViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 // TODO: Fetch class details
-                val details: Class? = null
+                // Do not sure to use firstOrNull() in here. My fen, what is the purpose of classDetailRepository?
+                val details: Class? = classDetailRepository.observeClassDetails(classId).firstOrNull()
                 if (details == null) {
                     _uiState.update { it.copy(isLoading = false, error = "Class details not found.") }
                     return@launch
@@ -91,13 +100,14 @@ class ClassSummaryViewModel @Inject constructor(
                 _uiState.update { it.copy(classDetails = details) }
 
                 // Fetch records for the class by the student
-                val studentId = null // TODO: Fetch student ID
 
+
+                val studentId = userRepository.getCurrentUserAsStudent()?.studentId
                 if (studentId == null) {
                     _uiState.update { it.copy(isLoading = false, error = "Student not identified. Cannot fetch records.") }
                     return@launch
                 }
-                val classRecords: List<Record>? = null
+                val classRecords = classDetailRepository.getRecord(classId, studentId)
                 // TODO: Handle the case where classRecords is null
                 _uiState.update { it.copy(isLoading = false, records = classRecords!!) }
 

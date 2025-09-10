@@ -8,6 +8,7 @@ import com.kttq.attendassist.core.navigation.login.login
 import com.kttq.attendassist.core.navigation.login.navigateToLogin
 import com.kttq.attendassist.core.navigation.redirect.navigateToRedirect
 import com.kttq.attendassist.core.navigation.redirect.redirect
+import com.kttq.attendassist.core.navigation.student.class_summary.navigateToClassSummary
 import com.kttq.attendassist.core.navigation.student.navigateToStudent
 import com.kttq.attendassist.core.navigation.student.session_confirm.navigateToSessionConfirm
 import com.kttq.attendassist.core.navigation.student.studentNavigation
@@ -47,6 +48,7 @@ fun AppNavHost(
         studentNavigation(onShowSnackbar, onSentToBack,
             navController::navigateToSessionConfirm,
             navController::navigateToRedirect,
+            navController::navigateToClassSummary
         )
     }
 }

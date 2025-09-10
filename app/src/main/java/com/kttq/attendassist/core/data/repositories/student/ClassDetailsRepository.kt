@@ -1,6 +1,7 @@
 package com.kttq.attendassist.core.data.repositories.student
 
 import com.kttq.attendassist.core.model.Class
+import com.kttq.attendassist.core.model.Record
 import kotlinx.coroutines.flow.Flow
 
 interface ClassDetailsRepository {
@@ -40,4 +41,7 @@ interface ClassDetailsRepository {
      * @param studentId The ID of the student whose records are to be refreshed.
      */
     suspend fun refreshClassRecords(classId: String, studentId: String)
+
+    // Currently, use /api/v1/student/{class_id}/all/attendance_records and then filter by studentId
+    suspend fun getRecord(classId: String, studentId: String): List<Record>
 }

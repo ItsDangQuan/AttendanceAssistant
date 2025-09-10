@@ -12,7 +12,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -33,6 +35,7 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun ClassSummaryRoute(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     viewModel: ClassSummaryViewModel = hiltViewModel()
 ) {
@@ -40,11 +43,13 @@ fun ClassSummaryRoute(
     val statSummary = viewModel.statSummary.collectAsStateWithLifecycle().value
 
     if (uiState.isLoading) {
-        // TODO: Show a loading indicator, e.g., CircularProgressIndicator
-        AppLabelPrimary(text = "Loading class summary...") 
+        CircularProgressIndicator()
     } else if (uiState.error != null) {
-        // TODO: Show a more user-friendly error message, possibly with a retry option
-        AppLabelPrimary(text = "Error: ${uiState.error}")
+        LaunchedEffect(
+            uiState.error,
+        ) {
+            onShowSnackbar(uiState.error, null)
+        }
     } else if (uiState.classDetails != null) {
         ClassSummaryScreen(
             classDetail = uiState.classDetails,

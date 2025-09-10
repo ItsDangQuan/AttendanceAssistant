@@ -92,7 +92,7 @@ class ClassDetailViewModel @Inject constructor(
                 val newSessionId = "SESSION_" + System.currentTimeMillis()
                 val newSession = StudentSession(
                     newSessionId, "",
-                    startTime = 0,
+                    startTime = "",
                     endTime = "",
                     teacherId = "",
                     className = "",

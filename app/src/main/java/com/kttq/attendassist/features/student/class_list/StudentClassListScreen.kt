@@ -24,8 +24,8 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun StudentClassListRoute(
+    navigateToClass: (String) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToClass: (Class) -> Unit = {},
     viewModel: StudentClassListViewModel = hiltViewModel()
 ) {
    StudentClassListScreen(
@@ -41,7 +41,7 @@ fun StudentClassListScreen(
 
     currentClasses: List<Class>,
     pastClasses: List<Class>,
-    navigateToClass: (Class) -> Unit,
+    navigateToClass: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -62,7 +62,7 @@ fun StudentClassListScreen(
             ) {
                 AppCard (
                     clickable = true,
-                    onClick = { navigateToClass(currentClasses[it]) }
+                    onClick = { navigateToClass(currentClasses[it].classId) }
                 ) {
                     AppLabelPrimary(currentClasses[it].classId)
                     AppLabelSecondary(
@@ -88,7 +88,7 @@ fun StudentClassListScreen(
             ) {
                 AppCard (
                     clickable = true,
-                    onClick = { navigateToClass(pastClasses[it]) }
+                    onClick = { navigateToClass(pastClasses[it].classId) }
                 ) {
                     AppLabelPrimary(pastClasses[it].classId)
                     AppLabelSecondary(

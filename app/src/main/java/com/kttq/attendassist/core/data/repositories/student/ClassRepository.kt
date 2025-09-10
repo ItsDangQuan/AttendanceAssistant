@@ -30,4 +30,7 @@ interface ClassRepository {
 
     // Use /api/v1/class/{class_id}/information
     suspend fun haveStudent(classId: String): Boolean
+
+    // Currently, we do not have any endpoint for getting all classes of a student
+    suspend fun getAllClass(): List<Class>
 }

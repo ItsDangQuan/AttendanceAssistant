@@ -2,6 +2,7 @@ package com.kttq.attendassist.features.student.class_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kttq.attendassist.core.data.repositories.student.ClassRepository
 import com.kttq.attendassist.core.model.Class // Changed import
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StudentClassListViewModel @Inject constructor(
     // TODO: Inject repository or use cases for fetching class data
+    private val classRepository: ClassRepository
 ) : ViewModel() {
 
     private val _currentClasses = MutableStateFlow<List<Class>>(emptyList()) // Renamed and type updated
@@ -35,7 +37,7 @@ class StudentClassListViewModel @Inject constructor(
     private suspend fun getCurrentClasses(): List<Class> { // Renamed and return type updated
         // TODO: Implement actual logic to fetch current classes from a repository/API
         // For now, returning an empty list or mock data
-        return emptyList()
+        return classRepository.getAllClass()
     }
 
     private suspend fun getPastClasses(): List<Class> { // Renamed and return type updated
