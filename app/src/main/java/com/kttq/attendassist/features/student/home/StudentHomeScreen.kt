@@ -43,9 +43,10 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 fun StudentHomeRoute(
     onSentToBack: () -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
+    navigateToNewSession: (Session) -> Unit,
+
     modifier: Modifier = Modifier,
     navigateToSummary: () -> Unit = {},
-    navigateToNewSession: (Session) -> Unit = {},
     viewModel: StudentHomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

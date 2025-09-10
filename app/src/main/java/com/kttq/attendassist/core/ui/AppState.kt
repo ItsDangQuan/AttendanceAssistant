@@ -71,7 +71,9 @@ class AppState(
             is Destination.Teacher.Home -> navController.navigateToTeacherHome()
             is Destination.Teacher.LessonInfo -> navController.navigateToTeacherLessonInfo()
             is Destination.Teacher.Profile -> navController.navigateToTeacherProfile()
+            is Destination.Teacher.ClassList -> navController.navigateToStudentClassList()
 
+            else -> {}
         }
     }
 

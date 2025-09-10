@@ -5,11 +5,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import com.kttq.attendassist.core.data.network.responses.Session
 import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.core.navigation.student.class_list.studentClassList
 import com.kttq.attendassist.core.navigation.student.home.studentHome
 import com.kttq.attendassist.core.navigation.student.lesson_info.studentLessonInfo
 import com.kttq.attendassist.core.navigation.student.profile.studentProfile
+import com.kttq.attendassist.core.navigation.student.session_confirm.studentSessionConfirm
 import com.kttq.attendassist.core.navigation.student.summary.studentSummary
 
 fun NavController.navigateToStudent(
@@ -23,14 +25,15 @@ fun NavController.navigateToStudent(
 
 fun NavGraphBuilder.studentNavigation(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    onSentToBack: () -> Unit
+    onSentToBack: () -> Unit,
+    navigateToNewSession: (Session) -> Unit
 ) {
     navigation<Destination.Student.Graph>(
         startDestination = Destination.Student.Home
     ) {
-        studentHome(onShowSnackbar, onSentToBack)
+        studentHome(onShowSnackbar, onSentToBack, navigateToNewSession)
         studentProfile()
-        studentLessonInfo()
         studentClassList()
+        studentSessionConfirm()
     }
 }

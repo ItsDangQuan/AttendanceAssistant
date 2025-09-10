@@ -104,7 +104,7 @@ class StudentHomeViewModel @Inject constructor(
         // TODO: Ensure Bluetooth permissions are granted before calling startScan
         // TODO: Handle scan results, e.g., by collecting a Flow from bleScanner or via a callback
         bleScanner.startScan(
-            onSuccess = {
+            onSuccess = { result ->
                 stopScan()
                 // TODO: parse the string into the session id
                 //  Sent that to the server to get the new session

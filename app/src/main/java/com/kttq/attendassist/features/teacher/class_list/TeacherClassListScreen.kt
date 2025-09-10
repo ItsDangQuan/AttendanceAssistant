@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.ui.components.AppCard
@@ -102,6 +103,7 @@ fun TeacherClassListScreen(
 }
 
 
+@Preview(showBackground = true)
 @Composable
 fun TeacherClassListScreenPreview(modifier: Modifier = Modifier) {
     AttendanceAssistantTheme {
