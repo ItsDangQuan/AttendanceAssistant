@@ -4,13 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Record(
-    @SerialName("record_id")
-    val recordId: String,
+data class EnrollmentCheckResponse(
     @SerialName("student_id")
     val studentId: String,
-    @SerialName("status")
-    val status: String,
-    @SerialName("session_id")
-    val session: String
+    @SerialName("class_id")
+    val classId: String,
+    val enrolled: Boolean,
 )

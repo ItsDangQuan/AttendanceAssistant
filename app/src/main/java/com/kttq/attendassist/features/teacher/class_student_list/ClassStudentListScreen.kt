@@ -13,8 +13,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.data.network.responses.Student
-import com.kttq.attendassist.core.navigation.Destination
+import com.kttq.attendassist.core.data.network.models.Student
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 

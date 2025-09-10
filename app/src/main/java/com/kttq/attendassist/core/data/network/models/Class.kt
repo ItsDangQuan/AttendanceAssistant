@@ -1,4 +1,4 @@
-package com.kttq.attendassist.core.data.network.responses
+package com.kttq.attendassist.core.data.network.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -16,13 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.data.network.responses.Class
-import com.kttq.attendassist.core.data.network.responses.Record
+import com.kttq.attendassist.core.data.network.models.Class
+import com.kttq.attendassist.core.data.network.models.Record
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary

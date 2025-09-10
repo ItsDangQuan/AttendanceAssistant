@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
-import com.kttq.attendassist.core.data.network.responses.Class
+import com.kttq.attendassist.core.data.network.models.Class
 import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.features.teacher.class_past_session.ClassPastSessionRoute
 

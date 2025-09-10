@@ -19,7 +19,7 @@ import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
-import com.kttq.attendassist.core.data.network.responses.Class
+import com.kttq.attendassist.core.data.network.models.Class
 
 
 @Composable

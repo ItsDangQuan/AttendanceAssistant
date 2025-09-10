@@ -3,8 +3,8 @@ package com.kttq.attendassist.features.student.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.ble.scanner.BleScanner
-import com.kttq.attendassist.core.data.network.responses.Record
-import com.kttq.attendassist.core.data.network.responses.Session
+import com.kttq.attendassist.core.data.network.models.Record
+import com.kttq.attendassist.core.data.network.models.Session
 import com.kttq.attendassist.core.data.repositories.user.UserRepository
 import com.kttq.attendassist.core.util.DateManager
 import dagger.hilt.android.lifecycle.HiltViewModel

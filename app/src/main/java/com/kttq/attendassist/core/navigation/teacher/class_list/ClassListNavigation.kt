@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.features.teacher.class_list.TeacherClassListRoute
-import com.kttq.attendassist.core.data.network.responses.Class
+import com.kttq.attendassist.core.data.network.models.Class
 
 fun NavController.navigateToTeacherClassList(
     navOptions: NavOptions? = navOptions {

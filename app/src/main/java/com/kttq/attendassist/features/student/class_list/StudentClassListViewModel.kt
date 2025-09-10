@@ -2,7 +2,7 @@ package com.kttq.attendassist.features.student.class_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kttq.attendassist.core.data.network.responses.Class // Changed import
+import com.kttq.attendassist.core.data.network.models.Class // Changed import
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
