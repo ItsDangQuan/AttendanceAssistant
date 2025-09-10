@@ -6,7 +6,7 @@ import com.kttq.attendassist.core.ble.scanner.BleScanner
 import com.kttq.attendassist.core.data.network.responses.Record
 import com.kttq.attendassist.core.data.network.responses.Session
 import com.kttq.attendassist.core.data.repositories.user.UserRepository
-import com.kttq.attendassist.core.util.DateFormatter
+import com.kttq.attendassist.core.util.DateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,6 @@ import javax.inject.Inject
 
 data class StudentHomeUiState(
     val userName: String = "User", // Default name
-    val date: String = "",
     val isLoading: Boolean = false,
     val isScanning: Boolean = false, // Added for scan status
     val error: String? = null,
@@ -31,7 +30,7 @@ data class StudentHomeUiState(
 
 @HiltViewModel
 class StudentHomeViewModel @Inject constructor(
-    private val dateFormatter: DateFormatter,
+    dateManager: DateManager,
     private val userRepository: UserRepository,
     private val bleScanner: BleScanner
     // TODO: Inject a repository for fetching records
@@ -42,6 +41,8 @@ class StudentHomeViewModel @Inject constructor(
 
     private val _allRecords = MutableStateFlow<List<Record>>(emptyList())
     val allRecords: StateFlow<List<Record>> = _allRecords.asStateFlow()
+
+    val formattedDate = dateManager.formattedDate
 
     val statSummary: StateFlow<List<Pair<String, String>>> =
         allRecords.map { records ->
@@ -81,7 +82,6 @@ class StudentHomeViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     userName = user?.firstName ?: user?.email ?: "User",
-                    date = dateFormatter.currentDate()
                 )
             }
             fetchAllStudentRecords()
@@ -159,7 +159,7 @@ class StudentHomeViewModel @Inject constructor(
     // // fun fetchIncomingClasses() { }
 
     // // TODO: Add function to fetch today's classes
-    // // fun fetchTodaysClasses() { }
+    // // fun fetchTodayClasses() { }
 
     fun updateError(error: String?) {
         _uiState.update { it.copy(error = error) }

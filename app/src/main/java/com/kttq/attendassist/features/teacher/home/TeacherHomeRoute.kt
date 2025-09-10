@@ -32,6 +32,7 @@ fun TeacherHomeRoute(
     viewModel: TeacherHomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val date by viewModel.formattedDate.collectAsStateWithLifecycle()
 
     BackHandler {
         onSentToBack()
@@ -42,7 +43,7 @@ fun TeacherHomeRoute(
     // )
     TeacherHomeScreen(
         userName = uiState.userName,
-        date = uiState.date,
+        date = date,
         recentSessions = viewModel.recentSession.collectAsStateWithLifecycle().value,
         navigateToNewSession = navigateToNewSession,
         modifier = modifier

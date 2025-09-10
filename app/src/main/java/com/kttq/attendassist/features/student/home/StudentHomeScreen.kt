@@ -50,6 +50,7 @@ fun StudentHomeRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val statSummary by viewModel.statSummary.collectAsStateWithLifecycle() // Collect statSummary
+    val date by viewModel.formattedDate.collectAsStateWithLifecycle()
 
     BackHandler {
         onSentToBack()
@@ -64,7 +65,7 @@ fun StudentHomeRoute(
 
     StudentHomeScreen(
         userName = uiState.userName,
-        date = uiState.date,
+        date = date,
         statSummary = statSummary, // Pass the collected statSummary
         isScanning = uiState.isScanning, // Pass scanning state
         onScanClicked = {
