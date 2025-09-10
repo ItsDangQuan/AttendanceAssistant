@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,10 +48,14 @@ fun TeacherProfileRoute(
         onChangePasswordClicked = viewModel::onChangePasswordClicked,
         onLogoutClicked = {
             viewModel.onLogoutClicked()
-            navigateToRedirect()
         },
         modifier = modifier
     )
+    LaunchedEffect(uiState.isLoggedout) {
+        if (uiState.isLoggedout) {
+            navigateToRedirect()
+        }
+    }
 }
 
 @Composable

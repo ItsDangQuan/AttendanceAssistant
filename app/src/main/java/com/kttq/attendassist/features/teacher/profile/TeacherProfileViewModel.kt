@@ -18,7 +18,8 @@ data class TeacherProfileUiState(
     val name: String = "",
     val studentId: String = "",
     val email: String = "",
-    val phone: String = ""
+    val phone: String = "",
+    val isLoggedout: Boolean = false
     // TODO: Add any other profile-related state if needed
 )
 
@@ -80,6 +81,7 @@ class TeacherProfileViewModel @Inject constructor(
     fun onLogoutClicked() {
         viewModelScope.launch {
             authRepository.logout()
+            _uiState.update { it.copy(isLoggedout = true) }
         }
     }
 }
