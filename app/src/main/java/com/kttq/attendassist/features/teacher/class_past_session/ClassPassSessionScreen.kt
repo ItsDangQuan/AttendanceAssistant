@@ -13,7 +13,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.model.Session
+import com.kttq.attendassist.core.model.StudentSession
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 
@@ -30,7 +30,7 @@ fun ClassPastSessionRoute(
 
 @Composable
 fun ClassPassSessionScreen(
-    sessionList: List<Session>,
+    studentSessionList: List<StudentSession>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -40,7 +40,7 @@ fun ClassPassSessionScreen(
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ){
-            items(sessionList) { session ->
+            items(studentSessionList) { session ->
                 AppCard {
                     AppLabelPrimary(session.sessionId)
                     AppLabelPrimary(session.endTime)

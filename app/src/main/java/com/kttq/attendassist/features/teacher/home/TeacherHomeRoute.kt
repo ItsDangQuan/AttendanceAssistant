@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.model.Session
+import com.kttq.attendassist.core.model.StudentSession
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
@@ -28,7 +28,7 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 fun TeacherHomeRoute(
     onSentToBack: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToNewSession: (Session) -> Unit = {},
+    navigateToNewSession: (StudentSession) -> Unit = {},
     viewModel: TeacherHomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -54,9 +54,9 @@ fun TeacherHomeRoute(
 fun TeacherHomeScreen(
     userName: String,
     date: String,
-    recentSessions: List<Session>,
+    recentSessions: List<StudentSession>,
     modifier: Modifier = Modifier,
-    navigateToNewSession: (Session) -> Unit = {},
+    navigateToNewSession: (StudentSession) -> Unit = {},
 ) {
     Column(
         modifier = modifier

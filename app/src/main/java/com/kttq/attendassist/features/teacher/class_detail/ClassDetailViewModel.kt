@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kttq.attendassist.core.ble.advertiser.BleAdvertiser
 import com.kttq.attendassist.core.model.Class // Existing import
-import com.kttq.attendassist.core.model.Session
+import com.kttq.attendassist.core.model.StudentSession
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -90,7 +90,7 @@ class ClassDetailViewModel @Inject constructor(
                 // val newSession = sessionRepository.createNewSession(classId, currentTeacherId, Date().time)
                 // Placeholder for new session creation:
                 val newSessionId = "SESSION_" + System.currentTimeMillis()
-                val newSession = Session(
+                val newSession = StudentSession(
                     newSessionId, "",
                     startTime = 0,
                     endTime = "",

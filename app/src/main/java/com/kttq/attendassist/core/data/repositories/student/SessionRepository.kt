@@ -1,6 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.student
 
-import com.kttq.attendassist.core.model.Session // As defined in SessionConfirmViewModel or a shared location
+import com.kttq.attendassist.core.model.StudentSession // As defined in SessionConfirmViewModel or a shared location
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -14,7 +14,7 @@ interface SessionRepository {
      * @param sessionId The ID of the session to observe.
      * @return A Flow emitting the Session details, or null if not found/cached or on error during refresh.
      */
-    fun observeSessionDetails(sessionId: String): Flow<Session?>
+    fun observeSessionDetails(sessionId: String): Flow<StudentSession?>
 
     /**
      * Fetches the latest details for a specific session from the API
@@ -34,6 +34,15 @@ interface SessionRepository {
      * @return True if attendance was successfully confirmed, false otherwise.
      *         (Alternatively, this could return a more detailed Result object or throw exceptions).
      */
-    suspend fun confirmAttendance(sessionId: String, studentId: String): Boolean
+
+    // Using this endpoint: /api/v1/student/roll_call
+    // suspend fun confirmAttendance(sessionId: String, studentId: String): Boolean
+    suspend fun confirmAttendance(sessionId: String): Boolean
+
+    // At first, we can use this:
+    // /api/v1/session/ and then filter in the client.
+    // From this, using /api/v1/class/{class_id}/information to get information about the class
+    // But no way to get information about the course and teacher ?
+    suspend fun getStudentSessionById(sessionId: String): StudentSession?
 }
 

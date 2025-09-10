@@ -4,7 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kttq.attendassist.core.model.Session
+import com.kttq.attendassist.core.data.repositories.student.SessionRepository
+import com.kttq.attendassist.core.model.StudentSession
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 data class SessionConfirmUiState(
     val isLoading: Boolean = false,
-    val session: Session? = null,
+    val studentSession: StudentSession? = null,
     val error: String? = null,
     val attendanceConfirmed: Boolean = false
 )
@@ -24,6 +25,7 @@ data class SessionConfirmUiState(
 @HiltViewModel
 class SessionConfirmViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SessionConfirmUiState())
@@ -39,28 +41,18 @@ class SessionConfirmViewModel @Inject constructor(
         }
     }
 
-    private fun fetchCurrentSessionDetails(id: String) {
+    private fun fetchCurrentSessionDetails(sessionId: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                // TODO: Replace with actual SessionRepository implementation if it returns a Result or handles errors differently
-                val sessionDetails = Session(
-                    sessionId = "",
-                    classId = "",
-                    startTime = 0,
-                    endTime = "",
-                    teacherId = "",
-                    className = "",
-                    teacherName = "",
-                    courseId = "",
-                    courseName = ""
-                )
+                // In here, we should fetch the session details from the repository, using the sessionId
+                val sessionDetails = sessionRepository.getStudentSessionById(sessionId)
 
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        session = sessionDetails,
-                        error = if (sessionDetails == null) "Session not found (ID: $id)" else null
+                        studentSession = sessionDetails,
+                        error = if (sessionDetails == null) "Session not found (ID: $sessionId)" else null
                     )
                 }
             } catch (e: Exception) {
@@ -70,25 +62,19 @@ class SessionConfirmViewModel @Inject constructor(
         }
     }
 
-    fun confirmAttendance() {
-        val currentSession = _uiState.value.session
+
+    fun confirmAttendance(): Boolean {
+        val currentSession = _uiState.value.studentSession
         if (currentSession == null) {
             _uiState.update { it.copy(error = "Session details not available. Cannot confirm attendance.") }
-            return
+            return false // Confirmation cannot be initiated
         }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                // TODO: Replace by real repo
-                val studentId = ""
-                if (studentId == null) {
-                    _uiState.update { it.copy(isLoading = false, error = "Unable to identify student. Please log in again.") }
-                    return@launch
-                }
+                val success = sessionRepository.confirmAttendance(sessionId)
 
-                // TODO: Replace with actual AttendanceRepository implementation
-                val success = true
                 if (success) {
                     _uiState.update { it.copy(isLoading = false, attendanceConfirmed = true) }
                     // TODO: Implement post-confirmation action, e.g., navigate to a success screen or back to home with a message.
@@ -100,6 +86,7 @@ class SessionConfirmViewModel @Inject constructor(
                 _uiState.update { it.copy(isLoading = false, error = "An error occurred while confirming attendance. Please try again.") }
             }
         }
+        return _uiState.value.attendanceConfirmed
     }
 
     fun clearError() {

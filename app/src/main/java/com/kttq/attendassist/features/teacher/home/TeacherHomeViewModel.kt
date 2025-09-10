@@ -2,7 +2,7 @@ package com.kttq.attendassist.features.teacher.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kttq.attendassist.core.model.Session
+import com.kttq.attendassist.core.model.StudentSession
 import com.kttq.attendassist.core.data.repositories.user.UserRepository
 import com.kttq.attendassist.core.util.DateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,8 +23,8 @@ class TeacherHomeViewModel @Inject constructor(
 
     val formattedDate = dateManager.formattedDate
 
-    private val _recentSession = MutableStateFlow<List<Session>>(emptyList())
-    val recentSession: StateFlow<List<Session>> = _recentSession.asStateFlow()
+    private val _recentSession = MutableStateFlow<List<StudentSession>>(emptyList())
+    val recentSession: StateFlow<List<StudentSession>> = _recentSession.asStateFlow()
 
     init {
         fetchCurrentUser()

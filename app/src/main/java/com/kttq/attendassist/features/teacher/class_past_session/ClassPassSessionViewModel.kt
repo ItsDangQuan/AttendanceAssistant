@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kttq.attendassist.core.model.Session
+import com.kttq.attendassist.core.model.StudentSession
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +18,8 @@ class ClassPassSessionViewModel @Inject constructor(
 ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Teacher.ClassPastSession>().classId
 
-    val _sessionList = MutableStateFlow<List<Session>>(emptyList())
-    val sessionList = _sessionList.asStateFlow()
+    val _Student_sessionList = MutableStateFlow<List<StudentSession>>(emptyList())
+    val sessionList = _Student_sessionList.asStateFlow()
 
     init {
         fetchData()
@@ -29,7 +29,7 @@ class ClassPassSessionViewModel @Inject constructor(
 
             // TODO: Fetch the data from the repo.
             //  Now just mock the data.
-            _sessionList.value = emptyList()
+            _Student_sessionList.value = emptyList()
         }
     }
 }

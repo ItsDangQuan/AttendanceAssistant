@@ -6,13 +6,10 @@ import com.kttq.attendassist.core.ble.scanner.BleScanner
 import com.kttq.attendassist.core.data.repositories.student.ClassRepository
 import com.kttq.attendassist.core.data.repositories.student.RecordRepository
 import com.kttq.attendassist.core.model.Record
-import com.kttq.attendassist.core.model.Session
-import com.kttq.attendassist.core.data.repositories.user.UserRepository
 import com.kttq.attendassist.core.data.repositories.user.UserRepositoryRefactor
 import com.kttq.attendassist.core.model.StudentProfile
 import com.kttq.attendassist.core.util.DateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
