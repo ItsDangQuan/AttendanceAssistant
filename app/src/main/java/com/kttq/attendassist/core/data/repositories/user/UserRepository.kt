@@ -1,6 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.user
 
-import com.kttq.attendassist.core.data.network.responses.UserOut
+import com.kttq.attendassist.core.data.network.dtos.UserOut
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

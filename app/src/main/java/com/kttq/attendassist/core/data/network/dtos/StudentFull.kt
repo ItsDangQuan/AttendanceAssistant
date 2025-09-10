@@ -1,4 +1,4 @@
-package com.kttq.attendassist.core.data.network.responses
+package com.kttq.attendassist.core.data.network.dtos
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,9 +14,9 @@ data class StudentFull(
     @SerialName("last_name")
     val lastName: String,
     @SerialName("DOB")
-    val dob: String,
+    val dob: String?,
     @SerialName("school_year")
-    val schoolYear: String,
+    val schoolYear: String?,
     @SerialName("department_id")
-    val departmentId: String,
+    val departmentId: String?,
 )

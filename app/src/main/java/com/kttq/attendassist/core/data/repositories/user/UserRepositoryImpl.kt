@@ -1,7 +1,7 @@
 package com.kttq.attendassist.core.data.repositories.user
 
 import com.kttq.attendassist.core.data.network.UserService
-import com.kttq.attendassist.core.data.network.responses.UserOut
+import com.kttq.attendassist.core.data.network.dtos.UserOut
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,7 +12,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentUser(): UserOut? {
         return try {
-            val response = userService.current()
+            val response = userService.getCurrentUser()
             if (response.isSuccessful) {
                 response.body()
             } else {

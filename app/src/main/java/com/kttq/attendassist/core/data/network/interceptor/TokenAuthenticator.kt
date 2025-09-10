@@ -2,7 +2,7 @@ package com.kttq.attendassist.core.data.network.interceptor
 
 import android.util.Log
 import com.kttq.attendassist.core.data.network.AuthService
-import com.kttq.attendassist.core.data.network.dtos.RefreshToken
+import com.kttq.attendassist.core.data.network.dtos.TokenRefresh
 import com.kttq.attendassist.core.data.repositories.token.TokenRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -43,7 +43,7 @@ class TokenAuthenticator @Inject constructor(
 
                 try {
                     val newTokensResponse =
-                        authService.refresh(RefreshToken(currentRefreshToken))
+                        authService.refreshToken(TokenRefresh(currentRefreshToken))
                     if (!newTokensResponse.isSuccessful || newTokensResponse.body() == null) {
                         tokenRepository.clearTokens()
                         return@withLock null

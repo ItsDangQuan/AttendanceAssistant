@@ -1,12 +1,10 @@
-package com.kttq.attendassist.core.data.network.responses
+package com.kttq.attendassist.core.data.network.dtos
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserOut(
-    @SerialName("user_id")
-    val userId: Int,
+data class UserCreate(
     val email: String,
     val role: String?,
     @SerialName("first_name")
@@ -16,5 +14,10 @@ data class UserOut(
     @SerialName("department_id")
     val departmentId: String?,
     @SerialName("DOB")
-    val dob: String?
+    val dob: String?,
+    val password: String,
+    @SerialName("student_id")
+    val studentId: String?,
+    @SerialName("school_year")
+    val schoolYear: String?,
 )

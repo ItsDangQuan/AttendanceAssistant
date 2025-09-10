@@ -86,9 +86,9 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun sync() {
         try {
-            val response = authService.role() // suspend call
+            val response = authService.getCurrentUserRole() // suspend call
             if (response.isSuccessful) {
-                when (response.body()?.role?.lowercase()) {
+                when (response.body()?.lowercase()) {
                     "student" -> dataStore.edit {
                         it[AuthPreferencesKeys.AUTH_STATE] = "AUTHENTICATED_STUDENT"
                     }
