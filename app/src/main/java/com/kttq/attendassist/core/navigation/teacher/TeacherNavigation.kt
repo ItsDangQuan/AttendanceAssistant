@@ -6,9 +6,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.kttq.attendassist.core.navigation.Destination
+import com.kttq.attendassist.core.navigation.teacher.class_detail.teacherClassDetail
+import com.kttq.attendassist.core.navigation.teacher.class_pass_session.teacherClassPastSession
+import com.kttq.attendassist.core.navigation.teacher.class_student_list.teacherClassStudentList
 import com.kttq.attendassist.core.navigation.teacher.home.teacherHome
-import com.kttq.attendassist.core.navigation.teacher.lesson_info.teacherLessonInfo
 import com.kttq.attendassist.core.navigation.teacher.profile.teacherProfile
+import com.kttq.attendassist.core.data.network.responses.Class
+import com.kttq.attendassist.core.navigation.teacher.class_list.teacherClassList
 
 fun NavController.navigateToTeacher(
     navOptions: NavOptions? = navOptions {
@@ -21,13 +25,22 @@ fun NavController.navigateToTeacher(
 
 fun NavGraphBuilder.teacherNavigation(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    onSentToBack: () -> Unit
+    onSentToBack: () -> Unit,
+    navigationToClassDetail: (Class) -> Unit,
+    navigateToSessionDetail: (Class) -> Unit,
+    navigateToStudentDetail: (Class) -> Unit
 ) {
     navigation<Destination.Teacher.Graph>(
         startDestination = Destination.Teacher.Home
     ) {
         teacherHome(onSentToBack)
-        teacherLessonInfo()
         teacherProfile()
+        teacherClassList(navigationToClassDetail)
+        teacherClassDetail(
+            navigateToSessionDetail = navigateToSessionDetail,
+            navigateToStudentDetail = navigateToStudentDetail,
+        )
+        teacherClassPastSession()
+        teacherClassStudentList()
     }
 }

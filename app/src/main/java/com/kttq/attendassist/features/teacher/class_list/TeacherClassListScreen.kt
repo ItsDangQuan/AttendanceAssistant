@@ -24,8 +24,8 @@ import com.kttq.attendassist.core.data.network.responses.Class
 
 @Composable
 fun TeacherClassListRoute(
+    navigateToClass: (Class) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToClass: (Class) -> Unit = {},
     viewModel: TeacherClassListViewModel = hiltViewModel()
 ) {
     TeacherClassListScreen(

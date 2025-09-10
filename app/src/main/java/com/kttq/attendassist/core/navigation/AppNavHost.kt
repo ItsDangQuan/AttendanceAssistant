@@ -11,6 +11,9 @@ import com.kttq.attendassist.core.navigation.redirect.redirect
 import com.kttq.attendassist.core.navigation.student.navigateToStudent
 import com.kttq.attendassist.core.navigation.student.session_confirm.navigateToSessionConfirm
 import com.kttq.attendassist.core.navigation.student.studentNavigation
+import com.kttq.attendassist.core.navigation.teacher.class_detail.navigateToClassDetail
+import com.kttq.attendassist.core.navigation.teacher.class_pass_session.navigateToClassPastSession
+import com.kttq.attendassist.core.navigation.teacher.class_student_list.navigateToTeacherClassStudentList
 import com.kttq.attendassist.core.navigation.teacher.navigateToTeacher
 import com.kttq.attendassist.core.navigation.teacher.teacherNavigation
 
@@ -35,7 +38,12 @@ fun AppNavHost(
             navController::navigateToTeacher
         )
         login(onShowSnackbar, navController::navigateToRedirect)
-        teacherNavigation(onShowSnackbar, onSentToBack)
+        teacherNavigation(onShowSnackbar, onSentToBack,
+            navController::navigateToClassDetail,
+            navController::navigateToClassPastSession,
+            navController::navigateToTeacherClassStudentList
+
+        )
         studentNavigation(onShowSnackbar, onSentToBack, navController::navigateToSessionConfirm)
     }
 }

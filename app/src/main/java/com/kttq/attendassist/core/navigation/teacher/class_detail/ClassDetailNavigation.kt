@@ -20,8 +20,13 @@ fun NavController.navigateToClassDetail(
 }
 
 fun NavGraphBuilder.teacherClassDetail(
+    navigateToSessionDetail: (Class) -> Unit,
+    navigateToStudentDetail: (Class) -> Unit
 ) {
     composable<Destination.Teacher.ClassDetail> {
-        ClassDetailRoute()
+        ClassDetailRoute(
+            navigateToSessionDetail = navigateToSessionDetail,
+            navigateToStudentDetail = navigateToStudentDetail,
+        )
     }
 }

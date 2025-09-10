@@ -14,12 +14,9 @@ import com.kttq.attendassist.core.navigation.login.navigateToLogin
 import com.kttq.attendassist.core.navigation.redirect.navigateToRedirect
 import com.kttq.attendassist.core.navigation.student.class_list.navigateToStudentClassList
 import com.kttq.attendassist.core.navigation.student.home.navigateToStudentHome
-import com.kttq.attendassist.core.navigation.student.lesson_info.navigateToStudentLessonInfo
 import com.kttq.attendassist.core.navigation.student.navigateToStudent
 import com.kttq.attendassist.core.navigation.student.profile.navigateToStudentProfile
-import com.kttq.attendassist.core.navigation.student.summary.navigateToStudentSummary
 import com.kttq.attendassist.core.navigation.teacher.home.navigateToTeacherHome
-import com.kttq.attendassist.core.navigation.teacher.lesson_info.navigateToTeacherLessonInfo
 import com.kttq.attendassist.core.navigation.teacher.navigateToTeacher
 import com.kttq.attendassist.core.navigation.teacher.profile.navigateToTeacherProfile
 import kotlinx.coroutines.CoroutineScope
@@ -62,14 +59,11 @@ class AppState(
             is Destination.Redirect -> navController.navigateToRedirect()
             is Destination.Student.Graph -> navController.navigateToStudent()
             is Destination.Student.Home -> navController.navigateToStudentHome()
-            is Destination.Student.LessonInfo -> navController.navigateToStudentLessonInfo()
             is Destination.Student.Profile -> navController.navigateToStudentProfile()
             is Destination.Student.ClassList -> navController.navigateToStudentClassList()
-            is Destination.Student.Summary -> navController.navigateToStudentSummary()
 
             is Destination.Teacher.Graph -> navController.navigateToTeacher()
             is Destination.Teacher.Home -> navController.navigateToTeacherHome()
-            is Destination.Teacher.LessonInfo -> navController.navigateToTeacherLessonInfo()
             is Destination.Teacher.Profile -> navController.navigateToTeacherProfile()
             is Destination.Teacher.ClassList -> navController.navigateToStudentClassList()
 

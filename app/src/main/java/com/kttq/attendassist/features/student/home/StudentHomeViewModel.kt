@@ -113,7 +113,7 @@ class StudentHomeViewModel @Inject constructor(
                    Session(
                        "",
                        "",
-                       "",
+                       0,
                        "",
                        "",
                        "",

@@ -9,10 +9,8 @@ import com.kttq.attendassist.core.data.network.responses.Session
 import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.core.navigation.student.class_list.studentClassList
 import com.kttq.attendassist.core.navigation.student.home.studentHome
-import com.kttq.attendassist.core.navigation.student.lesson_info.studentLessonInfo
 import com.kttq.attendassist.core.navigation.student.profile.studentProfile
 import com.kttq.attendassist.core.navigation.student.session_confirm.studentSessionConfirm
-import com.kttq.attendassist.core.navigation.student.summary.studentSummary
 
 fun NavController.navigateToStudent(
     navOptions: NavOptions? = navOptions {

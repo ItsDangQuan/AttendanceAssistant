@@ -107,7 +107,6 @@ class ClassDetailViewModel @Inject constructor(
                     bleAdvertiser.startAdvertising(newSession.sessionId) 
                     // Update UI state to reflect that advertising has started
                     _uiState.update { it.copy(activeSessionId = newSession.sessionId, isLoading = false, isAdvertising = true) }
-                    fetchSessionListOnly() // Refresh session list to include the new active one
                 } else {
                     _uiState.update { it.copy(isLoading = false, error = "Failed to create new session record.") }
                 }
@@ -137,7 +136,6 @@ class ClassDetailViewModel @Inject constructor(
                     // TODO: Update session end time in backend using SessionRepository
                     // sessionRepository.endSession(currentActiveSessionId, Date().time)
                     _uiState.value = newUiState.copy(activeSessionId = null)
-                    fetchSessionListOnly() // Refresh session list to update the ended session
                 } else {
                      _uiState.value = newUiState
                 }
@@ -150,23 +148,6 @@ class ClassDetailViewModel @Inject constructor(
         }
     }
 
-    private fun fetchSessionListOnly() {
-        viewModelScope.launch {
-            try {
-                // TODO: Fetch session list from SessionRepository for the current classId
-                // val pastSessions = sessionRepository.getSessionsForClass(classId)
-                val pastSessions: List<Session> = emptyList() // Placeholder
-                _uiState.update { it.copy(sessions = pastSessions.sortedByDescending { s -> s.startTime }) }
-            } catch (e: Exception) {
-                // TODO: Log e. More subtle error handling for background refresh might be needed.
-                _uiState.update { previousState -> 
-                    val currentError = previousState.error
-                    val newError = "Failed to refresh session list."
-                    previousState.copy(error = if (currentError.isNullOrEmpty()) newError else "$currentError\n$newError")
-                }
-            }
-        }
-    }
 
     fun clearError() {
         _uiState.update { it.copy(error = null) }

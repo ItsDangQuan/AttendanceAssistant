@@ -47,7 +47,7 @@ class SessionConfirmViewModel @Inject constructor(
                 val sessionDetails = Session(
                     sessionId = "",
                     classId = "",
-                    startTime = "",
+                    startTime = 0,
                     endTime = "",
                     teacherId = "",
                     className = "",

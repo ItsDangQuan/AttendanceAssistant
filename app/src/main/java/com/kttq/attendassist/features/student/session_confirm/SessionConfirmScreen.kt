@@ -78,7 +78,7 @@ private fun SessionConfirmScreenPreview() {
                 session = Session(
                     sessionId = "",
                     classId = "",
-                    startTime = "",
+                    startTime = 0,
                     endTime = "",
                     teacherId = "",
                     className = "",
