@@ -16,6 +16,7 @@ import com.kttq.attendassist.core.navigation.student.class_list.navigateToStuden
 import com.kttq.attendassist.core.navigation.student.home.navigateToStudentHome
 import com.kttq.attendassist.core.navigation.student.navigateToStudent
 import com.kttq.attendassist.core.navigation.student.profile.navigateToStudentProfile
+import com.kttq.attendassist.core.navigation.teacher.class_list.navigateToTeacherClassList
 import com.kttq.attendassist.core.navigation.teacher.home.navigateToTeacherHome
 import com.kttq.attendassist.core.navigation.teacher.navigateToTeacher
 import com.kttq.attendassist.core.navigation.teacher.profile.navigateToTeacherProfile
@@ -65,7 +66,7 @@ class AppState(
             is Destination.Teacher.Graph -> navController.navigateToTeacher()
             is Destination.Teacher.Home -> navController.navigateToTeacherHome()
             is Destination.Teacher.Profile -> navController.navigateToTeacherProfile()
-            is Destination.Teacher.ClassList -> navController.navigateToStudentClassList()
+            is Destination.Teacher.ClassList -> navController.navigateToTeacherClassList()
 
             else -> {}
         }

@@ -11,11 +11,11 @@ import com.kttq.attendassist.core.data.network.responses.Class
 
 fun NavController.navigateToTeacherClassList(
     navOptions: NavOptions? = navOptions {
-        popUpTo(Destination.Student.ClassList)
+        popUpTo(Destination.Teacher.ClassList)
         launchSingleTop = true
     }
 ) {
-    this.navigate(Destination.Student.ClassList, navOptions)
+    this.navigate(Destination.Teacher.ClassList, navOptions)
 }
 
 fun NavGraphBuilder.teacherClassList(

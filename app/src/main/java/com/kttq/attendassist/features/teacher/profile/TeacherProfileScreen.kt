@@ -1,11 +1,15 @@
 package com.kttq.attendassist.features.teacher.profile
 
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -50,11 +54,13 @@ fun TeacherProfileScreen(
     onChangePasswordClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // TODO: Pass this into the viewModel.
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.padding_large))
+            .verticalScroll(rememberScrollState())
     ) {
         AppAvatarImage() // Assuming this doesn't need data from ViewModel for now
 

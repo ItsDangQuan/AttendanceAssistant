@@ -173,6 +173,7 @@ fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
 // TODO: Using these for testing. These should be moved to somewhere in the future.
 val TopLevelTeacherDest: List<Destination> = listOf(
     Destination.Teacher.Home,
+    Destination.Teacher.ClassList,
     Destination.Teacher.Profile
 )
 val TopLevelStudentDest: List<Destination> = listOf(
