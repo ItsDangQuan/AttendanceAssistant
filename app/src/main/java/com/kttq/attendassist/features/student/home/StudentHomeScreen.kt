@@ -1,6 +1,10 @@
 package com.kttq.attendassist.features.student.home
 
-import android.bluetooth.le.ScanCallback // Import the whole ScanCallback class
+// import androidx.compose.foundation.layout.heightIn // Commented out as it's not used in current code
+// import androidx.compose.foundation.lazy.LazyColumn // Commented out as it's not used in current code
+// import androidx.compose.runtime.rememberCoroutineScope // Not needed here as LaunchedEffect provides a scope
+// import androidx.compose.ui.unit.dp // Commented out as it's not used in current code
+import android.bluetooth.le.ScanCallback
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,24 +12,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-// import androidx.compose.foundation.layout.heightIn // Commented out as it's not used in current code
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-// import androidx.compose.foundation.lazy.LazyColumn // Commented out as it's not used in current code
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-// import androidx.compose.runtime.rememberCoroutineScope // Not needed here as LaunchedEffect provides a scope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-// import androidx.compose.ui.unit.dp // Commented out as it's not used in current code
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
@@ -65,6 +64,7 @@ fun StudentHomeRoute(
 
     StudentHomeScreen(
         userName = uiState.userName,
+        date = uiState.date,
         statSummary = statSummary, // Pass the collected statSummary
         isScanning = uiState.isScanning, // Pass scanning state
         onScanClicked = {
@@ -92,6 +92,7 @@ fun StudentHomeRoute(
 @Composable
 fun StudentHomeScreen(
     userName: String,
+    date: String,
     statSummary: List<Pair<String, String>>,
     isScanning: Boolean, // Added to reflect scan state in UI if needed
     onScanClicked: () -> Unit,
@@ -106,7 +107,7 @@ fun StudentHomeScreen(
         verticalArrangement = Arrangement.Top
     ) {
         AppScreenTitle("Hello, $userName")
-        AppSectionTitle("<Date time>") // TODO: Replace with actual date/time
+        AppSectionTitle(date) // TODO: Maybe refactor
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,7 +115,7 @@ fun StudentHomeScreen(
             thickness = dimensionResource(R.dimen.divider_height),
         )
 
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -153,8 +154,10 @@ fun StudentHomeScreen(
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
         AppButton(
             onClick = onScanClicked, // Directly use the passed lambda
-            modifier = Modifier.fillMaxWidth().padding(horizontal = dimensionResource(R.dimen.padding_medium)), // Use horizontal padding
-            enabled = !isScanning 
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = dimensionResource(R.dimen.padding_medium)), // Use horizontal padding
+            enabled = !isScanning
         ) {
             AppLabelPrimary(if (isScanning) "Scanning..." else "Scan for class")
         }
@@ -162,12 +165,13 @@ fun StudentHomeScreen(
 
 }
 
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 @Composable
 private fun StudentHomeScreenPreview() {
     AttendanceAssistantTheme {
         StudentHomeScreen(
             userName = "User",
+            date = "",
             statSummary = listOf(
                 "Total" to "0",
                 "Attended" to "0",
@@ -181,12 +185,13 @@ private fun StudentHomeScreenPreview() {
     }
 }
 
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 @Composable
 private fun StudentHomeScreenScanningPreview() {
     AttendanceAssistantTheme {
         StudentHomeScreen(
             userName = "User",
+            date = "",
             statSummary = listOf(
                 "Total" to "0",
                 "Attended" to "0",

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.data.network.responses.Session
 import com.kttq.attendassist.core.data.repositories.user.UserRepository
+import com.kttq.attendassist.core.util.DateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TeacherHomeViewModel @Inject constructor(
+    private val dateFormatter: DateFormatter,
     private val userRepository: UserRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(TeacherHomeUiState(isLoading = true))
@@ -21,10 +23,17 @@ class TeacherHomeViewModel @Inject constructor(
 
     private val _recentSession = MutableStateFlow<List<Session>>(emptyList())
     val recentSession: StateFlow<List<Session>> = _recentSession.asStateFlow()
+
     init {
+        _uiState.update {
+            it.copy(
+                date = dateFormatter.currentDate()
+            )
+        }
         fetchCurrentUser()
         fetchRecentSession()
     }
+
     private fun fetchCurrentUser() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -37,6 +46,7 @@ class TeacherHomeViewModel @Inject constructor(
             }
         }
     }
+
     private fun fetchRecentSession() {
         viewModelScope.launch {
             // TODO: Fetch recent session from repository
@@ -54,5 +64,6 @@ class TeacherHomeViewModel @Inject constructor(
 
 data class TeacherHomeUiState(
     val userName: String = "User", // Default name
+    val date: String = "",
     val isLoading: Boolean = false
 )

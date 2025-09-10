@@ -3,16 +3,9 @@ package com.kttq.attendassist.features.teacher.home
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +18,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.data.network.responses.Session
 import com.kttq.attendassist.core.ui.components.AppCard
-import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
@@ -50,6 +42,7 @@ fun TeacherHomeRoute(
     // )
     TeacherHomeScreen(
         userName = uiState.userName,
+        date = uiState.date,
         recentSessions = viewModel.recentSession.collectAsStateWithLifecycle().value,
         navigateToNewSession = navigateToNewSession,
         modifier = modifier
@@ -59,46 +52,48 @@ fun TeacherHomeRoute(
 @Composable
 fun TeacherHomeScreen(
     userName: String,
+    date: String,
     recentSessions: List<Session>,
     modifier: Modifier = Modifier,
     navigateToNewSession: (Session) -> Unit = {},
 ) {
-   Column(
-       modifier = modifier.fillMaxWidth()
-           .padding(dimensionResource(R.dimen.padding_medium)),
-   ) {
-       AppScreenTitle("Hello, $userName")
-       AppSectionTitle("<Date time>") // TODO: Replace with actual date/time
-       HorizontalDivider(
-           modifier = Modifier
-               .fillMaxWidth()
-               .padding(vertical = dimensionResource(R.dimen.padding_large)), // Added vertical padding
-           thickness = dimensionResource(R.dimen.divider_height),
-       )
-       LazyColumn(
-           modifier = Modifier.fillMaxWidth(),
-           horizontalAlignment = Alignment.CenterHorizontally,
-           verticalArrangement = Arrangement.Top
-       ) {
-           items(
-               recentSessions.size
-           ) {
-               AppCard (
-                   clickable = true,
-                   onClick = {
-                       navigateToNewSession(recentSessions[it])
-                   }
-               ) {
-                   AppLabelPrimary(recentSessions[it].classId)
-                   AppLabelSecondary(
-                       recentSessions[it].courseId + " - " +
-                               recentSessions[it].courseName
-                   )
-               }
-           }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium)),
+    ) {
+        AppScreenTitle("Hello, $userName")
+        AppSectionTitle(date) // TODO: Maybe refactor
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(R.dimen.padding_large)), // Added vertical padding
+            thickness = dimensionResource(R.dimen.divider_height),
+        )
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            items(
+                recentSessions.size
+            ) {
+                AppCard(
+                    clickable = true,
+                    onClick = {
+                        navigateToNewSession(recentSessions[it])
+                    }
+                ) {
+                    AppLabelPrimary(recentSessions[it].classId)
+                    AppLabelSecondary(
+                        recentSessions[it].courseId + " - " +
+                                recentSessions[it].courseName
+                    )
+                }
+            }
 
-       }
-   }
+        }
+    }
 }
 
 @Preview
@@ -107,6 +102,7 @@ private fun TeacherHomeScreenPreview() {
     AttendanceAssistantTheme {
         TeacherHomeScreen(
             userName = "User",
+            date = "",
             recentSessions = emptyList()
         )
     }

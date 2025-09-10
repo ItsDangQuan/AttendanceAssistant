@@ -3,9 +3,10 @@ package com.kttq.attendassist.features.student.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.ble.scanner.BleScanner
-import com.kttq.attendassist.core.data.repositories.user.UserRepository
 import com.kttq.attendassist.core.data.network.responses.Record
 import com.kttq.attendassist.core.data.network.responses.Session
+import com.kttq.attendassist.core.data.repositories.user.UserRepository
+import com.kttq.attendassist.core.util.DateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,7 @@ import javax.inject.Inject
 
 data class StudentHomeUiState(
     val userName: String = "User", // Default name
+    val date: String = "",
     val isLoading: Boolean = false,
     val isScanning: Boolean = false, // Added for scan status
     val error: String? = null,
@@ -29,6 +31,7 @@ data class StudentHomeUiState(
 
 @HiltViewModel
 class StudentHomeViewModel @Inject constructor(
+    private val dateFormatter: DateFormatter,
     private val userRepository: UserRepository,
     private val bleScanner: BleScanner
     // TODO: Inject a repository for fetching records
@@ -40,12 +43,14 @@ class StudentHomeViewModel @Inject constructor(
     private val _allRecords = MutableStateFlow<List<Record>>(emptyList())
     val allRecords: StateFlow<List<Record>> = _allRecords.asStateFlow()
 
-    val statSummary: StateFlow<List<Pair<String, String>>> = 
+    val statSummary: StateFlow<List<Pair<String, String>>> =
         allRecords.map { records ->
             val totalCount = records.size
             val attendedCount = records.count { it.status.equals("attended", ignoreCase = true) }
-            val leaveAcceptedCount = records.count { it.status.equals("leaveAccepted", ignoreCase = true) }
-            val leaveUnacceptedCount = records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
+            val leaveAcceptedCount =
+                records.count { it.status.equals("leaveAccepted", ignoreCase = true) }
+            val leaveUnacceptedCount =
+                records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
             // TODO: Potentially add other statuses like "absent" if they become relevant
 
             listOf(
@@ -76,9 +81,10 @@ class StudentHomeViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     userName = user?.firstName ?: user?.email ?: "User",
+                    date = dateFormatter.currentDate()
                 )
             }
-            fetchAllStudentRecords() 
+            fetchAllStudentRecords()
         }
     }
 
@@ -91,16 +97,17 @@ class StudentHomeViewModel @Inject constructor(
 
     private fun fetchAllStudentRecords() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) } 
+            _uiState.update { it.copy(isLoading = true) }
             val records = getAllRecordsFromRepository()
             _allRecords.value = records
-            _uiState.update { it.copy(isLoading = false) } 
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
     fun startScan(
         onScanSuccess: (Session) -> Unit,
-        onScanFailure: (Int) -> Unit ) {
+        onScanFailure: (Int) -> Unit
+    ) {
         // TODO: Ensure Bluetooth permissions are granted before calling startScan
         // TODO: Handle scan results, e.g., by collecting a Flow from bleScanner or via a callback
         bleScanner.startScan(
@@ -110,17 +117,17 @@ class StudentHomeViewModel @Inject constructor(
                 //  Sent that to the server to get the new session
                 //  Currently just returning a dummy session
                 onScanSuccess(
-                   Session(
-                       "",
-                       "",
-                       0,
-                       "",
-                       "",
-                       "",
-                       "",
-                       "",
-                       "",
-                   )
+                    Session(
+                        "",
+                        "",
+                        0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    )
                 )
             },
             onFail = { errorCode ->
