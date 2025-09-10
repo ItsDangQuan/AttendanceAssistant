@@ -43,13 +43,7 @@ sealed class Destination {
         object Home : Student()
 
         @Serializable
-        object LessonInfo : Student()
-
-        @Serializable
         object Profile : Student()
-
-        @Serializable
-        object Summary : Student()
 
         @Serializable
         object ClassList: Student()
@@ -74,13 +68,15 @@ sealed class Destination {
         object Home : Teacher()
 
         @Serializable
-        object LessonInfo : Teacher()
-
-        @Serializable
         object Profile : Teacher()
 
         @Serializable
         object ClassList: Teacher()
+
+        @Serializable
+        data class ClassDetail(
+            val classId: String,
+        ) : Teacher()
     }
 }
 
