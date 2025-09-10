@@ -24,13 +24,14 @@ fun NavController.navigateToStudent(
 fun NavGraphBuilder.studentNavigation(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onSentToBack: () -> Unit,
-    navigateToNewSession: (Session) -> Unit
+    navigateToNewSession: (Session) -> Unit,
+    navigateToRedirect: () -> Unit
 ) {
     navigation<Destination.Student.Graph>(
         startDestination = Destination.Student.Home
     ) {
         studentHome(onShowSnackbar, onSentToBack, navigateToNewSession)
-        studentProfile()
+        studentProfile(navigateToRedirect)
         studentClassList()
         studentSessionConfirm()
     }

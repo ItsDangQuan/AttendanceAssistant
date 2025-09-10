@@ -28,13 +28,16 @@ fun NavGraphBuilder.teacherNavigation(
     onSentToBack: () -> Unit,
     navigationToClassDetail: (Class) -> Unit,
     navigateToSessionDetail: (Class) -> Unit,
-    navigateToStudentDetail: (Class) -> Unit
+    navigateToStudentDetail: (Class) -> Unit,
+    navigateToRedirect: () -> Unit
 ) {
     navigation<Destination.Teacher.Graph>(
         startDestination = Destination.Teacher.Home
     ) {
         teacherHome(onSentToBack)
-        teacherProfile()
+        teacherProfile(
+            navigateToRedirect = navigateToRedirect
+        )
         teacherClassList(navigationToClassDetail)
         teacherClassDetail(
             navigateToSessionDetail = navigateToSessionDetail,

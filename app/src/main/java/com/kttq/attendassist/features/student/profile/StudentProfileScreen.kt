@@ -1,11 +1,15 @@
 package com.kttq.attendassist.features.student.profile
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -17,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
 // Removed App import as it's unused after changes
 import com.kttq.attendassist.core.ui.components.AppAvatarImage
+import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppOutlineTextField
@@ -27,6 +32,7 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun StudentProfileRoute(
+    navigateToRedirect: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: StudentProfileViewModel = hiltViewModel(),
 ) {
@@ -38,6 +44,10 @@ fun StudentProfileRoute(
         email = uiState.email,
         phone = uiState.phone,
         onChangePasswordClicked = viewModel::onChangePasswordClicked,
+        onLogoutClicked = {
+            viewModel.onLogoutClicked()
+            navigateToRedirect()
+        },
         modifier = modifier
     )
 }
@@ -49,6 +59,7 @@ fun StudentProfileScreen(
     email: String,
     phone: String,
     onChangePasswordClicked: () -> Unit,
+    onLogoutClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -56,6 +67,7 @@ fun StudentProfileScreen(
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.padding_large))
+            .verticalScroll(rememberScrollState())
     ) {
         AppAvatarImage() // Assuming this doesn't need data from ViewModel for now
 
@@ -115,6 +127,13 @@ fun StudentProfileScreen(
                 onClick = { onChangePasswordClicked() } // Call ViewModel function
             )
         }
+        AppButton(
+            onClick = onLogoutClicked,
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.error
+        ) {
+            AppLabelPrimary("Log out")
+        }
     }
 }
 
@@ -129,7 +148,8 @@ private fun StudentProfileScreenPreview() {
             studentId = "",
             email = "",
             phone = "",
-            onChangePasswordClicked = {}
+            onChangePasswordClicked = {},
+            onLogoutClicked = {}
         )
     }
 }

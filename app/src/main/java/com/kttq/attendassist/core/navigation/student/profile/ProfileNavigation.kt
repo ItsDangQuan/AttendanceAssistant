@@ -18,8 +18,11 @@ fun NavController.navigateToStudentProfile(
 }
 
 fun NavGraphBuilder.studentProfile(
+    navigateToRedirect: () -> Unit
 ) {
     composable<Destination.Student.Profile> {
-        StudentProfileRoute()
+        StudentProfileRoute(
+            navigateToRedirect = navigateToRedirect
+        )
     }
 }

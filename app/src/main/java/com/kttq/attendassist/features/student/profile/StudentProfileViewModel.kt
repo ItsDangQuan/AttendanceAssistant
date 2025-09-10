@@ -2,6 +2,7 @@ package com.kttq.attendassist.features.student.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kttq.attendassist.core.data.repositories.auth.AuthRepository
 import com.kttq.attendassist.core.data.repositories.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,8 @@ data class StudentProfileUiState(
 
 @HiltViewModel
 class StudentProfileViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(StudentProfileUiState(isLoading = true))
@@ -73,4 +75,10 @@ class StudentProfileViewModel @Inject constructor(
 
     // TODO: Add function to update user profile if editable fields are introduced.
     // fun updateUserProfile(updatedState: StudentProfileUiState) { }
+
+    fun onLogoutClicked() {
+        viewModelScope.launch {
+            authRepository.logout()
+        }
+    }
 }

@@ -41,9 +41,12 @@ fun AppNavHost(
         teacherNavigation(onShowSnackbar, onSentToBack,
             navController::navigateToClassDetail,
             navController::navigateToClassPastSession,
-            navController::navigateToTeacherClassStudentList
-
+            navController::navigateToTeacherClassStudentList,
+            navController::navigateToRedirect
         )
-        studentNavigation(onShowSnackbar, onSentToBack, navController::navigateToSessionConfirm)
+        studentNavigation(onShowSnackbar, onSentToBack,
+            navController::navigateToSessionConfirm,
+            navController::navigateToRedirect,
+        )
     }
 }
