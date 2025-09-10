@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
-import com.kttq.attendassist.core.data.network.models.Session
+import com.kttq.attendassist.core.model.Session
 import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.features.student.home.StudentHomeRoute
 
@@ -21,7 +21,7 @@ fun NavController.navigateToStudentHome(
 fun NavGraphBuilder.studentHome(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onSentToBack: () -> Unit,
-    navigateToNewSession: (Session) -> Unit
+    navigateToNewSession: (String) -> Unit
 ) {
     composable<Destination.Student.Home> {
         StudentHomeRoute(

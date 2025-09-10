@@ -1,4 +1,4 @@
-package com.kttq.attendassist.core.domain.model
+package com.kttq.attendassist.core.model
 
 enum class AuthState {
     UNAUTHENTICATED,

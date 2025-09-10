@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kttq.attendassist.core.ble.advertiser.BleAdvertiser
-import com.kttq.attendassist.core.data.network.models.Class // Existing import
-import com.kttq.attendassist.core.data.network.models.Session
+import com.kttq.attendassist.core.model.Class // Existing import
+import com.kttq.attendassist.core.model.Session
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

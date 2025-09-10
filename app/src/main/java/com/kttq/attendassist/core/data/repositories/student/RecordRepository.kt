@@ -1,6 +1,7 @@
 package com.kttq.attendassist.core.data.repositories.student
 
 import kotlinx.coroutines.flow.Flow
+import com.kttq.attendassist.core.model.Record
 
 interface RecordRepository {
     /**
@@ -16,4 +17,7 @@ interface RecordRepository {
      * This method should handle its own errors internally or throw exceptions.
      */
     suspend fun refreshAllStudentRecords()
+
+    // Use /api/v1/student/{student_id}/records
+    suspend fun getRecordByStudentId(studentId: String): List<Record>
 }

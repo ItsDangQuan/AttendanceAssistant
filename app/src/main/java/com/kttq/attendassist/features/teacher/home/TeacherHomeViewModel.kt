@@ -2,7 +2,7 @@ package com.kttq.attendassist.features.teacher.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kttq.attendassist.core.data.network.models.Session
+import com.kttq.attendassist.core.model.Session
 import com.kttq.attendassist.core.data.repositories.user.UserRepository
 import com.kttq.attendassist.core.util.DateManager
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -9,7 +9,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.data.network.models.Class
+import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.ui.components.AppBodyPrimary
 import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary

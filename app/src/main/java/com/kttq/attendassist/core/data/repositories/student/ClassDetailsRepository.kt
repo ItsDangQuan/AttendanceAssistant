@@ -1,6 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.student
 
-import com.kttq.attendassist.core.data.network.models.Class
+import com.kttq.attendassist.core.model.Class
 import kotlinx.coroutines.flow.Flow
 
 interface ClassDetailsRepository {

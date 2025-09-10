@@ -1,4 +1,4 @@
-package com.kttq.attendassist.core.data.network.models
+package com.kttq.attendassist.core.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,3 +14,4 @@ data class Record(
     @SerialName("session_id")
     val session: String
 )
+

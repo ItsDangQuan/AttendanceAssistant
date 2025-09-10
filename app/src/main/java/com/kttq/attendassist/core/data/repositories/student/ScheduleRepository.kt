@@ -1,6 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.student
 
-import com.kttq.attendassist.core.data.network.models.Session
+import com.kttq.attendassist.core.model.Session
 import kotlinx.coroutines.flow.Flow
 
 // If possible, else ignore. Temporary use Session as placeholder.

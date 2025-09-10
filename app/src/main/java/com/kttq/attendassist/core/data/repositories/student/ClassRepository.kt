@@ -1,6 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.student
 
-import com.kttq.attendassist.core.data.network.models.Class
+import com.kttq.attendassist.core.model.Class
 import kotlinx.coroutines.flow.Flow
 
 interface ClassRepository {
@@ -27,4 +27,7 @@ interface ClassRepository {
      * Throws an exception on failure.
      */
     suspend fun refreshPastClasses()
+
+    // Use /api/v1/class/{class_id}/information
+    suspend fun haveStudent(classId: String): Boolean
 }

@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.data.network.models.Session
+import com.kttq.attendassist.core.model.Session
 import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppIconButton
@@ -42,7 +42,7 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 fun StudentHomeRoute(
     onSentToBack: () -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    navigateToNewSession: (Session) -> Unit,
+    navigateToNewSession: (String) -> Unit,
 
     modifier: Modifier = Modifier,
     navigateToSummary: () -> Unit = {},
@@ -50,6 +50,7 @@ fun StudentHomeRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val statSummary by viewModel.statSummary.collectAsStateWithLifecycle() // Collect statSummary
+    val userProfile by viewModel.userProfile.collectAsStateWithLifecycle()
     val date by viewModel.formattedDate.collectAsStateWithLifecycle()
 
     BackHandler {
@@ -64,9 +65,9 @@ fun StudentHomeRoute(
     }
 
     StudentHomeScreen(
-        userName = uiState.userName,
+        userName = userProfile?.firstName ?: "Loading...",
         date = date,
-        statSummary = statSummary, // Pass the collected statSummary
+        statSummary = statSummary,
         isScanning = uiState.isScanning, // Pass scanning state
         onScanClicked = {
             viewModel.startScan(
@@ -94,7 +95,7 @@ fun StudentHomeRoute(
 fun StudentHomeScreen(
     userName: String,
     date: String,
-    statSummary: List<Pair<String, String>>,
+    statSummary: StudentHomeStatSummary,
     isScanning: Boolean, // Added to reflect scan state in UI if needed
     onScanClicked: () -> Unit,
     onSummaryClicked: () -> Unit,
@@ -133,17 +134,39 @@ fun StudentHomeScreen(
             modifier = Modifier
                 .fillMaxWidth(),
         ) {
-            items(
-                items = statSummary,
-                key = { it.first } // use label as stable key
-            ) { pair ->
+            item {
                 AppCard(
                     modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
                 ) {
-                    AppLabelPrimary(pair.first)
-                    AppLabelSecondary(pair.second)
+                    AppLabelPrimary("Total")
+                    AppLabelSecondary(statSummary.total.toString())
                 }
             }
+            item {
+                AppCard(
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                ) {
+                    AppLabelPrimary("Attended")
+                    AppLabelSecondary(statSummary.attended.toString())
+                }
+            }
+            item {
+                AppCard(
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                ) {
+                    AppLabelPrimary("Leave Accepted")
+                    AppLabelSecondary(statSummary.leaveAccepted.toString())
+                }
+            }
+            item {
+                AppCard(
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                ) {
+                    AppLabelPrimary("Leave Unaccepted")
+                    AppLabelSecondary(statSummary.leaveUnaccepted.toString())
+                }
+            }
+
         }
         HorizontalDivider(
             modifier = Modifier
@@ -173,13 +196,13 @@ private fun StudentHomeScreenPreview() {
         StudentHomeScreen(
             userName = "User",
             date = "",
-            statSummary = listOf(
-                "Total" to "0",
-                "Attended" to "0",
-                "Leave Accepted" to "0",
-                "Leave Unaccepted" to "0"
-            ),
             isScanning = false,
+            statSummary = StudentHomeStatSummary(
+                total = 10,
+                attended = 5,
+                leaveAccepted = 2,
+                leaveUnaccepted = 3
+            ),
             onScanClicked = {},
             onSummaryClicked = {}
         )
@@ -193,11 +216,11 @@ private fun StudentHomeScreenScanningPreview() {
         StudentHomeScreen(
             userName = "User",
             date = "",
-            statSummary = listOf(
-                "Total" to "0",
-                "Attended" to "0",
-                "Leave Accepted" to "0",
-                "Leave Unaccepted" to "0"
+            statSummary = StudentHomeStatSummary(
+                total = 10,
+                attended = 5,
+                leaveAccepted = 2,
+                leaveUnaccepted = 3
             ),
             isScanning = true,
             onScanClicked = {},

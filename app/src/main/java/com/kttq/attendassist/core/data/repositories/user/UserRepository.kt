@@ -1,6 +1,7 @@
 package com.kttq.attendassist.core.data.repositories.user
 
 import com.kttq.attendassist.core.data.network.dtos.UserOut
+import com.kttq.attendassist.core.model.StudentProfile
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -26,4 +27,6 @@ interface UserRepositoryRefactor {
      * to be caught by the caller (ViewModel).
      */
     suspend fun refreshCurrentUser()
+
+    suspend fun getCurrentUserAsStudent() : StudentProfile?
 }

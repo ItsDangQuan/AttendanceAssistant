@@ -1,6 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.student
 
-import com.kttq.attendassist.core.data.network.models.Session // As defined in SessionConfirmViewModel or a shared location
+import com.kttq.attendassist.core.model.Session // As defined in SessionConfirmViewModel or a shared location
 import kotlinx.coroutines.flow.Flow
 
 /**
