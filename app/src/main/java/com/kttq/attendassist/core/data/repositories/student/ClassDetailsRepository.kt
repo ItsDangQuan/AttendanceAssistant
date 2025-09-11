@@ -4,6 +4,7 @@ import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.model.Record
 import kotlinx.coroutines.flow.Flow
 
+// TODO: Removed this after review (all usage have been removed)
 interface ClassDetailsRepository {
     /**
      * Observes the details of a specific class from an in-memory cache.

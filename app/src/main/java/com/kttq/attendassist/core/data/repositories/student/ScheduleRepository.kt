@@ -3,6 +3,7 @@ package com.kttq.attendassist.core.data.repositories.student
 import com.kttq.attendassist.core.model.StudentSession
 import kotlinx.coroutines.flow.Flow
 
+// TODO: Not used. To be removed
 // If possible, else ignore. Temporary use Session as placeholder.
 interface ScheduleRepository {
     /**

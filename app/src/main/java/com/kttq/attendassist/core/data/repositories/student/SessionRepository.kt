@@ -3,6 +3,7 @@ package com.kttq.attendassist.core.data.repositories.student
 import com.kttq.attendassist.core.model.StudentSession // As defined in SessionConfirmViewModel or a shared location
 import kotlinx.coroutines.flow.Flow
 
+// TODO: Remove this after review (all usage have been removed)
 /**
  * Repository interface for managing session details and attendance confirmation.
  */

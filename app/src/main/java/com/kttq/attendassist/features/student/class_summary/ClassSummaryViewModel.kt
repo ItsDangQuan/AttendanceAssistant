@@ -2,14 +2,15 @@ package com.kttq.attendassist.features.student.class_summary
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kttq.attendassist.core.data.repositories.student.ClassDetailsRepository
-import com.kttq.attendassist.core.data.repositories.user.UserRepository
+import com.kttq.attendassist.core.data.repositories.student.RecordRepository
+import com.kttq.attendassist.core.data.repositories.teacher.ClassRepository
 import com.kttq.attendassist.core.data.repositories.user.UserRepositoryRefactor
 import com.kttq.attendassist.core.model.Class
+import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.navigation.Destination
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,11 +20,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.text.isNotBlank
-import com.kttq.attendassist.core.model.Record
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 
 data class ClassSummaryUiState(
     val isLoading: Boolean = false,
@@ -35,14 +31,14 @@ data class ClassSummaryUiState(
 @HiltViewModel
 class ClassSummaryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val classDetailRepository: ClassDetailsRepository,
+    private val classRepository: ClassRepository,
+    private val recordRepository: RecordRepository,
     private val userRepository: UserRepositoryRefactor
 ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Student.ClassSummary>().classId
 
     private val _uiState = MutableStateFlow(ClassSummaryUiState())
     val uiState = _uiState.asStateFlow()
-
 
 
     init {
@@ -55,9 +51,16 @@ class ClassSummaryViewModel @Inject constructor(
             val totalCount = records.size
             // TODO: Define status strings consistently (e.g., as enums or constants)
             val attendedCount = records.count { it.status.equals("attended", ignoreCase = true) }
-            val absentCount = records.count { it.status.equals("absent", ignoreCase = true) } // Assuming "absent" status
-            val leaveAcceptedCount = records.count { it.status.equals("leaveAccepted", ignoreCase = true) }
-            val leaveUnacceptedCount = records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
+            val absentCount = records.count {
+                it.status.equals(
+                    "absent",
+                    ignoreCase = true
+                )
+            } // Assuming "absent" status
+            val leaveAcceptedCount =
+                records.count { it.status.equals("leaveAccepted", ignoreCase = true) }
+            val leaveUnacceptedCount =
+                records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
 
             listOf(
                 "Total Sessions" to totalCount.toString(),
@@ -82,7 +85,12 @@ class ClassSummaryViewModel @Inject constructor(
         if (classId != null && classId.isNotBlank()) {
             fetchData(classId)
         } else {
-            _uiState.update { it.copy(isLoading = false, error = "Class ID not provided or invalid.") }
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    error = "Class ID not provided or invalid."
+                )
+            }
         }
     }
 
@@ -92,9 +100,14 @@ class ClassSummaryViewModel @Inject constructor(
             try {
                 // TODO: Fetch class details
                 // Do not sure to use firstOrNull() in here. My fen, what is the purpose of classDetailRepository?
-                val details: Class? = classDetailRepository.observeClassDetails(classId).firstOrNull()
+                val details: Class? = classRepository.getClassById(classId)
                 if (details == null) {
-                    _uiState.update { it.copy(isLoading = false, error = "Class details not found.") }
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Class details not found."
+                        )
+                    }
                     return@launch
                 }
                 _uiState.update { it.copy(classDetails = details) }
@@ -104,16 +117,27 @@ class ClassSummaryViewModel @Inject constructor(
 
                 val studentId = userRepository.getCurrentUserAsStudent()?.studentId
                 if (studentId == null) {
-                    _uiState.update { it.copy(isLoading = false, error = "Student not identified. Cannot fetch records.") }
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Student not identified. Cannot fetch records."
+                        )
+                    }
                     return@launch
                 }
-                val classRecords = classDetailRepository.getRecord(classId, studentId)
+                val classRecords = recordRepository.getCurrentStudentRecords()
                 // TODO: Handle the case where classRecords is null
                 _uiState.update { it.copy(isLoading = false, records = classRecords!!) }
 
             } catch (e: Exception) {
                 // TODO: Log the exception e
-                _uiState.update { it.copy(isLoading = false, error = "Failed to load class summary: ${e.message}") }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to load class summary: ${e.message}"
+                    )
+                }
             }
         }
-    }}
+    }
+}
