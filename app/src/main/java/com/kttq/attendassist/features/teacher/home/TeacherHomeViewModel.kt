@@ -2,8 +2,8 @@ package com.kttq.attendassist.features.teacher.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kttq.attendassist.core.data.repositories.teacher.SessionRepository
 import com.kttq.attendassist.core.data.repositories.teacher.TeacherProfileRepository
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherSessionRepository
 import com.kttq.attendassist.core.model.TeacherProfile
 import com.kttq.attendassist.core.model.TeacherSession
 import com.kttq.attendassist.core.util.DateManager
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class TeacherHomeViewModel @Inject constructor(
     dateManager: DateManager,
     private val teacherProfileRepository: TeacherProfileRepository,
-    private val sessionRepository: SessionRepository
+    private val teacherSessionRepository: TeacherSessionRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(TeacherHomeUiState(isLoading = true))
     val uiState: StateFlow<TeacherHomeUiState> = _uiState.asStateFlow()
@@ -48,7 +48,7 @@ class TeacherHomeViewModel @Inject constructor(
     private fun fetchRecentSession() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            _recentSession.value = sessionRepository.getRecentSession()
+            _recentSession.value = teacherSessionRepository.getRecentSession()
             _uiState.update { it.copy(isLoading = false) }
         }
     }

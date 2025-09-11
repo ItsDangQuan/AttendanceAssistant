@@ -14,7 +14,7 @@ data class TeacherFull(
     @SerialName("last_name")
     val lastName: String,
     @SerialName("DOB")
-    val DOB: String?,
+    val dob: String?,
     @SerialName("department_id")
     val departmentId: String?
 )

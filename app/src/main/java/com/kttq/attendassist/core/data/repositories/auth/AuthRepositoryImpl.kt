@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.kttq.attendassist.core.data.network.AuthService
 import com.kttq.attendassist.core.data.network.dtos.UserLogin
-import com.kttq.attendassist.core.data.preferences.auth.AuthPreferencesKeys
+import com.kttq.attendassist.core.data.preferences.AuthPreferencesKeys
 import com.kttq.attendassist.core.data.repositories.token.TokenRepository
 import com.kttq.attendassist.core.model.AuthState
 import kotlinx.coroutines.flow.Flow

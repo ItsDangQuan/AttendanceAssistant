@@ -1,4 +1,4 @@
-package com.kttq.attendassist.core.data.preferences.auth
+package com.kttq.attendassist.core.data.preferences
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 

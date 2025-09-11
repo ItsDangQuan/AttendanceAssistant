@@ -3,9 +3,9 @@ package com.kttq.attendassist.features.student.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.ble.scanner.BleScanner
-import com.kttq.attendassist.core.data.repositories.student.ClassRepository
-import com.kttq.attendassist.core.data.repositories.student.RecordRepository
+import com.kttq.attendassist.core.data.repositories.student.StudentClassRepository
 import com.kttq.attendassist.core.data.repositories.student.StudentProfileRepository
+import com.kttq.attendassist.core.data.repositories.student.StudentRecordRepository
 import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.model.StudentProfile
 import com.kttq.attendassist.core.util.DateManager
@@ -37,8 +37,8 @@ data class StudentHomeStatSummary(
 class StudentHomeViewModel @Inject constructor(
     dateManager: DateManager,
     private val studentProfileRepository: StudentProfileRepository,
-    private val recordRepository: RecordRepository,
-    private val classRepository: ClassRepository,
+    private val studentRecordRepository: StudentRecordRepository,
+    private val studentClassRepository: StudentClassRepository,
     private val bleScanner: BleScanner
     // TODO: Inject a repository for fetching records
 ) : ViewModel() {
@@ -109,7 +109,8 @@ class StudentHomeViewModel @Inject constructor(
                 return@launch
             }
             // TODO: Fetch using the other API for server validation
-            val records = recordRepository.getRecordByStudentId(_userProfile.value!!.studentId)
+            val records =
+                studentRecordRepository.getRecordByStudentId(_userProfile.value!!.studentId)!!
             _allRecords.value = records
             _uiState.update { it.copy(isLoading = false) }
         }
@@ -132,7 +133,7 @@ class StudentHomeViewModel @Inject constructor(
                 // I think that you will not agree with this,
                 //  but this may be the best way to do it
                 viewModelScope.launch {
-                    if (classRepository.haveStudent(classId)) {
+                    if (studentClassRepository.haveStudent(classId) == true) {
                         stopScan()
                         onScanSuccess(sessionId)
                     }

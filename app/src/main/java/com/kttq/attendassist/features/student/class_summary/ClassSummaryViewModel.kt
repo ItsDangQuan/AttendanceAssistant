@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kttq.attendassist.core.data.repositories.student.RecordRepository
 import com.kttq.attendassist.core.data.repositories.student.StudentProfileRepository
-import com.kttq.attendassist.core.data.repositories.teacher.ClassRepository
+import com.kttq.attendassist.core.data.repositories.student.StudentRecordRepository
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherClassRepository
 import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.navigation.Destination
@@ -31,8 +31,8 @@ data class ClassSummaryUiState(
 @HiltViewModel
 class ClassSummaryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val classRepository: ClassRepository,
-    private val recordRepository: RecordRepository,
+    private val teacherClassRepository: TeacherClassRepository,
+    private val studentRecordRepository: StudentRecordRepository,
     private val studentProfileRepository: StudentProfileRepository
 ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Student.ClassSummary>().classId
@@ -94,7 +94,7 @@ class ClassSummaryViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 // TODO: Fetch class details
-                val details: Class? = classRepository.getClassById(classId)
+                val details: Class? = teacherClassRepository.getClassById(classId)
                 if (details == null) {
                     _uiState.update {
                         it.copy(
@@ -119,7 +119,7 @@ class ClassSummaryViewModel @Inject constructor(
                     }
                     return@launch
                 }
-                val classRecords = recordRepository.getCurrentStudentRecords()
+                val classRecords = studentRecordRepository.getCurrentStudentRecords()
                 // TODO: Handle the case where classRecords is null
                 _uiState.update { it.copy(isLoading = false, records = classRecords!!) }
 

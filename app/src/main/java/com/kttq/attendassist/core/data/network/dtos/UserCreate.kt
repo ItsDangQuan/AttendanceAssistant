@@ -18,6 +18,8 @@ data class UserCreate(
     val password: String,
     @SerialName("student_id")
     val studentId: String?,
+    @SerialName("teacher_id")
+    val teacherId: String?,
     @SerialName("school_year")
     val schoolYear: String?,
 )

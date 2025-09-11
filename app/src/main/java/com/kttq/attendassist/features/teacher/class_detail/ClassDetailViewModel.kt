@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kttq.attendassist.core.ble.advertiser.BleAdvertiser
-import com.kttq.attendassist.core.data.repositories.teacher.ClassRepository
-import com.kttq.attendassist.core.data.repositories.teacher.SessionRepository
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherClassRepository
 import com.kttq.attendassist.core.data.repositories.teacher.TeacherProfileRepository
-import com.kttq.attendassist.core.model.Class // Existing import
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherSessionRepository
+import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,8 +31,8 @@ data class ClassDetailUiState(
 class ClassDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val bleAdvertiser: BleAdvertiser,
-    private val teacherClassRepository: ClassRepository,
-    private val sessionRepository: SessionRepository,
+    private val teacherClassRepository: TeacherClassRepository,
+    private val teacherSessionRepository: TeacherSessionRepository,
     private val teacherUserRepository: TeacherProfileRepository
 ) : ViewModel() {
 
@@ -92,7 +92,8 @@ class ClassDetailViewModel @Inject constructor(
 
             try {
                 val teacherId = teacherUserRepository.getCurrentTeacherProfile()?.teacherId
-                val newSession = sessionRepository.createNewSession(classId, teacherId ?: "N/A")
+                val newSession =
+                    teacherSessionRepository.createNewSession(classId, teacherId ?: "N/A")
                 bleAdvertiser.startAdvertising(newSession.classId + "-" + newSession.sessionId)
                 _uiState.update {
                     it.copy(

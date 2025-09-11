@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kttq.attendassist.core.data.repositories.teacher.ClassRepository
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherClassRepository
 import com.kttq.attendassist.core.model.StudentPerformance
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ClassStudentListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val classRepository: ClassRepository,
+    private val teacherClassRepository: TeacherClassRepository,
 
     ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Teacher.ClassStudentList>().classId
@@ -33,7 +33,7 @@ class ClassStudentListViewModel @Inject constructor(
 
             // TODO: Fetch the data from the repo.
             //  Now just mock the data.
-            _studentsList.value = classRepository.getAllStudentInClass(classId)
+            _studentsList.value = teacherClassRepository.getAllStudentInClass(classId)!!
         }
     }
 }

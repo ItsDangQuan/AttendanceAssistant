@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kttq.attendassist.core.data.repositories.teacher.SessionRepository
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherSessionRepository
 import com.kttq.attendassist.core.model.TeacherSession
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ClassPastSessionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val teacherSessionRepository: SessionRepository,
+    private val teacherSessionRepository: TeacherSessionRepository,
 ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Teacher.ClassPastSession>().classId
 
@@ -32,7 +32,7 @@ class ClassPastSessionViewModel @Inject constructor(
 
             // TODO: Fetch the data from the repo.
             //  Now just mock the data.
-            _sessionList.value = teacherSessionRepository.getSessionByClassId(classId)
+            _sessionList.value = teacherSessionRepository.getSessionByClassId(classId)!!
         }
     }
 }
