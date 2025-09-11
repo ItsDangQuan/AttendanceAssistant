@@ -13,7 +13,6 @@ data class StudentPerformance(
 
     val studentAttendance: List<Record>
 
-    // This is beyond the scope of the Student table.
 ) {
     constructor(
         studentFull: StudentFull,
