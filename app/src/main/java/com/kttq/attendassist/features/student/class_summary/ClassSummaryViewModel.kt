@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kttq.attendassist.core.data.repositories.student.RecordRepository
+import com.kttq.attendassist.core.data.repositories.student.StudentProfileRepository
 import com.kttq.attendassist.core.data.repositories.teacher.ClassRepository
-import com.kttq.attendassist.core.data.repositories.user.UserRepositoryRefactor
 import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.navigation.Destination
@@ -33,17 +33,12 @@ class ClassSummaryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val classRepository: ClassRepository,
     private val recordRepository: RecordRepository,
-    private val userRepository: UserRepositoryRefactor
+    private val studentProfileRepository: StudentProfileRepository
 ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Student.ClassSummary>().classId
 
     private val _uiState = MutableStateFlow(ClassSummaryUiState())
     val uiState = _uiState.asStateFlow()
-
-
-    init {
-        fetchData(classId)
-    }
 
     val statSummary: StateFlow<List<Pair<String, String>>> =
         _uiState.map { state ->
@@ -82,8 +77,8 @@ class ClassSummaryViewModel @Inject constructor(
         )
 
     init {
-        if (classId != null && classId.isNotBlank()) {
-            fetchData(classId)
+        if (classId.isNotBlank()) {
+            fetchData()
         } else {
             _uiState.update {
                 it.copy(
@@ -94,12 +89,11 @@ class ClassSummaryViewModel @Inject constructor(
         }
     }
 
-    private fun fetchData(id: String) {
+    private fun fetchData() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 // TODO: Fetch class details
-                // Do not sure to use firstOrNull() in here. My fen, what is the purpose of classDetailRepository?
                 val details: Class? = classRepository.getClassById(classId)
                 if (details == null) {
                     _uiState.update {
@@ -115,7 +109,7 @@ class ClassSummaryViewModel @Inject constructor(
                 // Fetch records for the class by the student
 
 
-                val studentId = userRepository.getCurrentUserAsStudent()?.studentId
+                val studentId = studentProfileRepository.getCurrentStudentProfile()?.studentId
                 if (studentId == null) {
                     _uiState.update {
                         it.copy(

@@ -4,5 +4,5 @@ import com.kttq.attendassist.core.model.StudentProfile
 
 interface StudentProfileRepository {
     // use /api/v1/student/current
-    suspend fun getCurrentStudentProfile(): StudentProfile
+    suspend fun getCurrentStudentProfile(): StudentProfile?
 }

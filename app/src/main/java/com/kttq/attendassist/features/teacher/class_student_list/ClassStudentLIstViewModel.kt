@@ -21,12 +21,13 @@ class ClassStudentListViewModel @Inject constructor(
     ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Teacher.ClassStudentList>().classId
 
-    val _studentsList = MutableStateFlow<List<StudentPerformance>>(emptyList())
+    private val _studentsList = MutableStateFlow<List<StudentPerformance>>(emptyList())
     val studentsList = _studentsList.asStateFlow()
 
     init {
         fetchData()
     }
+
     fun fetchData() {
         viewModelScope.launch {
 

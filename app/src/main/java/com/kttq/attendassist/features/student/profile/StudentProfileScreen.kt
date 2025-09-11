@@ -1,6 +1,6 @@
 package com.kttq.attendassist.features.student.profile
 
-import androidx.compose.foundation.horizontalScroll
+// Removed App import as it's unused after changes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-// Removed App import as it's unused after changes
 import com.kttq.attendassist.core.ui.components.AppAvatarImage
 import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppIconButton
@@ -41,7 +40,7 @@ fun StudentProfileRoute(
     val user = viewModel.user.collectAsStateWithLifecycle().value
 
     StudentProfileScreen(
-        name = if(user != null) user.firstName + " " + user.lastName else "N/A",
+        name = if (user != null) user.firstName + " " + user.lastName else "N/A",
         studentId = user?.studentId ?: "N/A",
         email = user?.email ?: "N/A",
         onChangePasswordClicked = viewModel::onChangePasswordClicked,
@@ -50,8 +49,8 @@ fun StudentProfileRoute(
         },
         modifier = modifier
     )
-    LaunchedEffect(uiState.isLoggedout) {
-        if (uiState.isLoggedout) {
+    LaunchedEffect(uiState.isLoggedOut) {
+        if (uiState.isLoggedOut) {
             navigateToRedirect()
         }
     }

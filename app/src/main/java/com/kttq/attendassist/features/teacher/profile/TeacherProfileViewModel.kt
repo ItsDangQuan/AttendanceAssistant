@@ -3,8 +3,7 @@ package com.kttq.attendassist.features.teacher.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.data.repositories.auth.AuthRepository
-import com.kttq.attendassist.core.data.repositories.user.UserRepository
-import com.kttq.attendassist.core.data.repositories.user.UserRepositoryRefactor
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherProfileRepository
 import com.kttq.attendassist.core.model.TeacherProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,13 +16,13 @@ import javax.inject.Inject
 
 data class TeacherProfileUiState(
     val isLoading: Boolean = false,
-    val isLoggedout: Boolean = false
+    val isLoggedOut: Boolean = false
     // TODO: Add any other profile-related state if needed
 )
 
 @HiltViewModel
 class TeacherProfileViewModel @Inject constructor(
-    private val userRepository: UserRepositoryRefactor,
+    private val teacherProfileRepository: TeacherProfileRepository,
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -40,8 +39,8 @@ class TeacherProfileViewModel @Inject constructor(
     private fun fetchUserProfile() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            _user.value = userRepository.getCurrentUserAsTeacher()
-            _uiState.update { it.copy( isLoading = false, ) }
+            _user.value = teacherProfileRepository.getCurrentTeacherProfile()
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -57,7 +56,7 @@ class TeacherProfileViewModel @Inject constructor(
     fun onLogoutClicked() {
         viewModelScope.launch {
             authRepository.logout()
-            _uiState.update { it.copy(isLoggedout = true) }
+            _uiState.update { it.copy(isLoggedOut = true) }
         }
     }
 }

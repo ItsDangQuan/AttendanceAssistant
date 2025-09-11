@@ -4,8 +4,8 @@ import com.kttq.attendassist.core.data.network.dtos.ClassInformation
 
 data class Class(
     val classId: String,
-    val semester: String,
-    val year: Int,
+    val semester: String?,
+    val year: Int?,
     val courseId: String,
     val courseName: String,
     val teacherId: String,
@@ -13,10 +13,8 @@ data class Class(
 ) {
     constructor(classInformation: ClassInformation) : this(
         classInformation.classId,
-        // classInformation.semester,
-        // classInformation.year,
-        "N/A",
-        2023,
+        classInformation.semester,
+        classInformation.year,
         classInformation.courseId,
         classInformation.courseName,
         classInformation.teacherId,

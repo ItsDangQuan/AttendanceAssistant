@@ -55,7 +55,7 @@ class SessionConfirmViewModel @Inject constructor(
                         error = if (sessionDetails == null) "Session not found (ID: $sessionId)" else null
                     )
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // TODO: Log the exception e
                 _uiState.update {
                     it.copy(
@@ -91,7 +91,7 @@ class SessionConfirmViewModel @Inject constructor(
                         )
                     }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // TODO: Log the exception e
                 _uiState.update {
                     it.copy(

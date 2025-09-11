@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.ble.scanner.BleScanner
 import com.kttq.attendassist.core.data.repositories.student.ClassRepository
 import com.kttq.attendassist.core.data.repositories.student.RecordRepository
-import com.kttq.attendassist.core.data.repositories.user.UserRepositoryRefactor
+import com.kttq.attendassist.core.data.repositories.student.StudentProfileRepository
 import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.model.StudentProfile
 import com.kttq.attendassist.core.util.DateManager
@@ -36,7 +36,7 @@ data class StudentHomeStatSummary(
 @HiltViewModel
 class StudentHomeViewModel @Inject constructor(
     dateManager: DateManager,
-    private val userRepository: UserRepositoryRefactor,
+    private val studentProfileRepository: StudentProfileRepository,
     private val recordRepository: RecordRepository,
     private val classRepository: ClassRepository,
     private val bleScanner: BleScanner
@@ -90,7 +90,7 @@ class StudentHomeViewModel @Inject constructor(
             // TODO: Replace this in the future
             // val profile = userRepository.getCurrentUserAsStudent()
             // Now, we are fetching the code from the user table
-            val profile = userRepository.getCurrentUserAsStudent()
+            val profile = studentProfileRepository.getCurrentStudentProfile()
             if (profile == null) {
                 _uiState.update { it.copy(error = "User profile not found", isLoading = false) }
                 return@launch

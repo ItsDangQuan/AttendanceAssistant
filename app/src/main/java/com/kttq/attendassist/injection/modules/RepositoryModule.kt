@@ -4,8 +4,6 @@ import com.kttq.attendassist.core.data.repositories.auth.AuthRepository
 import com.kttq.attendassist.core.data.repositories.auth.AuthRepositoryImpl
 import com.kttq.attendassist.core.data.repositories.token.TokenRepository
 import com.kttq.attendassist.core.data.repositories.token.TokenRepositoryImpl
-import com.kttq.attendassist.core.data.repositories.user.UserRepository
-import com.kttq.attendassist.core.data.repositories.user.UserRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -26,10 +24,4 @@ abstract class RepositoryModule {
     abstract fun bindAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(
-        userRepositoryImpl: UserRepositoryImpl
-    ): UserRepository
 }

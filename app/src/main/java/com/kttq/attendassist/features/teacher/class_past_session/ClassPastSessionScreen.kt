@@ -22,16 +22,16 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 @Composable
 fun ClassPastSessionRoute(
     modifier: Modifier = Modifier,
-    viewModel: ClassPassSessionViewModel = hiltViewModel()
+    viewModel: ClassPastSessionViewModel = hiltViewModel()
 ) {
-    ClassPassSessionScreen(
+    ClassPastSessionScreen(
         viewModel.sessionList.collectAsStateWithLifecycle().value,
         modifier = modifier
     )
 }
 
 @Composable
-fun ClassPassSessionScreen(
+fun ClassPastSessionScreen(
     sessionList: List<TeacherSession>,
     modifier: Modifier = Modifier
 ) {
@@ -40,10 +40,10 @@ fun ClassPassSessionScreen(
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.padding_medium))
     ) {
-        LazyColumn (
+        LazyColumn(
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
-        ){
+        ) {
             items(sessionList) { session ->
                 AppCard {
                     AppLabelPrimary(session.sessionId)
@@ -57,11 +57,11 @@ fun ClassPassSessionScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun ClassPassSessionScreenPreview() {
+private fun ClassPastSessionScreenPreview() {
     AttendanceAssistantTheme {
-        ClassPassSessionScreen(
+        ClassPastSessionScreen(
             sessionList = emptyList()
         )
     }
-    
+
 }

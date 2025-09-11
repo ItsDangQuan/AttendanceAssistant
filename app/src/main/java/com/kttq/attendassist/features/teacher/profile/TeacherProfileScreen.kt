@@ -1,7 +1,5 @@
 package com.kttq.attendassist.features.teacher.profile
 
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +27,6 @@ import com.kttq.attendassist.core.ui.components.AppOutlineTextField
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.components.AppSubsectionTitle
-import com.kttq.attendassist.core.ui.components.AppTextButton
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
@@ -42,7 +39,7 @@ fun TeacherProfileRoute(
     val teacherProfile = viewModel.user.collectAsStateWithLifecycle().value
 
     TeacherProfileScreen(
-        name = if(teacherProfile != null) teacherProfile.firstName + " " + teacherProfile.lastName else "N/A",
+        name = if (teacherProfile != null) teacherProfile.firstName + " " + teacherProfile.lastName else "N/A",
         teacherId = teacherProfile?.teacherId ?: "N/A",
         email = teacherProfile?.email ?: "N/A",
         phone = teacherProfile?.phone ?: "N/A",
@@ -52,8 +49,8 @@ fun TeacherProfileRoute(
         },
         modifier = modifier
     )
-    LaunchedEffect(uiState.isLoggedout) {
-        if (uiState.isLoggedout) {
+    LaunchedEffect(uiState.isLoggedOut) {
+        if (uiState.isLoggedOut) {
             navigateToRedirect()
         }
     }

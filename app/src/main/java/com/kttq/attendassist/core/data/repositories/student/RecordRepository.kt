@@ -7,5 +7,5 @@ interface RecordRepository {
     suspend fun getRecordByStudentId(studentId: String): List<Record>
 
     // Use /api/v1/student/all/attendance_records to get of current student
-    suspend fun getCurrentStudentRecords(): List<Record>
+    suspend fun getCurrentStudentRecords(): List<Record>?
 }

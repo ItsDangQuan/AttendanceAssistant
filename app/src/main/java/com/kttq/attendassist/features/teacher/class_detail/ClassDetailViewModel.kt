@@ -8,9 +8,7 @@ import com.kttq.attendassist.core.ble.advertiser.BleAdvertiser
 import com.kttq.attendassist.core.data.repositories.teacher.ClassRepository
 import com.kttq.attendassist.core.data.repositories.teacher.SessionRepository
 import com.kttq.attendassist.core.data.repositories.teacher.TeacherProfileRepository
-import com.kttq.attendassist.core.data.repositories.user.UserRepository
 import com.kttq.attendassist.core.model.Class // Existing import
-import com.kttq.attendassist.core.model.StudentSession
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,9 +69,14 @@ class ClassDetailViewModel @Inject constructor(
                         error = if (details == null && classId.isNotBlank()) "Could not load class details for ID: $classId" else null
                     )
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // TODO: Log the exception e more specifically
-                _uiState.update { it.copy(isLoading = false, error = "Failed to load class data. Please try again.") }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to load class data. Please try again."
+                    )
+                }
             }
         }
     }
@@ -85,18 +88,30 @@ class ClassDetailViewModel @Inject constructor(
         }
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-            
+
 
             try {
-                val teacherId = teacherUserRepository.getCurrentUserAsTeacher()?.teacherId
-                val newSession = sessionRepository.createNewSession(classId, teacherId?: "N/A")
+                val teacherId = teacherUserRepository.getCurrentTeacherProfile()?.teacherId
+                val newSession = sessionRepository.createNewSession(classId, teacherId ?: "N/A")
                 bleAdvertiser.startAdvertising(newSession.classId + "-" + newSession.sessionId)
-                _uiState.update { it.copy(activeSessionId = newSession.sessionId, isLoading = false, isAdvertising = true) }
+                _uiState.update {
+                    it.copy(
+                        activeSessionId = newSession.sessionId,
+                        isLoading = false,
+                        isAdvertising = true
+                    )
+                }
 
             } catch (e: Exception) {
                 // TODO: Log the exception e
                 // If advertising failed to start, ensure isAdvertising is false
-                _uiState.update { it.copy(isLoading = false, error = "Error starting new session: ${e.message}", isAdvertising = false) }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Error starting new session: ${e.message}",
+                        isAdvertising = false
+                    )
+                }
             }
         }
     }
@@ -135,6 +150,6 @@ class ClassDetailViewModel @Inject constructor(
     fun clearError() {
         _uiState.update { it.copy(error = null) }
     }
-    
+
     // TODO: Add other necessary functions, e.g., navigating to a specific session's details or student details.
 }

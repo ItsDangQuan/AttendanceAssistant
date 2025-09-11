@@ -38,7 +38,8 @@ fun ClassDetailRoute(
         modifier = modifier
     )
     LaunchedEffect(uiState.error) {
-        onShowSnackbar(uiState.error?:"Unknown error", null)
+        onShowSnackbar(uiState.error ?: "Unknown error", null)
+        viewModel.clearError()
     }
 }
 

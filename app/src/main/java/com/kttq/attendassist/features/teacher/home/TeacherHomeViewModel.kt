@@ -3,10 +3,9 @@ package com.kttq.attendassist.features.teacher.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.data.repositories.teacher.SessionRepository
-import com.kttq.attendassist.core.model.TeacherSession
-import com.kttq.attendassist.core.data.repositories.user.UserRepository
-import com.kttq.attendassist.core.data.repositories.user.UserRepositoryRefactor
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherProfileRepository
 import com.kttq.attendassist.core.model.TeacherProfile
+import com.kttq.attendassist.core.model.TeacherSession
 import com.kttq.attendassist.core.util.DateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TeacherHomeViewModel @Inject constructor(
     dateManager: DateManager,
-    private val userRepository: UserRepositoryRefactor,
+    private val teacherProfileRepository: TeacherProfileRepository,
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(TeacherHomeUiState(isLoading = true))
@@ -41,8 +40,8 @@ class TeacherHomeViewModel @Inject constructor(
     private fun fetchCurrentUser() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            _user.value = userRepository.getCurrentUserAsTeacher()
-            _uiState.update { it.copy( isLoading = false ) }
+            _user.value = teacherProfileRepository.getCurrentTeacherProfile()
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -50,7 +49,7 @@ class TeacherHomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             _recentSession.value = sessionRepository.getRecentSession()
-            _uiState.update { it.copy( isLoading = false ) }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 }
