@@ -43,6 +43,7 @@ fun NavGraphBuilder.teacherNavigation(
         )
         teacherClassList(navigationToClassDetail)
         teacherClassDetail(
+            onShowSnackbar,
             navigateToSessionDetail = navigateToSessionDetail,
             navigateToStudentDetail = navigateToStudentDetail,
         )

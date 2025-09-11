@@ -19,11 +19,13 @@ fun NavController.navigateToClassDetail(
 }
 
 fun NavGraphBuilder.teacherClassDetail(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     navigateToSessionDetail: (String) -> Unit,
     navigateToStudentDetail: (String) -> Unit
 ) {
     composable<Destination.Teacher.ClassDetail> {
         ClassDetailRoute(
+            onShowSnackbar = onShowSnackbar,
             navigateToSessionDetail = navigateToSessionDetail,
             navigateToStudentDetail = navigateToStudentDetail,
         )

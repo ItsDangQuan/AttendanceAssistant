@@ -10,12 +10,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.model.StudentSession
+import com.kttq.attendassist.core.model.TeacherSession
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
+import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun ClassPastSessionRoute(
@@ -30,17 +32,19 @@ fun ClassPastSessionRoute(
 
 @Composable
 fun ClassPassSessionScreen(
-    studentSessionList: List<StudentSession>,
+    sessionList: List<TeacherSession>,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(dimensionResource(R.dimen.padding_medium))
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium))
     ) {
         LazyColumn (
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ){
-            items(studentSessionList) { session ->
+            items(sessionList) { session ->
                 AppCard {
                     AppLabelPrimary(session.sessionId)
                     AppLabelPrimary(session.endTime)
@@ -49,4 +53,15 @@ fun ClassPassSessionScreen(
 
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ClassPassSessionScreenPreview() {
+    AttendanceAssistantTheme {
+        ClassPassSessionScreen(
+            sessionList = emptyList()
+        )
+    }
+    
 }

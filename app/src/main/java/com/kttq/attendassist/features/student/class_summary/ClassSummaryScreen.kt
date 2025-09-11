@@ -155,7 +155,6 @@ private fun ClassSummaryScreenPreview() {
         teacherId = "TCH001",
         teacherName = "John Doe",
         courseName = "Mobile Application Development",
-        teacherName = "TeacherName"
     )
 
     val sampleRecords = listOf(
@@ -212,7 +211,6 @@ private fun ClassSummaryScreenEmptyRecordsPreview() {
         teacherId = "TCH002",
         teacherName = "Jane Smith",
         courseName = "Calculus I",
-        teacherName = "TeacherName"
     )
 
     val sampleStatSummaryEmpty = listOf(

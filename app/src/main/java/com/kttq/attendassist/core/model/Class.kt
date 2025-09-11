@@ -13,8 +13,10 @@ data class Class(
 ) {
     constructor(classInformation: ClassInformation) : this(
         classInformation.classId,
-        classInformation.semester,
-        classInformation.year,
+        // classInformation.semester,
+        // classInformation.year,
+        "N/A",
+        2023,
         classInformation.courseId,
         classInformation.courseName,
         classInformation.teacherId,

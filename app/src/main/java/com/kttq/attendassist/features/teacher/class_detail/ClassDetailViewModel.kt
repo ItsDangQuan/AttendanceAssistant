@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kttq.attendassist.core.ble.advertiser.BleAdvertiser
+import com.kttq.attendassist.core.data.repositories.teacher.ClassRepository
+import com.kttq.attendassist.core.data.repositories.teacher.SessionRepository
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherProfileRepository
+import com.kttq.attendassist.core.data.repositories.user.UserRepository
 import com.kttq.attendassist.core.model.Class // Existing import
 import com.kttq.attendassist.core.model.StudentSession
 import com.kttq.attendassist.core.navigation.Destination
@@ -28,8 +32,10 @@ data class ClassDetailUiState(
 @HiltViewModel
 class ClassDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val bleAdvertiser: BleAdvertiser
-    // TODO: Inject repositories (ClassRepository, SessionRepository, StudentRepository, UserRepository) when available
+    private val bleAdvertiser: BleAdvertiser,
+    private val teacherClassRepository: ClassRepository,
+    private val sessionRepository: SessionRepository,
+    private val teacherUserRepository: TeacherProfileRepository
 ) : ViewModel() {
 
     val classId: String = savedStateHandle.toRoute<Destination.Teacher.ClassDetail>().classId
@@ -56,10 +62,8 @@ class ClassDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                // TODO: Fetch class details using ClassRepository
-                // val details = classRepository.getClassDetails(classId)
-                val details: Class? = null // Placeholder
 
+                val details = teacherClassRepository.getClassById(classId)
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -82,31 +86,13 @@ class ClassDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             
-            // TODO: Get currentTeacherId from UserRepository
-            // val currentTeacherId = userRepository.getCurrentTeacherId()
 
             try {
-                // TODO: Create session record in backend using SessionRepository
-                // val newSession = sessionRepository.createNewSession(classId, currentTeacherId, Date().time)
-                // Placeholder for new session creation:
-                val newSessionId = "SESSION_" + System.currentTimeMillis()
-                val newSession = StudentSession(
-                    newSessionId, "",
-                    startTime = "",
-                    endTime = "",
-                    teacherId = "",
-                    teacherName = "",
-                    courseId = "",
-                    courseName = "",
-                )
+                val teacherId = teacherUserRepository.getCurrentUserAsTeacher()?.teacherId
+                val newSession = sessionRepository.createNewSession(classId, teacherId?: "N/A")
+                bleAdvertiser.startAdvertising(newSession.classId + "-" + newSession.sessionId)
+                _uiState.update { it.copy(activeSessionId = newSession.sessionId, isLoading = false, isAdvertising = true) }
 
-                if (newSession != null) {
-                    bleAdvertiser.startAdvertising(newSession.sessionId) 
-                    // Update UI state to reflect that advertising has started
-                    _uiState.update { it.copy(activeSessionId = newSession.sessionId, isLoading = false, isAdvertising = true) }
-                } else {
-                    _uiState.update { it.copy(isLoading = false, error = "Failed to create new session record.") }
-                }
             } catch (e: Exception) {
                 // TODO: Log the exception e
                 // If advertising failed to start, ensure isAdvertising is false
@@ -115,35 +101,35 @@ class ClassDetailViewModel @Inject constructor(
         }
     }
 
-    fun stopCurrentAttendanceSession() {
-        val currentActiveSessionId = _uiState.value.activeSessionId
-        // Check if we *think* we are advertising or have an active session
-        if (currentActiveSessionId == null && !_uiState.value.isAdvertising) {
-            _uiState.update { it.copy(error = "No active attendance session to stop.") }
-            return
-        }
-
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
-            try {
-                bleAdvertiser.stopAdvertising()
-                // Update UI state to reflect that advertising has stopped
-                val newUiState = _uiState.value.copy(isAdvertising = false, isLoading = false)
-                if (currentActiveSessionId != null) {
-                    // TODO: Update session end time in backend using SessionRepository
-                    // sessionRepository.endSession(currentActiveSessionId, Date().time)
-                    _uiState.value = newUiState.copy(activeSessionId = null)
-                } else {
-                     _uiState.value = newUiState
-                }
-            } catch (e: Exception) {
-                // TODO: Log the exception e
-                // If stopping advertising failed, the actual state might be uncertain.
-                // For now, we assume it stopped or will be stopped by the system eventually.
-                _uiState.update { it.copy(isLoading = false, error = "Error stopping session: ${e.message}", isAdvertising = false) }
-            }
-        }
-    }
+//     fun stopCurrentAttendanceSession() {
+//         val currentActiveSessionId = _uiState.value.activeSessionId
+//         // Check if we *think* we are advertising or have an active session
+//         if (currentActiveSessionId == null && !_uiState.value.isAdvertising) {
+//             _uiState.update { it.copy(error = "No active attendance session to stop.") }
+//             return
+//         }
+//
+//         viewModelScope.launch {
+//             _uiState.update { it.copy(isLoading = true, error = null) }
+//             try {
+//                 bleAdvertiser.stopAdvertising()
+//                 // Update UI state to reflect that advertising has stopped
+//                 val newUiState = _uiState.value.copy(isAdvertising = false, isLoading = false)
+//                 if (currentActiveSessionId != null) {
+//                     // TODO: Update session end time in backend using SessionRepository
+//                     // sessionRepository.endSession(currentActiveSessionId, Date().time)
+//                     _uiState.value = newUiState.copy(activeSessionId = null)
+//                 } else {
+//                      _uiState.value = newUiState
+//                 }
+//             } catch (e: Exception) {
+//                 // TODO: Log the exception e
+//                 // If stopping advertising failed, the actual state might be uncertain.
+//                 // For now, we assume it stopped or will be stopped by the system eventually.
+//                 _uiState.update { it.copy(isLoading = false, error = "Error stopping session: ${e.message}", isAdvertising = false) }
+//             }
+//         }
+//     }
 
 
     fun clearError() {
