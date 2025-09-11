@@ -6,9 +6,11 @@ data class StudentProfile (
     val firstName: String,
     val lastName: String,
 
+    val phone: String,
 
     // Currently, we need only 4 fields from the Student table.
-    // val dob: String,
-    // val schoolYear: String,
-    // val department_id: String,
+    val dob: String,
+    val schoolYear: String,
+    val department_id: String,
+
 )

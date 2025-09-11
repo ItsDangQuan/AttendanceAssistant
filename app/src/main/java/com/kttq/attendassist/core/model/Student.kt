@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Student(
-    @SerialName("ID")
-    val id: String,
     @SerialName("user_id")
     val userId: String,
     @SerialName("student_id")

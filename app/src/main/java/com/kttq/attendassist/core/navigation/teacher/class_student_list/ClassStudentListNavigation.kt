@@ -10,13 +10,13 @@ import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.features.teacher.class_student_list.ClassStudentListRoute
 
 fun NavController.navigateToTeacherClassStudentList(
-    cla: Class,
+    classId: String,
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
     }
 ) {
     this.navigate(
-        Destination.Teacher.ClassStudentList(cla.classId),
+        Destination.Teacher.ClassStudentList(classId),
         navOptions
     )
 }

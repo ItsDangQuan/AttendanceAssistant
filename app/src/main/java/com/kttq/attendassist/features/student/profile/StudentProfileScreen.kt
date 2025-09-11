@@ -38,12 +38,13 @@ fun StudentProfileRoute(
     viewModel: StudentProfileViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val user = viewModel.user.collectAsStateWithLifecycle().value
 
     StudentProfileScreen(
-        name = uiState.name,
-        studentId = uiState.studentId,
-        email = uiState.email,
-        phone = uiState.phone,
+        name = if(user != null) user.firstName + " " + user.lastName else "N/A",
+        studentId = user?.studentId ?: "N/A",
+        email = user?.email ?: "N/A",
+        phone = user?.phone ?: "N/A",
         onChangePasswordClicked = viewModel::onChangePasswordClicked,
         onLogoutClicked = {
             viewModel.onLogoutClicked()

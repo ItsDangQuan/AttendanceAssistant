@@ -18,8 +18,8 @@ import com.kttq.attendassist.core.ui.components.AppTextButton
 
 @Composable
 fun ClassDetailRoute(
-    navigateToSessionDetail: (Class) -> Unit,
-    navigateToStudentDetail: (Class) -> Unit,
+    navigateToSessionDetail: (String) -> Unit,
+    navigateToStudentDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClassDetailViewModel = hiltViewModel(),
 ) {
@@ -37,8 +37,8 @@ fun ClassDetailRoute(
 fun ClassDetailScreen(
     classDetail: Class,
     isAdvertising: Boolean,
-    navigateToSessionDetail: (Class) -> Unit,
-    navigateToStudentDetail: (Class) -> Unit,
+    navigateToSessionDetail: (String) -> Unit,
+    navigateToStudentDetail: (String) -> Unit,
     startScan: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -50,7 +50,7 @@ fun ClassDetailScreen(
         AppBodyPrimary("Course ID: ${classDetail.classId}")
         AppBodyPrimary("Course Name: ${classDetail.courseName}")
         AppTextButton(
-            onClick = { navigateToSessionDetail(classDetail) },
+            onClick = { navigateToSessionDetail(classDetail.classId) },
             content = {
                 AppLabelPrimary(
                     text = "Show all past attendance sessions"
@@ -58,7 +58,7 @@ fun ClassDetailScreen(
             }
         )
         AppTextButton(
-            onClick = { navigateToStudentDetail(classDetail) },
+            onClick = { navigateToStudentDetail(classDetail.classId) },
             content = {
                 AppLabelPrimary(
                     text = "Show all students"

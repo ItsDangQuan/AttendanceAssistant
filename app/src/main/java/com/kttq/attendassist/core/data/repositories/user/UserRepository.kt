@@ -2,6 +2,7 @@ package com.kttq.attendassist.core.data.repositories.user
 
 import com.kttq.attendassist.core.data.network.dtos.UserOut
 import com.kttq.attendassist.core.model.StudentProfile
+import com.kttq.attendassist.core.model.TeacherProfile
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -28,5 +29,8 @@ interface UserRepositoryRefactor {
      */
     suspend fun refreshCurrentUser()
 
+    // end point /api/v1/student/current
     suspend fun getCurrentUserAsStudent() : StudentProfile?
+    // end point /api/v1/teacher/current
+    suspend fun getCurrentUserAsTeacher() : TeacherProfile?
 }

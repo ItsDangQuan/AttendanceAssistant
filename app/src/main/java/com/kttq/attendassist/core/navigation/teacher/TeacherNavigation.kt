@@ -26,15 +26,18 @@ fun NavController.navigateToTeacher(
 fun NavGraphBuilder.teacherNavigation(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onSentToBack: () -> Unit,
-    navigationToClassDetail: (Class) -> Unit,
-    navigateToSessionDetail: (Class) -> Unit,
-    navigateToStudentDetail: (Class) -> Unit,
+    navigationToClassDetail: (String) -> Unit,
+    navigateToSessionDetail: (String) -> Unit,
+    navigateToStudentDetail: (String) -> Unit,
     navigateToRedirect: () -> Unit
 ) {
     navigation<Destination.Teacher.Graph>(
         startDestination = Destination.Teacher.Home
     ) {
-        teacherHome(onSentToBack)
+        teacherHome(
+            onSentToBack,
+            navigateToSessionDetail,
+        )
         teacherProfile(
             navigateToRedirect = navigateToRedirect
         )

@@ -69,6 +69,7 @@ fun StudentClassListScreen(
                         currentClasses[it].courseId + " - " +
                                 currentClasses[it].courseName
                     )
+                    AppLabelSecondary(currentClasses[it].teacherName)
                 }
             }
         }
@@ -95,6 +96,7 @@ fun StudentClassListScreen(
                         pastClasses[it].courseId + " - " +
                                 pastClasses[it].courseName
                     )
+                    AppLabelSecondary(pastClasses[it].teacherName)
                 }
             }
 

@@ -39,12 +39,13 @@ fun TeacherProfileRoute(
     viewModel: TeacherProfileViewModel = hiltViewModel() // Renamed for clarity
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val teacherProfile = viewModel.user.collectAsStateWithLifecycle().value
 
     TeacherProfileScreen(
-        name = uiState.name,
-        studentId = uiState.studentId,
-        email = uiState.email,
-        phone = uiState.phone,
+        name = if(teacherProfile != null) teacherProfile.firstName + " " + teacherProfile.lastName else "N/A",
+        teacherId = teacherProfile?.teacherId ?: "N/A",
+        email = teacherProfile?.email ?: "N/A",
+        phone = teacherProfile?.phone ?: "N/A",
         onChangePasswordClicked = viewModel::onChangePasswordClicked,
         onLogoutClicked = {
             viewModel.onLogoutClicked()
@@ -61,7 +62,7 @@ fun TeacherProfileRoute(
 @Composable
 fun TeacherProfileScreen(
     name: String,
-    studentId: String,
+    teacherId: String,
     email: String,
     phone: String,
     onChangePasswordClicked: () -> Unit,
@@ -101,7 +102,7 @@ fun TeacherProfileScreen(
         AppSubsectionTitle("Teacher ID", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
-            value = studentId,
+            value = teacherId,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -152,7 +153,7 @@ private fun TeacherProfileScreenPreview() {
         // For more complex scenarios, consider providing a mock ViewModel or UiState.
         TeacherProfileScreen(
             name = "",
-            studentId = "",
+            teacherId = "",
             email = "",
             phone = "",
             onChangePasswordClicked = {},

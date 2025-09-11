@@ -153,6 +153,7 @@ private fun ClassSummaryScreenPreview() {
         semester = "Spring",
         year = 2024,
         teacherId = "TCH001",
+        teacherName = "John Doe",
         courseName = "Mobile Application Development"
     )
 
@@ -188,6 +189,7 @@ private fun ClassSummaryScreenEmptyRecordsPreview() {
         semester = "Fall",
         year = 2023,
         teacherId = "TCH002",
+        teacherName = "Jane Smith",
         courseName = "Calculus I"
     )
 

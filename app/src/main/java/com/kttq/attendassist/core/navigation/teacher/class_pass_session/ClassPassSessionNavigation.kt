@@ -10,13 +10,13 @@ import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.features.teacher.class_past_session.ClassPastSessionRoute
 
 fun NavController.navigateToClassPastSession(
-    clazz: Class,
+    classId: String,
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
     }
 ) {
     this.navigate(
-        Destination.Teacher.ClassPastSession(clazz.classId),
+        Destination.Teacher.ClassPastSession(classId),
         navOptions
     )
 }

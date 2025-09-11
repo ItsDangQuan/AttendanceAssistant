@@ -16,6 +16,8 @@ data class Class(
     @SerialName("teacher_id")
     val teacherId: String,
 
+    @SerialName("teacher_name")
+    val teacherName: String,
 
     // This is beyond of the scope of `class` table in database
     @SerialName("course_name")

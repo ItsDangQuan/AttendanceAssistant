@@ -19,7 +19,7 @@ fun NavController.navigateToTeacherClassList(
 }
 
 fun NavGraphBuilder.teacherClassList(
-    navigateToClass: (Class) -> Unit
+    navigateToClass: (String) -> Unit
 ) {
     composable<Destination.Teacher.ClassList> {
         TeacherClassListRoute(
