@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.ble.scanner.BleScanner
 import com.kttq.attendassist.core.data.repositories.student.ClassRepository
 import com.kttq.attendassist.core.data.repositories.student.RecordRepository
-import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.data.repositories.user.UserRepositoryRefactor
+import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.model.StudentProfile
 import com.kttq.attendassist.core.util.DateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,8 +60,18 @@ class StudentHomeViewModel @Inject constructor(
             StudentHomeStatSummary(
                 total = records.size,
                 attended = records.count { it.status.equals("attended", ignoreCase = true) },
-                leaveAccepted = records.count { it.status.equals("leaveAccepted", ignoreCase = true) },
-                leaveUnaccepted = records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
+                leaveAccepted = records.count {
+                    it.status.equals(
+                        "leaveAccepted",
+                        ignoreCase = true
+                    )
+                },
+                leaveUnaccepted = records.count {
+                    it.status.equals(
+                        "leaveUnaccepted",
+                        ignoreCase = true
+                    )
+                }
             )
         }.stateIn(
             scope = viewModelScope,
@@ -74,7 +84,7 @@ class StudentHomeViewModel @Inject constructor(
         fetchAllStudentRecords()
     }
 
-    private fun fetchStudentProfile(){
+    private fun fetchStudentProfile() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             // TODO: Replace this in the future
@@ -98,6 +108,7 @@ class StudentHomeViewModel @Inject constructor(
                 _uiState.update { it.copy(error = "User profile not found", isLoading = false) }
                 return@launch
             }
+            // TODO: Fetch using the other API for server validation
             val records = recordRepository.getRecordByStudentId(_userProfile.value!!.studentId)
             _allRecords.value = records
             _uiState.update { it.copy(isLoading = false) }

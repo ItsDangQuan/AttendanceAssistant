@@ -95,7 +95,6 @@ class ClassDetailViewModel @Inject constructor(
                     startTime = "",
                     endTime = "",
                     teacherId = "",
-                    className = "",
                     teacherName = "",
                     courseId = "",
                     courseName = "",

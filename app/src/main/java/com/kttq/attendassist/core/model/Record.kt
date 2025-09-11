@@ -1,17 +1,17 @@
 package com.kttq.attendassist.core.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.kttq.attendassist.core.data.network.dtos.RecordOut
 
-@Serializable
 data class Record(
-    @SerialName("record_id")
     val recordId: String,
-    @SerialName("student_id")
     val studentId: String,
-    @SerialName("status")
     val status: String,
-    @SerialName("session_id")
-    val session: String
-)
-
+    val sessionId: String
+) {
+    constructor(recordOut: RecordOut) : this(
+        recordOut.recordId,
+        recordOut.studentId,
+        recordOut.status,
+        recordOut.sessionId
+    )
+}

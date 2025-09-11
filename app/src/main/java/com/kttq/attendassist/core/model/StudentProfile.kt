@@ -1,16 +1,23 @@
 package com.kttq.attendassist.core.model
 
-data class StudentProfile (
+import com.kttq.attendassist.core.data.network.dtos.StudentFull
+
+data class StudentProfile(
     val studentId: String,
     val email: String,
     val firstName: String,
     val lastName: String,
 
-    val phone: String,
 
     // Currently, we need only 4 fields from the Student table.
-    val dob: String,
-    val schoolYear: String,
-    val department_id: String,
-
-)
+    // val dob: String,
+    // val schoolYear: String,
+    // val department_id: String,
+) {
+    constructor(studentFull: StudentFull) : this(
+        studentFull.studentId,
+        studentFull.email,
+        studentFull.firstName,
+        studentFull.lastName
+    )
+}

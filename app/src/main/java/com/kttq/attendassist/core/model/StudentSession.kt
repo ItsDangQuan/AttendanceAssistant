@@ -1,29 +1,30 @@
 package com.kttq.attendassist.core.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.kttq.attendassist.core.data.network.dtos.ClassInformation
+import com.kttq.attendassist.core.data.network.dtos.SessionOut
 
-@Serializable
 data class StudentSession(
-    @SerialName("session_id")
     val sessionId: String,
-    @SerialName("class_id")
     val classId: String,
-    @SerialName("teacher_id")
     val teacherId: String,
 
-    @SerialName("class_name")
-    val className: String,
-    @SerialName("teacher_name")
     val teacherName: String,
-    @SerialName("course_id")
     val courseId: String,
-    @SerialName("course_name")
     val courseName: String,
 
     // TODO: Consider to remove this field.
-    @SerialName("start_time")
     val startTime: String,
-    @SerialName("end_time")
     val endTime: String,
-)
+) {
+    constructor(sessionOut: SessionOut, classInformation: ClassInformation) : this(
+        sessionOut.sessionId,
+        sessionOut.classId,
+        sessionOut.teacherId,
+        classInformation.teacherName,
+        classInformation.courseId,
+        classInformation.courseName,
+        sessionOut.startTime,
+        sessionOut.endTime
+    )
+}
+

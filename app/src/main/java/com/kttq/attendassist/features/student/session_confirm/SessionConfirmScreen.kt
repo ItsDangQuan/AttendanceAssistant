@@ -93,7 +93,6 @@ private fun SessionConfirmScreenPreview() {
                     startTime = "",
                     endTime = "",
                     teacherId = "",
-                    className = "",
                     teacherName = "",
                     courseId = "",
                     courseName = ""

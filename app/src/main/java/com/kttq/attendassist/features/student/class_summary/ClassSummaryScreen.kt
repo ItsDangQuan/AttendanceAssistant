@@ -71,7 +71,7 @@ fun ClassSummaryScreen(
     modifier: Modifier = Modifier
 
 ) {
-    Column (
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.padding_medium))
@@ -119,14 +119,14 @@ fun ClassSummaryScreen(
                     key = { record -> record.recordId } // Assuming recordId is a stable unique key
                 ) { record ->
                     AppCard {
-                        Row (
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column (
+                            Column(
                                 modifier = Modifier.weight(1f)
                             ) {
-                                AppLabelPrimary("Session: ${record.session}") // Changed to show session ID
+                                AppLabelPrimary("Session: ${record.sessionId}") // Changed to show session ID
                                 AppLabelSecondary("Status: ${record.status}")
                             }
                             // Consider making status comparison case-insensitive and using constants
@@ -154,14 +154,35 @@ private fun ClassSummaryScreenPreview() {
         year = 2024,
         teacherId = "TCH001",
         teacherName = "John Doe",
-        courseName = "Mobile Application Development"
+        courseName = "Mobile Application Development",
+        teacherName = "TeacherName"
     )
 
     val sampleRecords = listOf(
-        Record(recordId = "REC001", studentId = "STU001", status = "Attended", session = "SES001"),
-        Record(recordId = "REC003", studentId = "STU001", status = "LeaveAccepted", session = "SES003"),
-        Record(recordId = "REC004", studentId = "STU001", status = "LeaveUnaccepted", session = "SES004"),
-        Record(recordId = "REC005", studentId = "STU001", status = "Attended", session = "SES005")
+        Record(
+            recordId = "REC001",
+            studentId = "STU001",
+            status = "Attended",
+            sessionId = "SES001"
+        ),
+        Record(
+            recordId = "REC003",
+            studentId = "STU001",
+            status = "LeaveAccepted",
+            sessionId = "SES003"
+        ),
+        Record(
+            recordId = "REC004",
+            studentId = "STU001",
+            status = "LeaveUnaccepted",
+            sessionId = "SES004"
+        ),
+        Record(
+            recordId = "REC005",
+            studentId = "STU001",
+            status = "Attended",
+            sessionId = "SES005",
+        )
     )
 
     val sampleStatSummary = listOf(
@@ -190,7 +211,8 @@ private fun ClassSummaryScreenEmptyRecordsPreview() {
         year = 2023,
         teacherId = "TCH002",
         teacherName = "Jane Smith",
-        courseName = "Calculus I"
+        courseName = "Calculus I",
+        teacherName = "TeacherName"
     )
 
     val sampleStatSummaryEmpty = listOf(
