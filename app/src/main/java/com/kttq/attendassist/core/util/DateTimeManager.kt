@@ -33,7 +33,7 @@ class DateTimeManager @Inject constructor(
         fun localTimeAsFormattedString(
             positiveMinuteOffset: Long = 0
         ): String {
-            val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+            val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
             return fmt.withZone(ZoneOffset.UTC)
                 .format(Instant.now().plus(Duration.ofMinutes(positiveMinuteOffset)))
         }
@@ -43,7 +43,7 @@ class DateTimeManager @Inject constructor(
             outputPattern: String = "HH:mm"
         ): String? {
             val parser = DateTimeFormatterBuilder()
-                .appendPattern("yyyy-MM-dd HH:mm:ss")
+                .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
                 .optionalStart()
                 .appendFraction(ChronoField.NANO_OF_SECOND, 1, 9, true)
                 .optionalEnd()
