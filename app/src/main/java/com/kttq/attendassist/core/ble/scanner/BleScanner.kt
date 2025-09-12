@@ -16,10 +16,11 @@ import android.bluetooth.le.ScanFilter
 interface BleScanner {
     /**
      * The string in the first callback representing the data the device receive
+     * The Boolean in onSuccess representing a check for verifying
      **/
     fun startScan(
         filter: List<ScanFilter>? = null,
-        onSuccess: (ByteArray) -> Unit,
+        onSuccess: (ByteArray) -> Boolean,
         onFail: (errorCode: Int) -> Unit = {}
     )
     fun stopScan()

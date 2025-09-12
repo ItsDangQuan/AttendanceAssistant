@@ -50,7 +50,8 @@ fun StudentHomeRoute(
     val statSummary by viewModel.statSummary.collectAsStateWithLifecycle() // Collect statSummary
     val userProfile by viewModel.userProfile.collectAsStateWithLifecycle()
     val date by viewModel.formattedDate.collectAsStateWithLifecycle()
-
+    val classId = viewModel.classId.collectAsStateWithLifecycle().value
+    val sessionId = viewModel.sessionId.collectAsStateWithLifecycle().value
     BackHandler {
         onSentToBack()
     }
@@ -62,6 +63,12 @@ fun StudentHomeRoute(
         }
     }
 
+    LaunchedEffect(classId, sessionId) {
+        if (classId != null && sessionId != null) {
+            viewModel.stopScan()
+            navigateToNewSession(sessionId)
+        }
+    }
     StudentHomeScreen(
         userName = userProfile?.firstName ?: "Loading...",
         date = date,
@@ -72,6 +79,7 @@ fun StudentHomeRoute(
                 onScanSuccess = navigateToNewSession,
                 onScanFailure = { errorCode ->
                     val errorMessage = when (errorCode) {
+                        -1 -> "Scan failed: Scanner not available."
                         ScanCallback.SCAN_FAILED_ALREADY_STARTED -> "Scan failed: Already started."
                         ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED -> "Scan failed: Application registration failed."
                         ScanCallback.SCAN_FAILED_INTERNAL_ERROR -> "Scan failed: Internal error."
@@ -87,6 +95,7 @@ fun StudentHomeRoute(
         onSummaryClicked = navigateToSummary,
         modifier = modifier
     )
+
 }
 
 @Composable

@@ -53,6 +53,12 @@ class StudentHomeViewModel @Inject constructor(
     private val _allRecords = MutableStateFlow<List<Record>>(emptyList())
     val allRecords: StateFlow<List<Record>> = _allRecords.asStateFlow()
 
+    private val _classId = MutableStateFlow<String?>(null)
+    val classId: StateFlow<String?> = _classId.asStateFlow()
+
+    private val _sessionId = MutableStateFlow<String?>(null)
+    val sessionId: StateFlow<String?> = _sessionId.asStateFlow()
+
     val formattedDate = dateTimeManager.formattedDate
 
     val statSummary: StateFlow<StudentHomeStatSummary> =
@@ -121,22 +127,27 @@ class StudentHomeViewModel @Inject constructor(
     ) {
         // TODO: Ensure Bluetooth permissions are granted before calling startScan
 
+        _uiState.update { it.copy(isScanning = true) }
         bleScanner.startScan(
             onSuccess = { result ->
                 //  Hmm, may be the result should combine classId and sessionId,
                 //  The actual data may be not like this, i have just give an example
-
                 val res = ClassSessionCodec.unpack(result)
                 // I think that you will not agree with this,
                 //  but this may be the best way to do it
-                val classId = res.first
-                val sessionId = res.second.toString()
+                val classIdRes = res.first
+                val sessionIdRes = res.second.toString()
                 viewModelScope.launch {
-                    if (studentClassRepository.haveStudent(classId) == true) {
-                        stopScan()
-                        onScanSuccess(sessionId)
+                    if (studentClassRepository.haveStudent(classIdRes) == true) {
+                        _classId.value = classIdRes
+                        _sessionId.value = sessionIdRes
                     }
                 }
+                if (classId.value != null && sessionId.value != null) {
+                    stopScan()
+                    true
+                }
+                else false
 
             },
             onFail = { errorCode ->
@@ -144,7 +155,6 @@ class StudentHomeViewModel @Inject constructor(
                 onScanFailure(errorCode)
             }
         )
-        _uiState.update { it.copy(isScanning = true) }
     }
 
     fun stopScan() {
@@ -158,3 +168,4 @@ class StudentHomeViewModel @Inject constructor(
     }
 
 }
+

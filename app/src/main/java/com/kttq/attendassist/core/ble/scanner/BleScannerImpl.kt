@@ -20,43 +20,51 @@ class BleScannerImpl @Inject constructor(
     private var scanningState = false
     override fun isScanning(): Boolean = scanningState
 
+    private var callback: ScanCallback? = null
+
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     override fun stopScan() {
-        if (bleScanner == null) {
+        if (bleScanner == null || !scanningState || callback == null) {
             return
         }
-        // TODO: Handle the callback even the scanning is stopped
-        val callback = object : ScanCallback() {
-            override fun onScanResult(callbackType: Int, result: ScanResult?) {
-                super.onScanResult(callbackType, result)
-            }
-            override fun onScanFailed(errorCode: Int) {
-                super.onScanFailed(errorCode)
-            }
-        }
+        scanningState = false
         bleScanner.stopScan(callback)
+        callback = null
+        Log.d("BleScannerImpl", "Stop scanning")
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     override fun startScan(
         filter: List<ScanFilter>?,
-        onSuccess: (ByteArray) -> Unit,
+        onSuccess: (ByteArray) -> Boolean,
         onFail: (errorCode: Int) -> Unit
     ) {
-        val callback = object : ScanCallback() {
+         callback = object : ScanCallback() {
             override fun onScanFailed(errorCode: Int) {
                 super.onScanFailed(errorCode)
                 onFail(errorCode)
                 scanningState = false
             }
-            override fun onScanResult(callbackType: Int, result: ScanResult?) {
-                super.onScanResult(callbackType, result)
-                Log.d("BleScannerImpl", "onScanResult: ${result.toString()}")
-                val data = result?.scanRecord?.serviceData?.values?.firstOrNull() ?: return
-                onSuccess(data)
-                scanningState = false
-            }
+            // @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
+            // override fun onScanResult(callbackType: Int, result: ScanResult) {
+            //     super.onScanResult(callbackType, result)
+            //     Log.d("BleScannerImpl", "onScanResult: ${result.toString()}")
+            //     val data = result.scanRecord?.serviceData?.values?.firstOrNull() ?: return
+            //     if (onSuccess(data)) stopScan()
+            //     scanningState = false
+            // }
+
+             @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
+             override fun onBatchScanResults(results: List<ScanResult>) {
+                 super.onBatchScanResults(results)
+                 Log.d("BleScannerImpl", "onBatchScanResults: ${results.toString()}")
+                 val data = results.firstOrNull()?.scanRecord?.serviceData?.values?.firstOrNull() ?: return
+                 if (onSuccess(data)) stopScan()
+                 scanningState = false
+             }
+
         }
+
         val combinedFilters: List<ScanFilter> = (filter.orEmpty() + defaultFilter)
         bleScanner?.startScan(
             combinedFilters,

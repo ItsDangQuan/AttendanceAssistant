@@ -39,7 +39,10 @@ class BluetoothComponent {
     fun provideDefaultScanFilter(
         serviceUuid: UUID
     ): ScanFilter {
-        return ScanFilter.Builder().setServiceUuid(ParcelUuid(serviceUuid)).build()
+        return ScanFilter
+            .Builder()
+            .setServiceData(ParcelUuid(serviceUuid), byteArrayOf())
+            .build()
     }
 
     @Provides
@@ -47,6 +50,7 @@ class BluetoothComponent {
     fun provideDefaultScanSettings(): ScanSettings {
         return ScanSettings.Builder()
             .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+            .setReportDelay(200)
             .build()
     }
 

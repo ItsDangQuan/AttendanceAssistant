@@ -2,17 +2,25 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- ===== Legacy Bluetooth permissions (Android 11 / API 30 and below) ===== -->
-    <uses-permission android:name="android.permission.BLUETOOTH"
-        android:maxSdkVersion="30" />
+    <!-- BLE and Bluetooth classic -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
-        android:maxSdkVersion="30" />
+    <!-- Android 12+ split BLE permissions -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"
+        android:minSdkVersion="31" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:minSdkVersion="31" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"
+        android:minSdkVersion="31" />
 
-    <!-- ===== Modern Bluetooth permissions (Android 12 / API 31 and above) ===== -->
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+    <!-- Location needed for BLE scanning on Android 6–11 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <!-- Declare that you use BLE peripheral & central roles -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
