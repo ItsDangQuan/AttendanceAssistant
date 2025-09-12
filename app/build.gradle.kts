@@ -28,14 +28,14 @@ android {
             buildConfigField(
                 "String",
                 "BASE_URL",
-                "\"https://931d10a3b254.ngrok-free.app/\""
+                "\"https://683504fcabf5.ngrok-free.app\""
             )
         }
         release {
             buildConfigField(
                 "String",
                 "BASE_URL",
-                "\"https://931d10a3b254.ngrok-free.app/\""
+                "\"https://683504fcabf5.ngrok-free.app\""
             )
 
             isMinifyEnabled = false

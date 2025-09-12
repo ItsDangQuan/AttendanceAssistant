@@ -4,8 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kttq.attendassist.core.data.network.models.Class
+import com.kttq.attendassist.core.data.repositories.student.StudentProfileRepository
+import com.kttq.attendassist.core.data.repositories.student.StudentRecordRepository
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherClassRepository
+import com.kttq.attendassist.core.model.Class
+import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.navigation.Destination
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,9 +20,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.text.isNotBlank
-import com.kttq.attendassist.core.data.network.models.Record
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 data class ClassSummaryUiState(
     val isLoading: Boolean = false,
@@ -29,17 +31,14 @@ data class ClassSummaryUiState(
 @HiltViewModel
 class ClassSummaryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val teacherClassRepository: TeacherClassRepository,
+    private val studentRecordRepository: StudentRecordRepository,
+    private val studentProfileRepository: StudentProfileRepository
 ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Student.ClassSummary>().classId
 
     private val _uiState = MutableStateFlow(ClassSummaryUiState())
     val uiState = _uiState.asStateFlow()
-
-
-
-    init {
-        fetchData(classId)
-    }
 
     val statSummary: StateFlow<List<Pair<String, String>>> =
         _uiState.map { state ->
@@ -47,9 +46,16 @@ class ClassSummaryViewModel @Inject constructor(
             val totalCount = records.size
             // TODO: Define status strings consistently (e.g., as enums or constants)
             val attendedCount = records.count { it.status.equals("attended", ignoreCase = true) }
-            val absentCount = records.count { it.status.equals("absent", ignoreCase = true) } // Assuming "absent" status
-            val leaveAcceptedCount = records.count { it.status.equals("leaveAccepted", ignoreCase = true) }
-            val leaveUnacceptedCount = records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
+            val absentCount = records.count {
+                it.status.equals(
+                    "absent",
+                    ignoreCase = true
+                )
+            } // Assuming "absent" status
+            val leaveAcceptedCount =
+                records.count { it.status.equals("leaveAccepted", ignoreCase = true) }
+            val leaveUnacceptedCount =
+                records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
 
             listOf(
                 "Total Sessions" to totalCount.toString(),
@@ -71,39 +77,61 @@ class ClassSummaryViewModel @Inject constructor(
         )
 
     init {
-        if (classId != null && classId.isNotBlank()) {
-            fetchData(classId)
+        if (classId.isNotBlank()) {
+            fetchData()
         } else {
-            _uiState.update { it.copy(isLoading = false, error = "Class ID not provided or invalid.") }
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    error = "Class ID not provided or invalid."
+                )
+            }
         }
     }
 
-    private fun fetchData(id: String) {
+    private fun fetchData() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 // TODO: Fetch class details
-                val details: Class? = null
+                val details: Class? = teacherClassRepository.getClassById(classId)
                 if (details == null) {
-                    _uiState.update { it.copy(isLoading = false, error = "Class details not found.") }
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Class details not found."
+                        )
+                    }
                     return@launch
                 }
                 _uiState.update { it.copy(classDetails = details) }
 
                 // Fetch records for the class by the student
-                val studentId = null // TODO: Fetch student ID
 
+
+                val studentId = studentProfileRepository.getCurrentStudentProfile()?.studentId
                 if (studentId == null) {
-                    _uiState.update { it.copy(isLoading = false, error = "Student not identified. Cannot fetch records.") }
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Student not identified. Cannot fetch records."
+                        )
+                    }
                     return@launch
                 }
-                val classRecords: List<Record>? = null
+                val classRecords = studentRecordRepository.getCurrentStudentRecords()
                 // TODO: Handle the case where classRecords is null
                 _uiState.update { it.copy(isLoading = false, records = classRecords!!) }
 
             } catch (e: Exception) {
                 // TODO: Log the exception e
-                _uiState.update { it.copy(isLoading = false, error = "Failed to load class summary: ${e.message}") }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to load class summary: ${e.message}"
+                    )
+                }
             }
         }
-    }}
+    }
+}

@@ -18,9 +18,13 @@ fun NavController.navigateToTeacherHome(
 }
 
 fun NavGraphBuilder.teacherHome(
-    onSentToBack: () -> Unit
+    onSentToBack: () -> Unit,
+    navigateToSession: (String) -> Unit
 ) {
     composable<Destination.Teacher.Home> {
-        TeacherHomeRoute(onSentToBack)
+        TeacherHomeRoute(
+            onSentToBack,
+            navigateToSession
+        )
     }
 }

@@ -1,6 +1,6 @@
 package com.kttq.attendassist.core.data.network
 
-import com.kttq.attendassist.core.data.network.dtos.Department
+import com.kttq.attendassist.core.data.network.dtos.DepartmentBase
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -9,11 +9,11 @@ import retrofit2.http.Path
 
 interface DepartmentService {
     @GET("/api/v1/department")
-    suspend fun getDepartments(): Response<Department>
+    suspend fun getDepartments(): Response<DepartmentBase>
 
     @POST("/api/v1/department")
-    suspend fun createDepartment(@Body department: Department): Response<Department>
+    suspend fun createDepartment(@Body department: DepartmentBase): Response<DepartmentBase>
 
     @GET("/api/v1/department/{department_id}")
-    suspend fun getDepartment(@Path("department_id") departmentId: String): Response<Department>
+    suspend fun getDepartment(@Path("department_id") departmentId: String): Response<DepartmentBase>
 }

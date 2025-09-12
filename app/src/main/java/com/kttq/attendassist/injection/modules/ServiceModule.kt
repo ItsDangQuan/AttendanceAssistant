@@ -6,6 +6,7 @@ import com.kttq.attendassist.core.data.network.DepartmentService
 import com.kttq.attendassist.core.data.network.RecordService
 import com.kttq.attendassist.core.data.network.SessionService
 import com.kttq.attendassist.core.data.network.StudentService
+import com.kttq.attendassist.core.data.network.TeacherService
 import com.kttq.attendassist.core.data.network.UserService
 import dagger.Module
 import dagger.Provides
@@ -83,4 +84,12 @@ class ServiceModule {
     ): ClassService {
         return retrofit.create(ClassService::class.java)
     }
+    @Provides
+    @Singleton
+    fun provideAuthenticatedTeacherService(
+        @Named("AuthRetrofit") retrofit: Retrofit
+    ): TeacherService {
+        return retrofit.create(TeacherService::class.java)
+    }
+
 }

@@ -1,7 +1,5 @@
 package com.kttq.attendassist.features.teacher.profile
 
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +27,6 @@ import com.kttq.attendassist.core.ui.components.AppOutlineTextField
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.components.AppSubsectionTitle
-import com.kttq.attendassist.core.ui.components.AppTextButton
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
@@ -39,20 +36,20 @@ fun TeacherProfileRoute(
     viewModel: TeacherProfileViewModel = hiltViewModel() // Renamed for clarity
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val teacherProfile = viewModel.user.collectAsStateWithLifecycle().value
 
     TeacherProfileScreen(
-        name = uiState.name,
-        studentId = uiState.studentId,
-        email = uiState.email,
-        phone = uiState.phone,
+        name = if (teacherProfile != null) teacherProfile.firstName + " " + teacherProfile.lastName else "N/A",
+        teacherId = teacherProfile?.teacherId ?: "N/A",
+        email = teacherProfile?.email ?: "N/A",
         onChangePasswordClicked = viewModel::onChangePasswordClicked,
         onLogoutClicked = {
             viewModel.onLogoutClicked()
         },
         modifier = modifier
     )
-    LaunchedEffect(uiState.isLoggedout) {
-        if (uiState.isLoggedout) {
+    LaunchedEffect(uiState.isLoggedOut) {
+        if (uiState.isLoggedOut) {
             navigateToRedirect()
         }
     }
@@ -61,9 +58,8 @@ fun TeacherProfileRoute(
 @Composable
 fun TeacherProfileScreen(
     name: String,
-    studentId: String,
+    teacherId: String,
     email: String,
-    phone: String,
     onChangePasswordClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
     modifier: Modifier = Modifier,
@@ -101,7 +97,7 @@ fun TeacherProfileScreen(
         AppSubsectionTitle("Teacher ID", modifier = Modifier.fillMaxWidth())
         AppOutlineTextField(
             label = "",
-            value = studentId,
+            value = teacherId,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -110,14 +106,6 @@ fun TeacherProfileScreen(
         AppOutlineTextField(
             label = "",
             value = email,
-            onValueChange = {}, // Assuming read-only for now
-            modifier = Modifier.fillMaxWidth(),
-            readOnly = true
-        )
-        AppSubsectionTitle("Phone", modifier = Modifier.fillMaxWidth())
-        AppOutlineTextField(
-            label = "", // Changed from "Phone" as AppSubsectionTitle is present
-            value = phone,
             onValueChange = {}, // Assuming read-only for now
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
@@ -152,9 +140,8 @@ private fun TeacherProfileScreenPreview() {
         // For more complex scenarios, consider providing a mock ViewModel or UiState.
         TeacherProfileScreen(
             name = "",
-            studentId = "",
+            teacherId = "",
             email = "",
-            phone = "",
             onChangePasswordClicked = {},
             onLogoutClicked = {}
         )

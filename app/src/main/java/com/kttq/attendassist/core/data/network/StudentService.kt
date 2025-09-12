@@ -32,7 +32,7 @@ interface StudentService {
     suspend fun checkEnrollment(@Path("class_id") classId: String): Response<EnrollmentCheckResponse>
 
     @GET("/api/v1/student/all/class/enroll")
-    suspend fun getAllClassEnrollments(): Response<String?>
+    suspend fun getAllClassEnrollments(): Response<List<EnrollmentCheckResponse>>
 
     @GET("/api/v1/student/{class_id}/all/attendance_records")
     suspend fun getAllAttendanceRecords(@Path("class_id") classId: String): Response<List<RecordOut>>

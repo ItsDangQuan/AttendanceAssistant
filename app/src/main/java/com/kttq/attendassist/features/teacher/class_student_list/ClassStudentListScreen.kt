@@ -13,7 +13,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.data.network.models.Student
+import com.kttq.attendassist.core.model.StudentPerformance
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 
@@ -30,7 +30,7 @@ fun ClassStudentListRoute(
 
 @Composable
 fun ClassStudentListScreen(
-    studentsList: List<Student>,
+    studentsList: List<StudentPerformance>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -42,7 +42,7 @@ fun ClassStudentListScreen(
         ){
             items(studentsList) { student ->
                 AppCard {
-                    AppLabelPrimary(text = student.name)
+                    AppLabelPrimary(text = student.studentName)
                     AppLabelPrimary(text = student.studentId)
                 }
             }

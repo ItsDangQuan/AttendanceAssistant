@@ -3,7 +3,7 @@ package com.kttq.attendassist.core.data.repositories.token
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.kttq.attendassist.core.data.preferences.auth.AuthPreferencesKeys
+import com.kttq.attendassist.core.data.preferences.AuthPreferencesKeys
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

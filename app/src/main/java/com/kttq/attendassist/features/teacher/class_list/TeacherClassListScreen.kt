@@ -19,12 +19,12 @@ import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
-import com.kttq.attendassist.core.data.network.models.Class
+import com.kttq.attendassist.core.model.Class
 
 
 @Composable
 fun TeacherClassListRoute(
-    navigateToClass: (Class) -> Unit,
+    navigateToClass: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TeacherClassListViewModel = hiltViewModel()
 ) {
@@ -40,7 +40,7 @@ fun TeacherClassListRoute(
 fun TeacherClassListScreen(
     currentClasses: List<Class>,
     pastClasses: List<Class>,
-    navigateToClass: (Class) -> Unit,
+    navigateToClass: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -61,13 +61,14 @@ fun TeacherClassListScreen(
             ) {
                 AppCard (
                     clickable = true,
-                    onClick = { navigateToClass(currentClasses[it]) }
+                    onClick = { navigateToClass(currentClasses[it].classId) }
                 ) {
                     AppLabelPrimary(currentClasses[it].classId)
                     AppLabelSecondary(
                         currentClasses[it].courseId + " - " +
                                 currentClasses[it].courseName
                     )
+                    AppLabelSecondary(currentClasses[it].teacherName)
                 }
             }
         }
@@ -87,13 +88,15 @@ fun TeacherClassListScreen(
             ) {
                 AppCard (
                     clickable = true,
-                    onClick = { navigateToClass(pastClasses[it]) }
+                    onClick = { navigateToClass(pastClasses[it].classId) }
                 ) {
                     AppLabelPrimary(pastClasses[it].classId)
                     AppLabelSecondary(
                         pastClasses[it].courseId + " - " +
                                 pastClasses[it].courseName
                     )
+                    AppLabelSecondary(pastClasses[it].teacherName)
+
                 }
             }
 

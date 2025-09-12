@@ -12,7 +12,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -20,19 +22,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.data.network.models.Class
-import com.kttq.attendassist.core.data.network.models.Record
+import com.kttq.attendassist.core.model.Class
+import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
-// import com.kttq.attendassist.core.ui.components.AppScreenTitle // Not used in this screen directly
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 
 @Composable
 fun ClassSummaryRoute(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     viewModel: ClassSummaryViewModel = hiltViewModel()
 ) {
@@ -40,11 +42,13 @@ fun ClassSummaryRoute(
     val statSummary = viewModel.statSummary.collectAsStateWithLifecycle().value
 
     if (uiState.isLoading) {
-        // TODO: Show a loading indicator, e.g., CircularProgressIndicator
-        AppLabelPrimary(text = "Loading class summary...") 
+        CircularProgressIndicator()
     } else if (uiState.error != null) {
-        // TODO: Show a more user-friendly error message, possibly with a retry option
-        AppLabelPrimary(text = "Error: ${uiState.error}")
+        LaunchedEffect(
+            uiState.error,
+        ) {
+            onShowSnackbar(uiState.error, null)
+        }
     } else if (uiState.classDetails != null) {
         ClassSummaryScreen(
             classDetail = uiState.classDetails,
@@ -66,7 +70,7 @@ fun ClassSummaryScreen(
     modifier: Modifier = Modifier
 
 ) {
-    Column (
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.padding_medium))
@@ -114,14 +118,14 @@ fun ClassSummaryScreen(
                     key = { record -> record.recordId } // Assuming recordId is a stable unique key
                 ) { record ->
                     AppCard {
-                        Row (
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column (
+                            Column(
                                 modifier = Modifier.weight(1f)
                             ) {
-                                AppLabelPrimary("Session: ${record.session}") // Changed to show session ID
+                                AppLabelPrimary("Session: ${record.sessionId}") // Changed to show session ID
                                 AppLabelSecondary("Status: ${record.status}")
                             }
                             // Consider making status comparison case-insensitive and using constants
@@ -148,14 +152,35 @@ private fun ClassSummaryScreenPreview() {
         semester = "Spring",
         year = 2024,
         teacherId = "TCH001",
-        courseName = "Mobile Application Development"
+        teacherName = "John Doe",
+        courseName = "Mobile Application Development",
     )
 
     val sampleRecords = listOf(
-        Record(recordId = "REC001", studentId = "STU001", status = "Attended", session = "SES001"),
-        Record(recordId = "REC003", studentId = "STU001", status = "LeaveAccepted", session = "SES003"),
-        Record(recordId = "REC004", studentId = "STU001", status = "LeaveUnaccepted", session = "SES004"),
-        Record(recordId = "REC005", studentId = "STU001", status = "Attended", session = "SES005")
+        Record(
+            recordId = "REC001",
+            studentId = "STU001",
+            status = "Attended",
+            sessionId = "SES001"
+        ),
+        Record(
+            recordId = "REC003",
+            studentId = "STU001",
+            status = "LeaveAccepted",
+            sessionId = "SES003"
+        ),
+        Record(
+            recordId = "REC004",
+            studentId = "STU001",
+            status = "LeaveUnaccepted",
+            sessionId = "SES004"
+        ),
+        Record(
+            recordId = "REC005",
+            studentId = "STU001",
+            status = "Attended",
+            sessionId = "SES005",
+        )
     )
 
     val sampleStatSummary = listOf(
@@ -183,7 +208,8 @@ private fun ClassSummaryScreenEmptyRecordsPreview() {
         semester = "Fall",
         year = 2023,
         teacherId = "TCH002",
-        courseName = "Calculus I"
+        teacherName = "Jane Smith",
+        courseName = "Calculus I",
     )
 
     val sampleStatSummaryEmpty = listOf(

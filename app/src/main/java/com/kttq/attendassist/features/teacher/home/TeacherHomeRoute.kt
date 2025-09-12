@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.data.network.models.Session
+import com.kttq.attendassist.core.model.TeacherSession
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
@@ -27,12 +27,13 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 @Composable
 fun TeacherHomeRoute(
     onSentToBack: () -> Unit,
+    navigateToSession: (String) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToNewSession: (Session) -> Unit = {},
     viewModel: TeacherHomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val date by viewModel.formattedDate.collectAsStateWithLifecycle()
+    val teacherProfile = viewModel.user.collectAsStateWithLifecycle().value
 
     BackHandler {
         onSentToBack()
@@ -42,10 +43,10 @@ fun TeacherHomeRoute(
     //     modifier = modifier
     // )
     TeacherHomeScreen(
-        userName = uiState.userName,
+        userName = teacherProfile?.firstName?: "User",
         date = date,
         recentSessions = viewModel.recentSession.collectAsStateWithLifecycle().value,
-        navigateToNewSession = navigateToNewSession,
+        navigateToSession = navigateToSession,
         modifier = modifier
     )
 }
@@ -54,9 +55,9 @@ fun TeacherHomeRoute(
 fun TeacherHomeScreen(
     userName: String,
     date: String,
-    recentSessions: List<Session>,
+    recentSessions: List<TeacherSession>,
+    navigateToSession: (String) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToNewSession: (Session) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -82,7 +83,7 @@ fun TeacherHomeScreen(
                 AppCard(
                     clickable = true,
                     onClick = {
-                        navigateToNewSession(recentSessions[it])
+                        navigateToSession(recentSessions[it].sessionId)
                     }
                 ) {
                     AppLabelPrimary(recentSessions[it].classId)
@@ -104,7 +105,8 @@ private fun TeacherHomeScreenPreview() {
         TeacherHomeScreen(
             userName = "User",
             date = "",
-            recentSessions = emptyList()
+            recentSessions = emptyList(),
+            navigateToSession = {}
         )
     }
 }

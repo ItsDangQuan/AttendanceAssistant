@@ -4,7 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kttq.attendassist.core.data.network.models.Student
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherClassRepository
+import com.kttq.attendassist.core.model.StudentPerformance
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,22 +16,24 @@ import javax.inject.Inject
 @HiltViewModel
 class ClassStudentListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val teacherClassRepository: TeacherClassRepository,
 
-) : ViewModel() {
+    ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Teacher.ClassStudentList>().classId
 
-    val _studentsList = MutableStateFlow<List<Student>>(emptyList())
+    private val _studentsList = MutableStateFlow<List<StudentPerformance>>(emptyList())
     val studentsList = _studentsList.asStateFlow()
 
     init {
         fetchData()
     }
+
     fun fetchData() {
         viewModelScope.launch {
 
             // TODO: Fetch the data from the repo.
             //  Now just mock the data.
-            _studentsList.value = emptyList()
+            _studentsList.value = teacherClassRepository.getAllStudentInClass(classId)!!
         }
     }
 }

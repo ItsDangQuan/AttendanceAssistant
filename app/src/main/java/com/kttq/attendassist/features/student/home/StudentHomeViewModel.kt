@@ -3,12 +3,13 @@ package com.kttq.attendassist.features.student.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.ble.scanner.BleScanner
-import com.kttq.attendassist.core.data.network.models.Record
-import com.kttq.attendassist.core.data.network.models.Session
-import com.kttq.attendassist.core.data.repositories.user.UserRepository
+import com.kttq.attendassist.core.data.repositories.student.StudentClassRepository
+import com.kttq.attendassist.core.data.repositories.student.StudentProfileRepository
+import com.kttq.attendassist.core.data.repositories.student.StudentRecordRepository
+import com.kttq.attendassist.core.model.Record
+import com.kttq.attendassist.core.model.StudentProfile
 import com.kttq.attendassist.core.util.DateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,18 +21,24 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class StudentHomeUiState(
-    val userName: String = "User", // Default name
     val isLoading: Boolean = false,
     val isScanning: Boolean = false, // Added for scan status
     val error: String? = null,
-    // TODO: Add state for incoming classes list
-    // TODO: Add state for today's classes list
+)
+
+data class StudentHomeStatSummary(
+    val total: Int = 0,
+    val attended: Int = 0,
+    val leaveAccepted: Int = 0,
+    val leaveUnaccepted: Int = 0
 )
 
 @HiltViewModel
 class StudentHomeViewModel @Inject constructor(
     dateManager: DateManager,
-    private val userRepository: UserRepository,
+    private val studentProfileRepository: StudentProfileRepository,
+    private val studentRecordRepository: StudentRecordRepository,
+    private val studentClassRepository: StudentClassRepository,
     private val bleScanner: BleScanner
     // TODO: Inject a repository for fetching records
 ) : ViewModel() {
@@ -39,96 +46,99 @@ class StudentHomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(StudentHomeUiState(isLoading = true))
     val uiState: StateFlow<StudentHomeUiState> = _uiState.asStateFlow()
 
+    private val _userProfile = MutableStateFlow<StudentProfile?>(null)
+    val userProfile: StateFlow<StudentProfile?> = _userProfile.asStateFlow()
+
     private val _allRecords = MutableStateFlow<List<Record>>(emptyList())
     val allRecords: StateFlow<List<Record>> = _allRecords.asStateFlow()
 
     val formattedDate = dateManager.formattedDate
 
-    val statSummary: StateFlow<List<Pair<String, String>>> =
+    val statSummary: StateFlow<StudentHomeStatSummary> =
         allRecords.map { records ->
-            val totalCount = records.size
-            val attendedCount = records.count { it.status.equals("attended", ignoreCase = true) }
-            val leaveAcceptedCount =
-                records.count { it.status.equals("leaveAccepted", ignoreCase = true) }
-            val leaveUnacceptedCount =
-                records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
             // TODO: Potentially add other statuses like "absent" if they become relevant
-
-            listOf(
-                "Total" to totalCount.toString(),
-                "Attended" to attendedCount.toString(),
-                "Leave Accepted" to leaveAcceptedCount.toString(),
-                "Leave Unaccepted" to leaveUnacceptedCount.toString()
+            StudentHomeStatSummary(
+                total = records.size,
+                attended = records.count { it.status.equals("attended", ignoreCase = true) },
+                leaveAccepted = records.count {
+                    it.status.equals(
+                        "leaveAccepted",
+                        ignoreCase = true
+                    )
+                },
+                leaveUnaccepted = records.count {
+                    it.status.equals(
+                        "leaveUnaccepted",
+                        ignoreCase = true
+                    )
+                }
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = listOf(
-                "Total" to "0",
-                "Attended" to "0",
-                "Leave Accepted" to "0",
-                "Leave Unaccepted" to "0"
-            ) // Initial default values
+            initialValue = StudentHomeStatSummary() // Uses default values (all 0)
         )
 
     init {
-        fetchInitialData()
+        fetchStudentProfile()
+        fetchAllStudentRecords()
     }
 
-    private fun fetchInitialData() {
+    private fun fetchStudentProfile() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val user = userRepository.getCurrentUser()
-            _uiState.update {
-                it.copy(
-                    userName = user?.firstName ?: user?.email ?: "User",
-                )
+            // TODO: Replace this in the future
+            // val profile = userRepository.getCurrentUserAsStudent()
+            // Now, we are fetching the code from the user table
+            val profile = studentProfileRepository.getCurrentStudentProfile()
+            if (profile == null) {
+                _uiState.update { it.copy(error = "User profile not found", isLoading = false) }
+                return@launch
             }
-            fetchAllStudentRecords()
+            _userProfile.value = profile
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
-    private suspend fun getAllRecordsFromRepository(): List<Record> {
-        // TODO: Implement actual logic to fetch all records for the student from a repository/API
-        // This might involve using the current user's ID.
-        delay(1000) // Simulate network delay
-        return emptyList() // Placeholder
-    }
 
     private fun fetchAllStudentRecords() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val records = getAllRecordsFromRepository()
+            if (_userProfile.value == null) {
+                _uiState.update { it.copy(error = "User profile not found", isLoading = false) }
+                return@launch
+            }
+            // TODO: Fetch using the other API for server validation
+            val records =
+                studentRecordRepository.getRecordByStudentId(_userProfile.value!!.studentId)!!
             _allRecords.value = records
             _uiState.update { it.copy(isLoading = false) }
         }
     }
 
+    // onScanSuccess takes the session id as a string
     fun startScan(
-        onScanSuccess: (Session) -> Unit,
+        onScanSuccess: (String) -> Unit,
         onScanFailure: (Int) -> Unit
     ) {
         // TODO: Ensure Bluetooth permissions are granted before calling startScan
-        // TODO: Handle scan results, e.g., by collecting a Flow from bleScanner or via a callback
+
         bleScanner.startScan(
             onSuccess = { result ->
-                stopScan()
-                // TODO: parse the string into the session id
-                //  Sent that to the server to get the new session
-                //  Currently just returning a dummy session
-                onScanSuccess(
-                    Session(
-                        "",
-                        "",
-                        0,
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                    )
-                )
+                //  Hmm, may be the result should combine classId and sessionId,
+                //  The actual data may be not like this, i have just give an example
+                val classId = result.substringBeforeLast("-")
+                val sessionId = result.substringAfterLast("-")
+
+                // I think that you will not agree with this,
+                //  but this may be the best way to do it
+                viewModelScope.launch {
+                    if (studentClassRepository.haveStudent(classId) == true) {
+                        stopScan()
+                        onScanSuccess(sessionId)
+                    }
+                }
+
             },
             onFail = { errorCode ->
                 stopScan()
@@ -143,25 +153,9 @@ class StudentHomeViewModel @Inject constructor(
         _uiState.update { it.copy(isScanning = false) }
     }
 
-    // fun onIncomingClassSeeAllClicked() {
-    //     // TODO: Implement navigation to the full list of incoming classes
-    //     // TODO: Or fetch more incoming classes data if displaying a preview
-    //     println("Navigate to all incoming classes screen or fetch data.")
-    // }
-
-    // fun onClassTodaySeeAllClicked() {
-    //     // TODO: Implement navigation to the full list of today's classes
-    //     // TODO: Or fetch more today's classes data if displaying a preview
-    //     println("Navigate to all today's classes screen or fetch data.")
-    // }
-
-    // // TODO: Add function to fetch incoming classes
-    // // fun fetchIncomingClasses() { }
-
-    // // TODO: Add function to fetch today's classes
-    // // fun fetchTodayClasses() { }
 
     fun updateError(error: String?) {
         _uiState.update { it.copy(error = error) }
     }
+
 }

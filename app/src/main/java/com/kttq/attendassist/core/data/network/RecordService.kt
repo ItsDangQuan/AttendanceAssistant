@@ -6,6 +6,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface RecordService {
     @GET("/api/v1/record")
@@ -13,4 +14,7 @@ interface RecordService {
 
     @POST("/api/v1/record")
     suspend fun createRecord(@Body recordCreate: RecordCreate): Response<RecordOut>
+
+    @GET("/api/v1/record/{session_id}")
+    suspend fun getSessionRecords(@Path("session_id") sessionId: String): Response<List<RecordOut>>
 }

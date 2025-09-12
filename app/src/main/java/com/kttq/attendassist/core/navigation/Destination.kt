@@ -53,6 +53,7 @@ sealed class Destination {
             val sessionId: String,
         ) : Student()
 
+        @Serializable
         data class ClassSummary(
             val classId: String,
         ) : Student()

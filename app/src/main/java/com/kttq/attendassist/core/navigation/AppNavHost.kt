@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -8,6 +9,7 @@ import com.kttq.attendassist.core.navigation.login.login
 import com.kttq.attendassist.core.navigation.login.navigateToLogin
 import com.kttq.attendassist.core.navigation.redirect.navigateToRedirect
 import com.kttq.attendassist.core.navigation.redirect.redirect
+import com.kttq.attendassist.core.navigation.student.class_summary.navigateToClassSummary
 import com.kttq.attendassist.core.navigation.student.navigateToStudent
 import com.kttq.attendassist.core.navigation.student.session_confirm.navigateToSessionConfirm
 import com.kttq.attendassist.core.navigation.student.studentNavigation
@@ -26,6 +28,7 @@ fun AppNavHost(
     startDestination: Destination,
     modifier: Modifier = Modifier,
 ) {
+    Log.d("Nav", "Current navigation: $startDestination")
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -47,6 +50,7 @@ fun AppNavHost(
         studentNavigation(onShowSnackbar, onSentToBack,
             navController::navigateToSessionConfirm,
             navController::navigateToRedirect,
+            navController::navigateToClassSummary
         )
     }
 }

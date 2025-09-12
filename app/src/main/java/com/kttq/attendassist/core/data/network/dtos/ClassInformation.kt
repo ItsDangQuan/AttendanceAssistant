@@ -11,7 +11,6 @@ data class ClassInformation(
     val courseId: String,
     @SerialName("teacher_id")
     val teacherId: String,
-
     @SerialName("course_name")
     val courseName: String,
     @SerialName("teacher_name")
@@ -19,5 +18,7 @@ data class ClassInformation(
     @SerialName("department_id")
     val departmentId: String,
     @SerialName("department_name")
-    val departmentName: String
+    val departmentName: String,
+    val semester: String?,
+    val year: Int?
 )

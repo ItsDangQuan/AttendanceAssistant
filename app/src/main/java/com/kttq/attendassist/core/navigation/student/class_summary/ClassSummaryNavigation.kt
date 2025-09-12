@@ -21,8 +21,9 @@ fun NavController.navigateToClassSummary(
 }
 
 fun NavGraphBuilder.studentClassSummary(
+    onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
     composable<Destination.Student.ClassSummary> {
-        ClassSummaryRoute()
+        ClassSummaryRoute(onShowSnackbar)
     }
 }

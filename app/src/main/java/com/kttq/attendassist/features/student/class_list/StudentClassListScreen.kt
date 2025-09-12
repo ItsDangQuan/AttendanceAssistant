@@ -9,7 +9,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kttq.attendassist.core.data.network.models.Class
+import com.kttq.attendassist.core.model.Class
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.dimensionResource
@@ -24,8 +24,8 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun StudentClassListRoute(
+    navigateToClass: (String) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToClass: (Class) -> Unit = {},
     viewModel: StudentClassListViewModel = hiltViewModel()
 ) {
    StudentClassListScreen(
@@ -41,7 +41,7 @@ fun StudentClassListScreen(
 
     currentClasses: List<Class>,
     pastClasses: List<Class>,
-    navigateToClass: (Class) -> Unit,
+    navigateToClass: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -62,13 +62,14 @@ fun StudentClassListScreen(
             ) {
                 AppCard (
                     clickable = true,
-                    onClick = { navigateToClass(currentClasses[it]) }
+                    onClick = { navigateToClass(currentClasses[it].classId) }
                 ) {
                     AppLabelPrimary(currentClasses[it].classId)
                     AppLabelSecondary(
                         currentClasses[it].courseId + " - " +
                                 currentClasses[it].courseName
                     )
+                    AppLabelSecondary(currentClasses[it].teacherName)
                 }
             }
         }
@@ -88,13 +89,14 @@ fun StudentClassListScreen(
             ) {
                 AppCard (
                     clickable = true,
-                    onClick = { navigateToClass(pastClasses[it]) }
+                    onClick = { navigateToClass(pastClasses[it].classId) }
                 ) {
                     AppLabelPrimary(pastClasses[it].classId)
                     AppLabelSecondary(
                         pastClasses[it].courseId + " - " +
                                 pastClasses[it].courseName
                     )
+                    AppLabelSecondary(pastClasses[it].teacherName)
                 }
             }
 

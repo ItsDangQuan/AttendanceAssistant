@@ -1,6 +1,6 @@
 package com.kttq.attendassist.features.student.profile
 
-import androidx.compose.foundation.horizontalScroll
+// Removed App import as it's unused after changes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-// Removed App import as it's unused after changes
 import com.kttq.attendassist.core.ui.components.AppAvatarImage
 import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppIconButton
@@ -38,20 +37,20 @@ fun StudentProfileRoute(
     viewModel: StudentProfileViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val user = viewModel.user.collectAsStateWithLifecycle().value
 
     StudentProfileScreen(
-        name = uiState.name,
-        studentId = uiState.studentId,
-        email = uiState.email,
-        phone = uiState.phone,
+        name = if (user != null) user.firstName + " " + user.lastName else "N/A",
+        studentId = user?.studentId ?: "N/A",
+        email = user?.email ?: "N/A",
         onChangePasswordClicked = viewModel::onChangePasswordClicked,
         onLogoutClicked = {
             viewModel.onLogoutClicked()
         },
         modifier = modifier
     )
-    LaunchedEffect(uiState.isLoggedout) {
-        if (uiState.isLoggedout) {
+    LaunchedEffect(uiState.isLoggedOut) {
+        if (uiState.isLoggedOut) {
             navigateToRedirect()
         }
     }
@@ -62,7 +61,6 @@ fun StudentProfileScreen(
     name: String,
     studentId: String,
     email: String,
-    phone: String,
     onChangePasswordClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
     modifier: Modifier = Modifier,
@@ -112,14 +110,6 @@ fun StudentProfileScreen(
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
         )
-        AppSubsectionTitle("Phone", modifier = Modifier.fillMaxWidth())
-        AppOutlineTextField(
-            label = "", // Changed from "Phone" as AppSubsectionTitle is present
-            value = phone,
-            onValueChange = {}, // Assuming read-only for now
-            modifier = Modifier.fillMaxWidth(),
-            readOnly = true
-        )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_24)))
         AppSectionTitle("Settings", Modifier.fillMaxWidth())
         Row(
@@ -152,7 +142,6 @@ private fun StudentProfileScreenPreview() {
             name = "",
             studentId = "",
             email = "",
-            phone = "",
             onChangePasswordClicked = {},
             onLogoutClicked = {}
         )
