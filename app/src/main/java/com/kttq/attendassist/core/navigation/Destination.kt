@@ -87,7 +87,13 @@ sealed class Destination {
         data class ClassPastSession(
             val classId: String,
         ) : Teacher()
+
+        @Serializable
+        data class ClassCurrentSession(
+            val sessionId: String
+        ) : Teacher()
     }
+
 }
 
 data class UiMeta(

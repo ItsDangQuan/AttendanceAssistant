@@ -13,6 +13,7 @@ import com.kttq.attendassist.core.navigation.student.class_summary.navigateToCla
 import com.kttq.attendassist.core.navigation.student.navigateToStudent
 import com.kttq.attendassist.core.navigation.student.session_confirm.navigateToSessionConfirm
 import com.kttq.attendassist.core.navigation.student.studentNavigation
+import com.kttq.attendassist.core.navigation.teacher.class_current_session.navigateToCurrentSession
 import com.kttq.attendassist.core.navigation.teacher.class_detail.navigateToClassDetail
 import com.kttq.attendassist.core.navigation.teacher.class_pass_session.navigateToClassPastSession
 import com.kttq.attendassist.core.navigation.teacher.class_student_list.navigateToTeacherClassStudentList
@@ -45,7 +46,9 @@ fun AppNavHost(
             navController::navigateToClassDetail,
             navController::navigateToClassPastSession,
             navController::navigateToTeacherClassStudentList,
-            navController::navigateToRedirect
+            navController::navigateToCurrentSession,
+            navController::navigateToRedirect,
+            onBackClick
         )
         studentNavigation(onShowSnackbar, onSentToBack,
             navController::navigateToSessionConfirm,

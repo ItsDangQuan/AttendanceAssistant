@@ -5,6 +5,7 @@ import com.kttq.attendassist.core.data.network.ClassService
 import com.kttq.attendassist.core.data.network.SessionService
 import com.kttq.attendassist.core.data.network.TeacherService
 import com.kttq.attendassist.core.data.network.dtos.SessionCreate
+import com.kttq.attendassist.core.model.StudentProfile
 import com.kttq.attendassist.core.model.TeacherSession
 import java.time.LocalTime
 import javax.inject.Inject
@@ -91,5 +92,12 @@ class TeacherSessionRepositoryImpl @Inject constructor(
         val classInfo = classResponse.body() ?: throw Exception("Failed to create session")
         return TeacherSession(sessionOut, classInfo)
 
+    }
+
+    override suspend fun getStudentInSession(
+        classId: String,
+        sessionId: String
+    ): List<StudentProfile> {
+        TODO("Not yet implemented")
     }
 }

@@ -25,6 +25,7 @@ fun ClassDetailRoute(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     navigateToSessionDetail: (String) -> Unit,
     navigateToStudentDetail: (String) -> Unit,
+    navigateToCurrentSession: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClassDetailViewModel = hiltViewModel(),
 ) {
@@ -36,7 +37,11 @@ fun ClassDetailRoute(
         isAdvertising = uiState.isAdvertising,
         navigateToSessionDetail = navigateToSessionDetail,
         navigateToStudentDetail = navigateToStudentDetail,
-        startAdvertise = viewModel::startNewAttendanceSession,
+        startAdvertise = {
+            viewModel::startNewAttendanceSession
+            if (uiState.error == null && uiState.activeSessionId != null)
+                navigateToCurrentSession(uiState.activeSessionId)
+        },
         modifier = modifier
     )
     LaunchedEffect(uiState.error) {

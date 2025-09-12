@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.teacher
 
+import com.kttq.attendassist.core.model.StudentProfile
 import com.kttq.attendassist.core.model.TeacherSession
 
 interface TeacherSessionRepository {
@@ -15,4 +16,9 @@ interface TeacherSessionRepository {
 
     // /api/vi/class/sessions
     suspend fun createNewSession(classId: String, teacherId: String): TeacherSession
+
+    //  /api/v1/record/{sessionId}
+    //  /api/v1/student/{studentId}/full
+    suspend fun getStudentInSession(classId: String, sessionId: String): List<StudentProfile>
+
 }

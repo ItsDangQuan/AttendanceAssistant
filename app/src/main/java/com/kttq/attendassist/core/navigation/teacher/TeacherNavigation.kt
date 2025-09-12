@@ -12,6 +12,7 @@ import com.kttq.attendassist.core.navigation.teacher.class_student_list.teacherC
 import com.kttq.attendassist.core.navigation.teacher.home.teacherHome
 import com.kttq.attendassist.core.navigation.teacher.profile.teacherProfile
 import com.kttq.attendassist.core.model.Class
+import com.kttq.attendassist.core.navigation.teacher.class_current_session.teacherCurrentSession
 import com.kttq.attendassist.core.navigation.teacher.class_list.teacherClassList
 
 fun NavController.navigateToTeacher(
@@ -29,7 +30,9 @@ fun NavGraphBuilder.teacherNavigation(
     navigationToClassDetail: (String) -> Unit,
     navigateToSessionDetail: (String) -> Unit,
     navigateToStudentDetail: (String) -> Unit,
-    navigateToRedirect: () -> Unit
+    navigateToCurrentSession: (String) -> Unit,
+    navigateToRedirect: () -> Unit,
+    navigateBack: () -> Unit
 ) {
     navigation<Destination.Teacher.Graph>(
         startDestination = Destination.Teacher.Home
@@ -46,7 +49,9 @@ fun NavGraphBuilder.teacherNavigation(
             onShowSnackbar,
             navigateToSessionDetail = navigateToSessionDetail,
             navigateToStudentDetail = navigateToStudentDetail,
+            navigateToCurrentSession = navigateToCurrentSession
         )
+        teacherCurrentSession(navigateBack)
         teacherClassPastSession()
         teacherClassStudentList()
     }
