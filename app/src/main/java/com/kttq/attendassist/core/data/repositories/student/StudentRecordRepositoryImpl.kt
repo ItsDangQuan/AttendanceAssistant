@@ -8,32 +8,32 @@ class StudentRecordRepositoryImpl @Inject constructor(
     private val studentService: StudentService
 ) : StudentRecordRepository {
     override suspend fun getRecordByStudentId(studentId: String): List<Record>? {
-        return try {
+        try {
             val response = studentService.getStudentRecords(studentId)
             if (!response.isSuccessful) {
-                null
+                return null
             }
             val recordOutList = response.body() ?: return null
-            recordOutList.map {
-                Record(it)
+            return recordOutList.map {
+                return@map Record(it)
             }
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 
     override suspend fun getCurrentStudentRecords(): List<Record>? {
-        return try {
+        try {
             val response = studentService.getAttendanceRecords()
             if (!response.isSuccessful) {
-                null
+                return null
             }
             val recordOutList = response.body() ?: return null
-            recordOutList.map {
-                Record(it)
+            return recordOutList.map {
+                return@map Record(it)
             }
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 }

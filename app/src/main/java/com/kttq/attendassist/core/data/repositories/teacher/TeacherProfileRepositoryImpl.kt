@@ -9,16 +9,16 @@ class TeacherProfileRepositoryImpl @Inject constructor(
     private val teacherService: TeacherService
 ) : TeacherProfileRepository {
     override suspend fun getCurrentTeacherProfile(): TeacherProfile? {
-        return try {
+        try {
             val response = teacherService.getCurrentTeacher()
             if (!response.isSuccessful) {
-                null
+                return null
             }
             val teacherFull = response.body() ?: return null
-            TeacherProfile(teacherFull)
+            return TeacherProfile(teacherFull)
         } catch (e: Exception) {
             Log.e("TeacherProfileRepository", "Error fetching current teacher profile", e)
-            null
+            return null
         }
     }
 }

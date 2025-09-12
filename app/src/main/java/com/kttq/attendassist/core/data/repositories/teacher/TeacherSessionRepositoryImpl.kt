@@ -1,6 +1,5 @@
 package com.kttq.attendassist.core.data.repositories.teacher
 
-import android.util.Log
 import com.kttq.attendassist.core.data.network.ClassService
 import com.kttq.attendassist.core.data.network.SessionService
 import com.kttq.attendassist.core.data.network.TeacherService
@@ -16,28 +15,28 @@ class TeacherSessionRepositoryImpl @Inject constructor(
     private val sessionService: SessionService
 ) : TeacherSessionRepository {
     override suspend fun getAllSession(): List<TeacherSession>? {
-        return try {
+        try {
             val response = teacherService.getTeachingSessions()
             if (!response.isSuccessful) {
-                null
+                return null
             }
             val sessionOutList = response.body() ?: return null
-            sessionOutList.mapNotNull {
+            return sessionOutList.mapNotNull {
                 // TODO: In case of failed to fetch class information, skip one or discard all?
                 //       Currently skip one.
                 try {
                     val response = classService.getClassInformation(it.classId)
                     if (!response.isSuccessful) {
-                        null
+                        return@mapNotNull null
                     }
                     val classInformation = response.body() ?: return@mapNotNull null
-                    TeacherSession(it, classInformation)
+                    return@mapNotNull TeacherSession(it, classInformation)
                 } catch (_: Exception) {
-                    null
+                    return@mapNotNull null
                 }
             }
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 
@@ -49,22 +48,22 @@ class TeacherSessionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSessionByClassId(classId: String): List<TeacherSession>? {
-        return try {
+        try {
             val classInformationResponse = classService.getClassInformation(classId)
             if (!classInformationResponse.isSuccessful) {
-                null
+                return null
             }
             val classInformation = classInformationResponse.body() ?: return null
             val sessionInfoResponse = classService.getClassSessions(classId)
             if (!sessionInfoResponse.isSuccessful) {
-                null
+                return null
             }
             val sessionInfoList = sessionInfoResponse.body() ?: return null
-            sessionInfoList.map {
-                TeacherSession(it, classId, classInformation)
+            return sessionInfoList.map {
+                return@map TeacherSession(it, classId, classInformation)
             }
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 

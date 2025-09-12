@@ -8,15 +8,15 @@ class StudentProfileRepositoryImpl @Inject constructor(
     private val studentService: StudentService
 ) : StudentProfileRepository {
     override suspend fun getCurrentStudentProfile(): StudentProfile? {
-        return try {
+        try {
             val response = studentService.getCurrentStudent()
             if (!response.isSuccessful) {
-                null
+                return null
             }
             val studentFull = response.body() ?: return null
-            StudentProfile(studentFull)
+            return StudentProfile(studentFull)
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 }

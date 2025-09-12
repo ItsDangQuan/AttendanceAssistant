@@ -10,43 +10,43 @@ class StudentClassRepositoryImpl @Inject constructor(
     private val studentService: StudentService
 ) : StudentClassRepository {
     override suspend fun getClassById(classId: String): Class? {
-        return try {
+        try {
             val response = classService.getClassInformation(classId)
             if (!response.isSuccessful) {
-                null
+                return null
             }
             val classInformation = response.body() ?: return null
-            Class(classInformation)
+            return Class(classInformation)
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 
     override suspend fun haveStudent(classId: String): Boolean? {
-        return try {
+        try {
             val response = studentService.checkEnrollment(classId)
             if (!response.isSuccessful) {
-                null
+                return null
             }
             val enrollmentCheckResponse = response.body() ?: return null
-            enrollmentCheckResponse.enrolled
+            return enrollmentCheckResponse.enrolled
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 
     override suspend fun getAllClass(): List<Class>? {
-        return try {
+        try {
             val response = studentService.getAllClassEnrollments()
             if (!response.isSuccessful) {
-                null
+                return null
             }
             val enrollmentCheckResponseList = response.body() ?: return null
-            enrollmentCheckResponseList.mapNotNull {
-                this.getClassById(it.classId)
+            return enrollmentCheckResponseList.mapNotNull {
+                return@mapNotNull this.getClassById(it.classId)
             }
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 }

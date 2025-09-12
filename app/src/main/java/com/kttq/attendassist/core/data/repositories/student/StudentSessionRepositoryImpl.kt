@@ -13,30 +13,30 @@ class StudentSessionRepositoryImpl @Inject constructor(
     private val studentService: StudentService
 ) : StudentSessionRepository {
     override suspend fun getStudentSessionById(sessionId: String): StudentSession? {
-        return try {
+        try {
             val sessionOutResponse = sessionService.getSession(sessionId)
             if (!sessionOutResponse.isSuccessful) {
-                null
+                return null
             }
             val sessionOut = sessionOutResponse.body() ?: return null
             val classInformationResponse = classService.getClassInformation(sessionOut.classId)
             if (!classInformationResponse.isSuccessful) {
-                null
+                return null
             }
             val classInformation = classInformationResponse.body() ?: return null
-            StudentSession(sessionOut, classInformation)
+            return StudentSession(sessionOut, classInformation)
         } catch (_: Exception) {
-            null
+            return null
         }
     }
 
     override suspend fun confirmAttendance(sessionId: String): Boolean {
-        return try {
+        try {
             val attendanceRequest = AttendanceRequest(sessionId, "Present")
             val response = studentService.studentRollCall(attendanceRequest)
             return response.isSuccessful
         } catch (_: Exception) {
-            false
+            return false
         }
     }
 }
