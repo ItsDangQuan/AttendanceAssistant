@@ -1,5 +1,6 @@
 package com.kttq.attendassist.features.teacher.class_current_session
 
+import android.util.Log
 import com.kttq.attendassist.core.model.StudentProfile
 
 
@@ -9,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.kttq.attendassist.core.ble.advertiser.BleAdvertiser
 import com.kttq.attendassist.core.data.repositories.teacher.TeacherClassRepository
-import com.kttq.attendassist.core.model.StudentPerformance
+import com.kttq.attendassist.core.data.repositories.teacher.TeacherSessionRepository
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,18 +18,26 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class ClassCurrentSessionUiState(
+    val isStop: Boolean = false
+)
+
 @HiltViewModel
-class ClassStudentListViewModel @Inject constructor(
+class ClassCurrentSessionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val teacherClassRepository: TeacherClassRepository,
+    private val teacherSessionRepository: TeacherSessionRepository,
     private val bleAdvertiser: BleAdvertiser
 ) : ViewModel() {
     val sessionId = savedStateHandle.toRoute<Destination.Teacher.ClassCurrentSession>().sessionId
 
-    private val _studentsList = MutableStateFlow<List<StudentProfile>>(emptyList())
+    private val _uiState = MutableStateFlow(ClassCurrentSessionUiState())
+    val uiState = _uiState.asStateFlow()
+
+    private val _studentsList = MutableStateFlow<List<StudentProfile>?>(null)
     val studentsList = _studentsList.asStateFlow()
 
-    private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>>(emptyList())
+    private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>?>(null)
     val currentsStudentsList = _currentsStudentsList.asStateFlow()
 
     init {
@@ -37,13 +46,19 @@ class ClassStudentListViewModel @Inject constructor(
 
     fun fetchData() {
         viewModelScope.launch {
-            // TODO: Fetch the data from the repo.
-            //  Now just mock the data.
+            val currentSession = teacherSessionRepository.getSessionBySessionId(sessionId)
+            if (currentSession == null) {
+                return@launch
+            }
+
+            _studentsList.value = teacherClassRepository.getAllStudentProfileInClass(currentSession.classId)
+            _currentsStudentsList.value = teacherSessionRepository.getStudentInSession(currentSession.classId, currentSession.sessionId)
         }
     }
     fun stopCurrentAttendanceSession() {
         viewModelScope.launch {
-                bleAdvertiser.stopAdvertising()
+            bleAdvertiser.stopAdvertising()
+            _uiState.value = _uiState.value.copy(isStop = true)
         }
      }
 

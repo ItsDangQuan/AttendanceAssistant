@@ -33,7 +33,7 @@ class ClassStudentListViewModel @Inject constructor(
 
             // TODO: Fetch the data from the repo.
             //  Now just mock the data.
-            _studentsList.value = teacherClassRepository.getAllStudentInClass(classId)
+            _studentsList.value = teacherClassRepository.getAllStudentPerformanceInClass(classId)
         }
     }
 }

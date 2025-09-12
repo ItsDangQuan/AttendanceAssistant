@@ -8,6 +8,7 @@ interface TeacherSessionRepository {
     // Use the api /api/v1/teacher/teaching_sessions/
     suspend fun getAllSession(): List<TeacherSession>?
 
+    suspend fun getSessionBySessionId(sessionId: String): TeacherSession?
     // Same as above, but filter by time, ig ?
     suspend fun getRecentSession(): List<TeacherSession>
 
@@ -19,6 +20,6 @@ interface TeacherSessionRepository {
 
     //  /api/v1/record/{sessionId}
     //  /api/v1/student/{studentId}/full
-    suspend fun getStudentInSession(classId: String, sessionId: String): List<StudentProfile>
+    suspend fun getStudentInSession(classId: String, sessionId: String): List<StudentProfile>?
 
 }

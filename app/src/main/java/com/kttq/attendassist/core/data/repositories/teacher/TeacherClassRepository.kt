@@ -3,7 +3,6 @@ package com.kttq.attendassist.core.data.repositories.teacher
 import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.model.StudentPerformance
 import com.kttq.attendassist.core.model.StudentProfile
-import com.kttq.attendassist.core.model.StudentSession
 
 interface TeacherClassRepository {
     // /api/v1/teacher/teaching_classes
@@ -19,6 +18,7 @@ interface TeacherClassRepository {
     //  /api/v1/class/{classId}/students
     //  /api/v1/class/{classId}/records
     //  /api/v1/class/{classId}/sessions
-    suspend fun getAllStudentInClass(classId: String): List<StudentPerformance>?
+    suspend fun getAllStudentPerformanceInClass(classId: String): List<StudentPerformance>?
 
+    suspend fun getAllStudentProfileInClass(classId: String): List<StudentProfile>?
 }

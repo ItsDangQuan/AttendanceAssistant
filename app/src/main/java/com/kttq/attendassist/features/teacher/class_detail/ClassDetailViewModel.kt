@@ -24,7 +24,7 @@ data class ClassDetailUiState(
     val isLoading: Boolean = true,
     val classDetails: Class? = null,
     val activeSessionId: String? = null,            // ID of the session currently being advertised
-    val isAdvertising: Boolean = false,             // Reflects ViewModel's understanding of advertising state
+    // val isAdvertising: Boolean = false,             // Reflects ViewModel's understanding of advertising state
     val error: String? = null
 )
 
@@ -34,7 +34,7 @@ class ClassDetailViewModel @Inject constructor(
     private val bleAdvertiser: BleAdvertiser,
     private val teacherClassRepository: TeacherClassRepository,
     private val teacherSessionRepository: TeacherSessionRepository,
-    private val teacherUserRepository: TeacherProfileRepository
+    private val teacherUserRepository: TeacherProfileRepository,
 ) : ViewModel() {
 
     val classId: String = savedStateHandle.toRoute<Destination.Teacher.ClassDetail>().classId
@@ -85,7 +85,7 @@ class ClassDetailViewModel @Inject constructor(
     }
 
     fun startNewAttendanceSession() {
-        if (_uiState.value.isAdvertising || _uiState.value.activeSessionId != null) {
+        if (/* _uiState.value.isAdvertising  || */ _uiState.value.activeSessionId != null) {
             _uiState.update { it.copy(error = "An attendance session is already active.") }
             return
         }
@@ -102,7 +102,7 @@ class ClassDetailViewModel @Inject constructor(
                     it.copy(
                         activeSessionId = newSession.sessionId,
                         isLoading = false,
-                        isAdvertising = true
+                        // isAdvertising = true
                     )
                 }
 
@@ -113,7 +113,7 @@ class ClassDetailViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         error = "Error starting new session: ${e.message}",
-                        isAdvertising = false
+                        // isAdvertising = false
                     )
                 }
             }
@@ -155,5 +155,15 @@ class ClassDetailViewModel @Inject constructor(
         _uiState.update { it.copy(error = null) }
     }
 
+    fun resetUiState(){
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                activeSessionId = null,
+                // isAdvertising = false,
+                error = null
+            )
+        }
+    }
     // TODO: Add other necessary functions, e.g., navigating to a specific session's details or student details.
 }

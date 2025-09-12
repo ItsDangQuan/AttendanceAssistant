@@ -1,18 +1,22 @@
 package com.kttq.attendassist.core.data.repositories.teacher
 
 import com.kttq.attendassist.core.data.network.ClassService
+import com.kttq.attendassist.core.data.network.RecordService
 import com.kttq.attendassist.core.data.network.SessionService
+import com.kttq.attendassist.core.data.network.StudentService
 import com.kttq.attendassist.core.data.network.TeacherService
 import com.kttq.attendassist.core.data.network.dtos.SessionCreate
 import com.kttq.attendassist.core.model.StudentProfile
 import com.kttq.attendassist.core.model.TeacherSession
-import java.time.LocalTime
+import com.kttq.attendassist.core.util.DateTimeManager
 import javax.inject.Inject
 
 class TeacherSessionRepositoryImpl @Inject constructor(
     private val teacherService: TeacherService,
     private val classService: ClassService,
-    private val sessionService: SessionService
+    private val sessionService: SessionService,
+    private val recordService: RecordService,
+    private val studentService: StudentService
 ) : TeacherSessionRepository {
     override suspend fun getAllSession(): List<TeacherSession>? {
         try {
@@ -37,6 +41,33 @@ class TeacherSessionRepositoryImpl @Inject constructor(
             }
         } catch (_: Exception) {
             return null
+        }
+    }
+
+    override suspend fun getSessionBySessionId(sessionId: String): TeacherSession? {
+        val response = sessionService.getSession(sessionId)
+        if (!response.isSuccessful) {
+            return null
+        }
+        else if(response.body() == null) {
+            return null
+        }
+        else {
+            val sessionOut = response.body()
+            if (sessionOut == null) {
+                return null
+            }
+            try {
+                val response = classService.getClassInformation(sessionOut.classId)
+                if (!response.isSuccessful) {
+                    return null
+                }
+                val classInformation = response.body() ?: return null
+                return TeacherSession(sessionOut, classInformation)
+            }
+            catch (_: Exception) {
+                return null
+            }
         }
     }
 
@@ -72,9 +103,10 @@ class TeacherSessionRepositoryImpl @Inject constructor(
         // TODO("Not yet implemented. What should go into start_time and end_time?")
         // The start_time should be "LocalTime.now(). However, I also do not know how to put into end_time
         // Currently, the end time has the same value as start time
+        val currentDateTime:String = DateTimeManager.localTimeAsFormattedString()
         val sessionCreate = SessionCreate(
-            startTime = LocalTime.now().toString(),
-            endTime = LocalTime.now().toString(),
+            startTime = currentDateTime,
+            endTime = currentDateTime,
             classId = classId,
             teacherId = teacherId
         )
@@ -96,7 +128,30 @@ class TeacherSessionRepositoryImpl @Inject constructor(
     override suspend fun getStudentInSession(
         classId: String,
         sessionId: String
-    ): List<StudentProfile> {
-        TODO("Not yet implemented")
+    ): List<StudentProfile>? {
+        try {
+            val response = recordService.getSessionRecords(sessionId)
+            if (!response.isSuccessful) {
+                return null
+            }
+            val recordList = response.body() ?: return null
+            return recordList.mapNotNull {
+                try {
+                    val response = studentService.getFullStudent(it.studentId)
+                    if(!response.isSuccessful) {
+                        return@mapNotNull null
+                    }
+                    val studentFull = response.body() ?: return@mapNotNull null
+                    return@mapNotNull StudentProfile(studentFull)
+                    }
+                catch (_: Exception) {
+                    return@mapNotNull null
+                }
+            }
+
+        } catch (_: Exception) {
+            return null
+        }
     }
+
 }

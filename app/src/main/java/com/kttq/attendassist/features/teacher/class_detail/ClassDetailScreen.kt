@@ -34,16 +34,23 @@ fun ClassDetailRoute(
     Log.d("ClassDetailRoute", "uiState: $uiState")
     ClassDetailScreen(
         classDetail = uiState.classDetails,
-        isAdvertising = uiState.isAdvertising,
+        // isAdvertising = uiState.isAdvertising,
         navigateToSessionDetail = navigateToSessionDetail,
         navigateToStudentDetail = navigateToStudentDetail,
         startAdvertise = {
-            viewModel::startNewAttendanceSession
-            if (uiState.error == null && uiState.activeSessionId != null)
-                navigateToCurrentSession(uiState.activeSessionId)
+            viewModel.startNewAttendanceSession()
         },
         modifier = modifier
     )
+    LaunchedEffect(uiState.activeSessionId) {
+        if (uiState.error == null && uiState.activeSessionId != null) {
+            // TODO: This is not good. Considering to refactor it.
+            val sessionId = uiState.activeSessionId
+            viewModel.resetUiState()
+            navigateToCurrentSession(sessionId)
+
+        }
+    }
     LaunchedEffect(uiState.error) {
         if(uiState.error != null) {
             onShowSnackbar(uiState.error, "OK")
@@ -55,7 +62,7 @@ fun ClassDetailRoute(
 @Composable
 fun ClassDetailScreen(
     classDetail: Class?,
-    isAdvertising: Boolean,
+    // isAdvertising: Boolean,
     navigateToSessionDetail: (String) -> Unit,
     navigateToStudentDetail: (String) -> Unit,
     startAdvertise: () -> Unit,
@@ -91,7 +98,7 @@ fun ClassDetailScreen(
 
         AppButton(
             onClick = startAdvertise,
-            enabled = !isAdvertising
+            // enabled = !isAdvertising
         ) {
             AppLabelPrimary(text = "Start new attendance session")
         }
@@ -112,7 +119,7 @@ private fun ClassDetailScreenPreview() {
                 teacherId = "123",
                 teacherName = "John Doe",
             ),
-            isAdvertising = false,
+            // isAdvertising = false,
             navigateToSessionDetail = {},
             navigateToStudentDetail = {},
             startAdvertise = {}

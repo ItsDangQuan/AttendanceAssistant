@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,20 +29,26 @@ import com.kttq.attendassist.core.ui.components.AppSectionTitle
 fun ClassCurrentSessionRoute(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ClassStudentListViewModel = hiltViewModel()
+    viewModel: ClassCurrentSessionViewModel = hiltViewModel()
 ) {
 
-    val totalStudent = viewModel.studentsList.collectAsStateWithLifecycle().value
-    val currentStudent = viewModel.currentsStudentsList.collectAsStateWithLifecycle().value
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val totalStudent = viewModel.studentsList.collectAsStateWithLifecycle().value?: emptyList()
+    val currentStudent = viewModel.currentsStudentsList.collectAsStateWithLifecycle().value?: emptyList()
     val absentStudent = currentStudent - totalStudent
 
+
+    LaunchedEffect(uiState.isStop) {
+        if (uiState.isStop) {
+            onNavigateBack()
+        }
+    }
 
     ClassCurrentSessionScreen(
         currentStudent = currentStudent,
         absentStudent = absentStudent,
         onStopAdvertise = {
             viewModel.stopCurrentAttendanceSession()
-            onNavigateBack()
         },
         modifier = modifier
     )

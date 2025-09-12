@@ -207,6 +207,13 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         showTopBar = true,
         title = "Class Past Session"
     )
+    ,
+    Destination.Teacher.ClassCurrentSession::class to UiMeta(
+        isTopLevel = true,
+        showNavigation = false,
+        showTopBar = false,
+        title = "Class Current Session"
+    )
 )
 fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
 

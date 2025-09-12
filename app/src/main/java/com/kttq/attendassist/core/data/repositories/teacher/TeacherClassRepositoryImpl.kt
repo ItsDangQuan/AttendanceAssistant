@@ -5,6 +5,7 @@ import com.kttq.attendassist.core.data.network.StudentService
 import com.kttq.attendassist.core.data.network.TeacherService
 import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.model.StudentPerformance
+import com.kttq.attendassist.core.model.StudentProfile
 import javax.inject.Inject
 
 class TeacherClassRepositoryImpl @Inject constructor(
@@ -70,7 +71,7 @@ class TeacherClassRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllStudentInClass(classId: String): List<StudentPerformance>? {
+    override suspend fun getAllStudentPerformanceInClass(classId: String): List<StudentPerformance>? {
         try {
             val response = classService.getClassStudents(classId)
             if (!response.isSuccessful) {
@@ -89,6 +90,26 @@ class TeacherClassRepositoryImpl @Inject constructor(
                 }
                 val recordOutList = recordOutListResponse.body() ?: return@mapNotNull null
                 return@mapNotNull StudentPerformance(studentFull, classId, recordOutList)
+            }
+        } catch (_: Exception) {
+            return null
+        }
+    }
+
+    override suspend fun getAllStudentProfileInClass(classId: String): List<StudentProfile>? {
+        try {
+            val response = classService.getClassStudents(classId)
+            if (!response.isSuccessful) {
+                return null
+            }
+            val studentBaseList = response.body() ?: return null
+            return studentBaseList.mapNotNull {
+                val studentFullResponse = studentService.getFullStudent(it.studentId)
+                if (!studentFullResponse.isSuccessful) {
+                    return@mapNotNull null
+                }
+                val studentFull = studentFullResponse.body() ?: return@mapNotNull null
+                return@mapNotNull StudentProfile(studentFull)
             }
         } catch (_: Exception) {
             return null
