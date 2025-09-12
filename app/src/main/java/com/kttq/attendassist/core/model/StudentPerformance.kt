@@ -20,7 +20,7 @@ data class StudentPerformance(
         recordOutList: List<RecordOut>
     ) : this(
         studentFull.studentId,
-        studentFull.lastName + studentFull.lastName,
+        studentFull.lastName + " " + studentFull.firstName,
         classId,
         recordOutList.map { Record(it) }
     )

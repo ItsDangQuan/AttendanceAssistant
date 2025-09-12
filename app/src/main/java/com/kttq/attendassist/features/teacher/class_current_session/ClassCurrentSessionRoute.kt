@@ -35,7 +35,7 @@ fun ClassCurrentSessionRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val totalStudent = viewModel.studentsList.collectAsStateWithLifecycle().value?: emptyList()
     val currentStudent = viewModel.currentsStudentsList.collectAsStateWithLifecycle().value?: emptyList()
-    val absentStudent = currentStudent - totalStudent
+    val absentStudent = totalStudent - currentStudent
 
 
     LaunchedEffect(uiState.isStop) {
