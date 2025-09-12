@@ -30,10 +30,10 @@ fun ClassDetailRoute(
     viewModel: ClassDetailViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    // TODO: Handle the case
+    // TODO: Handle the case of nullable classDetails
     Log.d("ClassDetailRoute", "uiState: $uiState")
     ClassDetailScreen(
-        classDetail = uiState.classDetails!!,
+        classDetail = uiState.classDetails,
         isAdvertising = uiState.isAdvertising,
         navigateToSessionDetail = navigateToSessionDetail,
         navigateToStudentDetail = navigateToStudentDetail,
@@ -45,14 +45,16 @@ fun ClassDetailRoute(
         modifier = modifier
     )
     LaunchedEffect(uiState.error) {
-        onShowSnackbar(uiState.error ?: "Unknown error", null)
-        viewModel.clearError()
+        if(uiState.error != null) {
+            onShowSnackbar(uiState.error, "OK")
+            viewModel.clearError()
+        }
     }
 }
 
 @Composable
 fun ClassDetailScreen(
-    classDetail: Class,
+    classDetail: Class?,
     isAdvertising: Boolean,
     navigateToSessionDetail: (String) -> Unit,
     navigateToStudentDetail: (String) -> Unit,
@@ -65,11 +67,13 @@ fun ClassDetailScreen(
             .padding(dimensionResource(R.dimen.padding_medium))
     ) {
         AppSectionTitle("Overview")
-        AppBodyPrimary("Class ID: ${classDetail.classId}")
-        AppBodyPrimary("Course ID: ${classDetail.classId}")
-        AppBodyPrimary("Course Name: ${classDetail.courseName}")
+        AppBodyPrimary("Class ID: ${classDetail?.classId?:"Loading..."}")
+        AppBodyPrimary("Course ID: ${classDetail?.classId?:"Loading..."}")
+        AppBodyPrimary("Course Name: ${classDetail?.courseName?:"Loading..."}")
         AppTextButton(
-            onClick = { navigateToSessionDetail(classDetail.classId) },
+            onClick = {
+                if(classDetail != null) navigateToSessionDetail(classDetail.classId)
+            },
             content = {
                 AppLabelPrimary(
                     text = "Show all past attendance sessions"
@@ -77,7 +81,7 @@ fun ClassDetailScreen(
             }
         )
         AppTextButton(
-            onClick = { navigateToStudentDetail(classDetail.classId) },
+            onClick = { if (classDetail != null) navigateToStudentDetail(classDetail.classId) },
             content = {
                 AppLabelPrimary(
                     text = "Show all students"

@@ -47,6 +47,7 @@ class ClassDetailViewModel @Inject constructor(
     // For a reactive approach, BleAdvertiser should expose its state as a Flow.
 
     init {
+
         if (classId.isNotBlank()) {
             fetchData()
             // TODO: If BleAdvertiser offers a way to get initial advertising state (e.g., a simple boolean getter),
@@ -62,6 +63,7 @@ class ClassDetailViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 val details = teacherClassRepository.getClassById(classId)
+                Log.d("ClassDetailViewModel", "fetchData: $details")
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -71,7 +73,6 @@ class ClassDetailViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 // TODO: Log the exception e more specifically
-
                 Log.d("ClassDetailViewModel", "fetchData: $e")
                 _uiState.update {
                     it.copy(
