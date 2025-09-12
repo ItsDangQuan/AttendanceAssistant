@@ -32,7 +32,7 @@ fun ClassPastSessionRoute(
 
 @Composable
 fun ClassPastSessionScreen(
-    sessionList: List<TeacherSession>,
+    sessionList: List<TeacherSession>?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -44,7 +44,7 @@ fun ClassPastSessionScreen(
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ) {
-            items(sessionList) { session ->
+            items(sessionList?:emptyList()) { session ->
                 AppCard {
                     AppLabelPrimary(session.sessionId)
                     AppLabelPrimary(session.endTime)

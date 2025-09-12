@@ -20,7 +20,7 @@ class ClassPastSessionViewModel @Inject constructor(
 ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Teacher.ClassPastSession>().classId
 
-    private val _sessionList = MutableStateFlow<List<TeacherSession>>(emptyList())
+    private val _sessionList = MutableStateFlow<List<TeacherSession>?>(null)
     val sessionList = _sessionList.asStateFlow()
 
     init {
@@ -32,7 +32,7 @@ class ClassPastSessionViewModel @Inject constructor(
 
             // TODO: Fetch the data from the repo.
             //  Now just mock the data.
-            _sessionList.value = teacherSessionRepository.getSessionByClassId(classId)!!
+            _sessionList.value = teacherSessionRepository.getSessionByClassId(classId)
         }
     }
 }

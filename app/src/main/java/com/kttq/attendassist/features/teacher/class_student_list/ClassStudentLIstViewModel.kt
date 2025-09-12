@@ -21,7 +21,7 @@ class ClassStudentListViewModel @Inject constructor(
     ) : ViewModel() {
     val classId = savedStateHandle.toRoute<Destination.Teacher.ClassStudentList>().classId
 
-    private val _studentsList = MutableStateFlow<List<StudentPerformance>>(emptyList())
+    private val _studentsList = MutableStateFlow<List<StudentPerformance>?>(null)
     val studentsList = _studentsList.asStateFlow()
 
     init {
@@ -33,7 +33,7 @@ class ClassStudentListViewModel @Inject constructor(
 
             // TODO: Fetch the data from the repo.
             //  Now just mock the data.
-            _studentsList.value = teacherClassRepository.getAllStudentInClass(classId)!!
+            _studentsList.value = teacherClassRepository.getAllStudentInClass(classId)
         }
     }
 }

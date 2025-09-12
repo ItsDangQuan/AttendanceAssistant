@@ -112,16 +112,17 @@ fun StudentProfileScreen(
         )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_24)))
         AppSectionTitle("Settings", Modifier.fillMaxWidth())
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AppLabelPrimary("Change password", Modifier.weight(1f))
-            AppIconButton(
-                iconId = R.drawable.ic_arrow_forward,
-                onClick = { onChangePasswordClicked() } // Call ViewModel function
-            )
-        }
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_12)))
+        // Row(
+        //     modifier = Modifier.fillMaxWidth(),
+        //     verticalAlignment = Alignment.CenterVertically
+        // ) {
+        //     AppLabelPrimary("Change password", Modifier.weight(1f))
+        //     AppIconButton(
+        //         iconId = R.drawable.ic_arrow_forward,
+        //         onClick = { onChangePasswordClicked() } // Call ViewModel function
+        //     )
+        // }
         AppButton(
             onClick = onLogoutClicked,
             modifier = Modifier.fillMaxWidth(),

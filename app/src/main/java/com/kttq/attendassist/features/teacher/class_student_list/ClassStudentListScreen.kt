@@ -30,7 +30,7 @@ fun ClassStudentListRoute(
 
 @Composable
 fun ClassStudentListScreen(
-    studentsList: List<StudentPerformance>,
+    studentsList: List<StudentPerformance>?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -40,7 +40,7 @@ fun ClassStudentListScreen(
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ){
-            items(studentsList) { student ->
+            items(studentsList?:emptyList()) { student ->
                 AppCard {
                     AppLabelPrimary(text = student.studentName)
                     AppLabelPrimary(text = student.studentId)
