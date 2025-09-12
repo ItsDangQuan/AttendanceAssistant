@@ -1,5 +1,6 @@
 package com.kttq.attendassist.features.teacher.class_detail
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ fun ClassDetailRoute(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     // TODO: Handle the case
+    Log.d("ClassDetailRoute", "uiState: $uiState")
     ClassDetailScreen(
         classDetail = uiState.classDetails!!,
         isAdvertising = uiState.isAdvertising,

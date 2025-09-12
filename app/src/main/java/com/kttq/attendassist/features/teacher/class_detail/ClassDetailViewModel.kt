@@ -1,5 +1,6 @@
 package com.kttq.attendassist.features.teacher.class_detail
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -60,7 +61,6 @@ class ClassDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-
                 val details = teacherClassRepository.getClassById(classId)
                 _uiState.update {
                     it.copy(
@@ -69,8 +69,10 @@ class ClassDetailViewModel @Inject constructor(
                         error = if (details == null && classId.isNotBlank()) "Could not load class details for ID: $classId" else null
                     )
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 // TODO: Log the exception e more specifically
+
+                Log.d("ClassDetailViewModel", "fetchData: $e")
                 _uiState.update {
                     it.copy(
                         isLoading = false,

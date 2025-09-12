@@ -57,7 +57,7 @@ fun StudentHomeRoute(
 
     LaunchedEffect(uiState.error) {
         if (uiState.error != null) {
-            onShowSnackbar(uiState.error!!, null)
+            onShowSnackbar(uiState.error!!, "OK")
             viewModel.updateError(null)
         }
     }

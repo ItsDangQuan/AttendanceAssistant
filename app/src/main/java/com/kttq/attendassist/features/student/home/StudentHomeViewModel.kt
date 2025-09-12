@@ -80,16 +80,15 @@ class StudentHomeViewModel @Inject constructor(
         )
 
     init {
-        fetchStudentProfile()
-        fetchAllStudentRecords()
+        viewModelScope.launch {
+            fetchStudentProfile()
+            fetchAllStudentRecords()
+        }
     }
 
     private fun fetchStudentProfile() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            // TODO: Replace this in the future
-            // val profile = userRepository.getCurrentUserAsStudent()
-            // Now, we are fetching the code from the user table
             val profile = studentProfileRepository.getCurrentStudentProfile()
             if (profile == null) {
                 _uiState.update { it.copy(error = "User profile not found", isLoading = false) }
@@ -105,10 +104,8 @@ class StudentHomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             if (_userProfile.value == null) {
-                _uiState.update { it.copy(error = "User profile not found", isLoading = false) }
                 return@launch
             }
-            // TODO: Fetch using the other API for server validation
             val records =
                 studentRecordRepository.getRecordByStudentId(_userProfile.value!!.studentId)!!
             _allRecords.value = records

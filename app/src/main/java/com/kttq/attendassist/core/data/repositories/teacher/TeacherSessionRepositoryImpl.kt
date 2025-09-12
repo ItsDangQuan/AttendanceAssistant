@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.teacher
 
+import android.util.Log
 import com.kttq.attendassist.core.data.network.ClassService
 import com.kttq.attendassist.core.data.network.SessionService
 import com.kttq.attendassist.core.data.network.TeacherService

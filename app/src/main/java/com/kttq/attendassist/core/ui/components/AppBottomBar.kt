@@ -48,8 +48,7 @@ fun AppBottomBar(
                 val painter = painterResource(iconResId)
 
                 // stringResource is @Composable — call it directly here.
-                val contentDescription = meta.titleTextRes?.let { stringResource(it) }
-
+                val contentDescription = meta.title
                 NavigationBarItem(
                     selected = selected,
                     onClick = { onSelectedState(destination) },

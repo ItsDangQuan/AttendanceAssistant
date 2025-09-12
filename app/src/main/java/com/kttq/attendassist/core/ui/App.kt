@@ -21,9 +21,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import com.kttq.attendassist.R
 import com.kttq.attendassist.core.navigation.AppNavHost
 import com.kttq.attendassist.core.navigation.Destination
+import com.kttq.attendassist.core.navigation.uiMeta
 import com.kttq.attendassist.core.ui.components.AppBottomBar
+import com.kttq.attendassist.core.ui.components.AppTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,10 +42,25 @@ fun App(
     val navigateUpdated by rememberUpdatedState(newValue = { d: Destination -> appState.navigate(d) })
 
     Scaffold(
+
         modifier = modifier,
+        topBar = {
+            if(currentDestination?.uiMeta()?.showTopBar == true) {
+                Log.d("App", "Top bar recomposed")
+                AppTopBar(
+                    title = currentDestination?.uiMeta()?.title,
+                    navigationIconRes = R.drawable.ic_arrow_back,
+                    onNavigationClick = appState::onBackClick
+                )
+            }
+
+        },
         bottomBar = {
             // Keep the bar visible by default (empty list = no items)
-            if (appState.currentDestinationSubgraph.collectAsState().value != null) {
+            if (
+                appState.currentDestinationSubgraph.collectAsState().value != null &&
+                currentDestination?.uiMeta()?.showNavigation == true
+            ) {
                 AppBottomBar(
                     destinations = appState.bottomBarDestinations.collectAsState().value,
                     isSelected = { destination ->

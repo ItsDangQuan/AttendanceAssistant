@@ -1,9 +1,11 @@
 package com.kttq.attendassist.features.student.class_summary
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,7 +44,13 @@ fun ClassSummaryRoute(
     val statSummary = viewModel.statSummary.collectAsStateWithLifecycle().value
 
     if (uiState.isLoading) {
-        CircularProgressIndicator()
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+            )
+        }
     } else if (uiState.error != null) {
         LaunchedEffect(
             uiState.error,
@@ -117,7 +125,9 @@ fun ClassSummaryScreen(
                     items = records, // Changed to use records directly for better stability with keys if available
                     key = { record -> record.recordId } // Assuming recordId is a stable unique key
                 ) { record ->
-                    AppCard {
+                    AppCard (
+                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                    ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically

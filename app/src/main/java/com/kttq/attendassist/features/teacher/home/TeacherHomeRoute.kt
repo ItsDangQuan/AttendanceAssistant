@@ -72,6 +72,7 @@ fun TeacherHomeScreen(
                 .padding(vertical = dimensionResource(R.dimen.padding_large)), // Added vertical padding
             thickness = dimensionResource(R.dimen.divider_height),
         )
+        AppSectionTitle("Recent Sessions")
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,

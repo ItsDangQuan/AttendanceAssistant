@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.ui
 
+import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -76,17 +77,13 @@ class AppState(
     val currentDestination: StateFlow<Destination?> =
         navController.currentBackStackEntryFlow.map { navBackStackEntry ->
             val route = navBackStackEntry.destination
-            val dest = Destination.listDestinations().firstOrNull { destination ->
+            val dest = Destination.destinations.firstOrNull { destination ->
                 route.hasRoute(destination)
             }
-            if (dest == null) {
-                null
-            } else {
-                navBackStackEntry.toRoute(dest)
-            }
+            navBackStackEntry.toRoute(dest ?: return@map null) as Destination
         }.stateIn(
             scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.Lazily,
             initialValue = null
         )
 
@@ -99,7 +96,7 @@ class AppState(
             }
         }.stateIn(
             scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.WhileSubscribed(500),
             initialValue = currentDestination.value?.let { // Initial value based on currentDestination's initial value
                 when (it) {
                     is Destination.Student -> Destination.Student.Graph
