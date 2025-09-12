@@ -1,5 +1,6 @@
 package com.kttq.attendassist.features.teacher.profile
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.data.repositories.auth.AuthRepository
@@ -40,6 +41,7 @@ class TeacherProfileViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             _user.value = teacherProfileRepository.getCurrentTeacherProfile()
+            Log.d("TeacherProfileViewModel", "Fetched user: ${user.value}")
             _uiState.update { it.copy(isLoading = false) }
         }
     }

@@ -42,7 +42,6 @@ fun TeacherProfileRoute(
         name = if (teacherProfile != null) teacherProfile.firstName + " " + teacherProfile.lastName else "N/A",
         teacherId = teacherProfile?.teacherId ?: "N/A",
         email = teacherProfile?.email ?: "N/A",
-        phone = teacherProfile?.phone ?: "N/A",
         onChangePasswordClicked = viewModel::onChangePasswordClicked,
         onLogoutClicked = {
             viewModel.onLogoutClicked()
@@ -61,7 +60,6 @@ fun TeacherProfileScreen(
     name: String,
     teacherId: String,
     email: String,
-    phone: String,
     onChangePasswordClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
     modifier: Modifier = Modifier,
@@ -112,14 +110,6 @@ fun TeacherProfileScreen(
             modifier = Modifier.fillMaxWidth(),
             readOnly = true
         )
-        AppSubsectionTitle("Phone", modifier = Modifier.fillMaxWidth())
-        AppOutlineTextField(
-            label = "", // Changed from "Phone" as AppSubsectionTitle is present
-            value = phone,
-            onValueChange = {}, // Assuming read-only for now
-            modifier = Modifier.fillMaxWidth(),
-            readOnly = true
-        )
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_24)))
         AppSectionTitle("Settings", Modifier.fillMaxWidth())
         Row(
@@ -152,7 +142,6 @@ private fun TeacherProfileScreenPreview() {
             name = "",
             teacherId = "",
             email = "",
-            phone = "",
             onChangePasswordClicked = {},
             onLogoutClicked = {}
         )

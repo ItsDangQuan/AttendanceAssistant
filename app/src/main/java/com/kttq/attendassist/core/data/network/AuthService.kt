@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.data.network
 
+import com.kttq.attendassist.core.data.network.dtos.Role
 import com.kttq.attendassist.core.data.network.dtos.Token
 import com.kttq.attendassist.core.data.network.dtos.TokenRefresh
 import com.kttq.attendassist.core.data.network.dtos.UserLogin
@@ -20,5 +21,5 @@ interface AuthService {
     suspend fun logout(): Response<String?>
 
     @GET("/api/v1/auth/me/role")
-    suspend fun getCurrentUserRole(): Response<String?>
+    suspend fun getCurrentUserRole(): Response<Role>
 }

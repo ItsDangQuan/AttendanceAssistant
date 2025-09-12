@@ -26,11 +26,33 @@ class TeacherClassRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCurrentClass(): List<Class> {
-        TODO("Not yet implemented. No API?")
+        return try {
+            val response = teacherService.getTeachingClasses()
+            if (!response.isSuccessful) {
+                emptyList<Class>()
+            }
+            val classInformationList = response.body() ?: return emptyList()
+            classInformationList.map {
+                Class(it)
+            }
+        } catch (_: Exception){
+            emptyList()
+        }
     }
 
     override suspend fun getPastClass(): List<Class> {
-        TODO("Not yet implemented. No API?")
+        return try {
+            val response = teacherService.getTeachingClasses()
+            if (!response.isSuccessful) {
+                emptyList<Class>()
+            }
+            val classInformationList = response.body() ?: return emptyList()
+            classInformationList.map {
+                Class(it)
+            }
+        } catch (_: Exception){
+            emptyList()
+        }
     }
 
     override suspend fun getClassById(classId: String): Class? {

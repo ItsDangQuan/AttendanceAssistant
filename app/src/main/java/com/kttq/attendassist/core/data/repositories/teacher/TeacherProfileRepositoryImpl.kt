@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.teacher
 
+import android.util.Log
 import com.kttq.attendassist.core.data.network.TeacherService
 import com.kttq.attendassist.core.model.TeacherProfile
 import javax.inject.Inject
@@ -15,7 +16,8 @@ class TeacherProfileRepositoryImpl @Inject constructor(
             }
             val teacherFull = response.body() ?: return null
             TeacherProfile(teacherFull)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Log.e("TeacherProfileRepository", "Error fetching current teacher profile", e)
             null
         }
     }

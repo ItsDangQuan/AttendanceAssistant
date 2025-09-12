@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.data.repositories.auth
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -59,6 +60,8 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(userLogin: UserLogin): Boolean {
         return try {
             val response = authService.login(userLogin)
+            Log.d("AuthRepository", "Login response: $response")
+            Log.d("AuthRepository", "Login response body: ${response.body()}")
             if (response.isSuccessful && response.body() != null) {
                 val token = response.body()!!
                 tokenRepository.saveTokens(
@@ -87,8 +90,11 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun sync() {
         try {
             val response = authService.getCurrentUserRole() // suspend call
+            Log.d("AuthRepository", "Sync response: $response")
+            Log.d("AuthRepository", "Sync response body: ${response.body()}")
             if (response.isSuccessful) {
-                when (response.body()?.lowercase()) {
+                Log.d("AuthRepository", "Sync response body: ${response.body()}")
+                when (response.body()?.role?.lowercase()) {
                     "student" -> dataStore.edit {
                         it[AuthPreferencesKeys.AUTH_STATE] = "AUTHENTICATED_STUDENT"
                     }
@@ -111,6 +117,7 @@ class AuthRepositoryImpl @Inject constructor(
                 }
             }
         } catch (e: Exception) {
+            Log.d("AuthRepository", "Sync exception: $e")
             tokenRepository.clearTokens()
             dataStore.edit {
                 it[AuthPreferencesKeys.AUTH_STATE] = "UNAUTHENTICATED"

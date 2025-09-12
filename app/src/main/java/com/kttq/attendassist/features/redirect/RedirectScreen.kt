@@ -1,5 +1,6 @@
 package com.kttq.attendassist.features.redirect
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,6 +19,7 @@ fun RedirectRoute(
 ) {
     val auth by redirectViewModel.authState.collectAsStateWithLifecycle(null)
 
+    Log.d("Redirect", "Redirect recomposed with auth: $auth")
     LaunchedEffect(auth) {
         when (auth) {
             AuthState.UNAUTHENTICATED -> navigateToLogin()

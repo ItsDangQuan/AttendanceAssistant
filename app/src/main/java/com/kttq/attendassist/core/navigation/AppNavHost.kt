@@ -1,5 +1,6 @@
 package com.kttq.attendassist.core.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -27,6 +28,7 @@ fun AppNavHost(
     startDestination: Destination,
     modifier: Modifier = Modifier,
 ) {
+    Log.d("Nav", "Current navigation: $startDestination")
     NavHost(
         navController = navController,
         startDestination = startDestination,
