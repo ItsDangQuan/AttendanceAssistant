@@ -7,6 +7,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.core.navigation.TopLevelStudentDest
 import com.kttq.attendassist.core.navigation.TopLevelTeacherDest
@@ -72,20 +73,21 @@ class AppState(
         }
     }
 
-    val currentDestination: StateFlow<Destination?> = 
+    val currentDestination: StateFlow<Destination?> =
         navController.currentBackStackEntryFlow.map { navBackStackEntry ->
             val route = navBackStackEntry.destination
-            Destination.listDestinations().firstOrNull { destination ->
-                route.hasRoute(destination::class)
+            val dest = Destination.listDestinations().firstOrNull { destination ->
+                route.hasRoute(destination)
+            }
+            if (dest == null) {
+                null
+            } else {
+                navBackStackEntry.toRoute(dest)
             }
         }.stateIn(
             scope = coroutineScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = navController.currentDestination?.let { route ->
-                Destination.listDestinations().firstOrNull { destination ->
-                    route.hasRoute(destination::class)
-                }
-            }
+            initialValue = null
         )
 
     val currentDestinationSubgraph: StateFlow<Destination?> =

@@ -16,15 +16,13 @@ annotation class Subgraph
 @Singleton
 sealed class Destination {
     companion object {
-        private fun collectObjects(kClass: KClass<out Destination>): List<Destination> {
-            kClass.objectInstance?.let { return listOf(it) }
-            return kClass.sealedSubclasses.flatMap { collectObjects(it) }
+        private fun collectClasses(kClass: KClass<out Destination>): List<KClass<out Destination>> {
+            return listOf(kClass) + kClass.sealedSubclasses.flatMap { collectClasses(it) }
         }
 
-        fun listDestinations(): List<Destination> =
-            Destination::class.sealedSubclasses
-                .flatMap { collectObjects(it) }
-                .filter { it::class.findAnnotation<Subgraph>() == null }
+        fun listDestinations(): List<KClass<out Destination>> =
+            collectClasses(Destination::class)
+                .filter { it.findAnnotation<Subgraph>() == null }
     }
 
     @Serializable
@@ -46,7 +44,7 @@ sealed class Destination {
         object Profile : Student()
 
         @Serializable
-        object ClassList: Student()
+        object ClassList : Student()
 
         @Serializable
         data class SessionConfirm(
@@ -72,7 +70,7 @@ sealed class Destination {
         object Profile : Teacher()
 
         @Serializable
-        object ClassList: Teacher()
+        object ClassList : Teacher()
 
         @Serializable
         data class ClassDetail(
@@ -167,7 +165,7 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         unselectedIconRes = R.drawable.ic_view_kanban
     ),
 
-)
+    )
 
 fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
 
