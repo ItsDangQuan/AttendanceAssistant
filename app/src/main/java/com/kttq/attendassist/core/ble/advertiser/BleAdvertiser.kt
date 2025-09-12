@@ -14,7 +14,7 @@ interface BleAdvertiser {
      * - ADVERTISE_FAILED_TOO_MANY_ADVERTISERS: no advertising instances available.
      */
     fun startAdvertising(
-        data: String,
+        data: ByteArray,
         advertiseSettings: AdvertiseSettings? = null,
         onSuccess: () -> Unit = {},
         onFail: (errorCode: Int) -> Unit = {},

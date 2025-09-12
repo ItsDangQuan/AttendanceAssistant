@@ -26,7 +26,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class BluetoothComponent {
     companion object{
-        val SERVICE_UUID: UUID = UUID.fromString("a61278f8-4139-4e93-8e9b-794fb519cb8d")
+        val SERVICE_UUID: UUID = UUID.fromString("0000F890-0000-1000-8000-00805F9B34FB")
     }
     @Provides
     @Singleton

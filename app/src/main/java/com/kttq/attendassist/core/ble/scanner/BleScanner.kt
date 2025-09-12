@@ -19,7 +19,7 @@ interface BleScanner {
      **/
     fun startScan(
         filter: List<ScanFilter>? = null,
-        onSuccess: (String) -> Unit,
+        onSuccess: (ByteArray) -> Unit,
         onFail: (errorCode: Int) -> Unit = {}
     )
     fun stopScan()

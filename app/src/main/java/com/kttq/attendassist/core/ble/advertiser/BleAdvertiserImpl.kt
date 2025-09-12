@@ -5,6 +5,7 @@ import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.bluetooth.le.BluetoothLeAdvertiser
+import android.os.Parcel
 import android.os.ParcelUuid
 import android.util.Log
 import jakarta.inject.Inject
@@ -16,41 +17,28 @@ class BleAdvertiserImpl @Inject constructor(
     private val serviceUuid: UUID
 ) : BleAdvertiser {
 
-    private var advertisingState = false // More explicit name for the state variable
+    private var advertisingState = false
+    private var advertiseCallback: AdvertiseCallback? = null
 
     override fun isAdvertising(): Boolean = advertisingState
 
-    @SuppressLint("MissingPermission") // Permissions should be checked by the caller
+    @SuppressLint("MissingPermission")
     override fun stopAdvertising() {
-        if (bleAdvertiser == null) {
-            advertisingState = false // Ensure state is false if advertiser is not there
+        if (bleAdvertiser == null || advertiseCallback == null) {
+            advertisingState = false
             return
         }
 
-        if (!advertisingState) {
-            return
-        }
+        if (!advertisingState) return
 
-        // TODO: Handle the callback even the scanning is stopped
-        val callback = object : AdvertiseCallback() {
-            override fun onStartFailure(errorCode: Int) {
-                super.onStartFailure(errorCode)
-                advertisingState = false
-            }
-
-            override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
-                super.onStartSuccess(settingsInEffect)
-                advertisingState = false
-            }
-        }
-        bleAdvertiser.stopAdvertising(callback)
-        // Note: advertisingState is updated in the callback asynchronously.
-        // Setting it here immediately might be premature if stop is not guaranteed to succeed.
+        bleAdvertiser.stopAdvertising(advertiseCallback)
+        advertisingState = false
+        advertiseCallback = null
     }
 
-    @SuppressLint("MissingPermission") // Permissions should be checked by the caller
+    @SuppressLint("MissingPermission")
     override fun startAdvertising(
-        data: String,
+        data: ByteArray,
         advertiseSettings: AdvertiseSettings?,
         onSuccess: () -> Unit,
         onFail: (errorCode: Int) -> Unit
@@ -69,20 +57,33 @@ class BleAdvertiserImpl @Inject constructor(
         val parcelServiceUuid = ParcelUuid(serviceUuid)
         val advertiseData = AdvertiseData.Builder()
             .setIncludeDeviceName(false)
-            .addServiceUuid(parcelServiceUuid)
-            .addServiceData(parcelServiceUuid, data.toByteArray(Charsets.UTF_8))
+            .addServiceData(parcelServiceUuid,data)
             .build()
+
+
+        Log.d("BleAdvertiserImpl", "data bytes = ${data.size}")
 
         val settings = advertiseSettings ?: defaultAdvertiseSetting
 
-        val callback = object : AdvertiseCallback() {
+        advertiseCallback = object : AdvertiseCallback() {
             override fun onStartFailure(errorCode: Int) {
                 super.onStartFailure(errorCode)
                 onFail(errorCode)
+                val error: String = when (errorCode) {
+                    ADVERTISE_FAILED_ALREADY_STARTED -> "already advertising."
+                    ADVERTISE_FAILED_DATA_TOO_LARGE -> "payload > 31 bytes."
+                    ADVERTISE_FAILED_FEATURE_UNSUPPORTED -> "feature not supported."
+                    ADVERTISE_FAILED_INTERNAL_ERROR -> "internal Bluetooth stack error."
+                    ADVERTISE_FAILED_TOO_MANY_ADVERTISERS -> "no advertising instances available."
+                    else -> "Unknown error."
+                }
+                Log.d("BleAdvertiserImpl", "start failed: $error")
                 advertisingState = false
+                advertiseCallback = null
             }
 
             override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
+                Log.d("BleAdvertiserImpl", "start success")
                 super.onStartSuccess(settingsInEffect)
                 onSuccess()
                 advertisingState = true
@@ -92,7 +93,10 @@ class BleAdvertiserImpl @Inject constructor(
         bleAdvertiser.startAdvertising(
             settings,
             advertiseData,
-            callback
+            advertiseCallback
         )
+        Log.d("BleAdvertiserImpl", "start advertising")
     }
 }
+
+

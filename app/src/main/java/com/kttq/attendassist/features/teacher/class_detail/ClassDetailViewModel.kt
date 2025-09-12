@@ -11,12 +11,14 @@ import com.kttq.attendassist.core.data.repositories.teacher.TeacherProfileReposi
 import com.kttq.attendassist.core.data.repositories.teacher.TeacherSessionRepository
 import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.navigation.Destination
+import com.kttq.attendassist.core.util.ClassSessionCodec
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -97,7 +99,12 @@ class ClassDetailViewModel @Inject constructor(
                 val teacherId = teacherUserRepository.getCurrentTeacherProfile()?.teacherId
                 val newSession =
                     teacherSessionRepository.createNewSession(classId, teacherId ?: "N/A")
-                bleAdvertiser.startAdvertising(newSession.classId + "-" + newSession.sessionId)
+                val sessionUuid = UUID.fromString(newSession.sessionId)
+
+
+                bleAdvertiser.startAdvertising(
+                    ClassSessionCodec.pack(newSession.classId, sessionUuid)
+                )
                 _uiState.update {
                     it.copy(
                         activeSessionId = newSession.sessionId,

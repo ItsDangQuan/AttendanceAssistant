@@ -1,11 +1,14 @@
 package com.kttq.attendassist.core.ble.scanner
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.util.Log
+import androidx.annotation.RequiresPermission
 import jakarta.inject.Inject
 
 //TODO: Checking permission
@@ -17,7 +20,7 @@ class BleScannerImpl @Inject constructor(
     private var scanningState = false
     override fun isScanning(): Boolean = scanningState
 
-    @SuppressLint("MissingPermission") // Permissions should be checked by the caller
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     override fun stopScan() {
         if (bleScanner == null) {
             return
@@ -34,10 +37,10 @@ class BleScannerImpl @Inject constructor(
         bleScanner.stopScan(callback)
     }
 
-    @SuppressLint("MissingPermission") // Permissions should be checked by the caller
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     override fun startScan(
         filter: List<ScanFilter>?,
-        onSuccess: (String) -> Unit,
+        onSuccess: (ByteArray) -> Unit,
         onFail: (errorCode: Int) -> Unit
     ) {
         val callback = object : ScanCallback() {
@@ -48,9 +51,9 @@ class BleScannerImpl @Inject constructor(
             }
             override fun onScanResult(callbackType: Int, result: ScanResult?) {
                 super.onScanResult(callbackType, result)
-
-                val data = result?.scanRecord?.serviceData
-                onSuccess(data.toString())
+                Log.d("BleScannerImpl", "onScanResult: ${result.toString()}")
+                val data = result?.scanRecord?.serviceData?.values?.firstOrNull() ?: return
+                onSuccess(data)
                 scanningState = false
             }
         }
@@ -60,6 +63,7 @@ class BleScannerImpl @Inject constructor(
             defaultSettings,
             callback
         )
+        Log.d("BleScannerImpl", "Start scanning")
     }
 
 }

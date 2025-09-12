@@ -8,6 +8,7 @@ import com.kttq.attendassist.core.data.repositories.student.StudentProfileReposi
 import com.kttq.attendassist.core.data.repositories.student.StudentRecordRepository
 import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.model.StudentProfile
+import com.kttq.attendassist.core.util.ClassSessionCodec
 import com.kttq.attendassist.core.util.DateTimeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -124,11 +125,12 @@ class StudentHomeViewModel @Inject constructor(
             onSuccess = { result ->
                 //  Hmm, may be the result should combine classId and sessionId,
                 //  The actual data may be not like this, i have just give an example
-                val classId = result.substringBeforeLast("-")
-                val sessionId = result.substringAfterLast("-")
 
+                val res = ClassSessionCodec.unpack(result)
                 // I think that you will not agree with this,
                 //  but this may be the best way to do it
+                val classId = res.first
+                val sessionId = res.second.toString()
                 viewModelScope.launch {
                     if (studentClassRepository.haveStudent(classId) == true) {
                         stopScan()
