@@ -39,4 +39,7 @@ interface StudentService {
 
     @POST("/api/v1/student/roll_call")
     suspend fun studentRollCall(@Body attendanceRequest: AttendanceRequest): Response<RecordOut>
+
+    @GET("/api/v1/student/{student_id}/full")
+    suspend fun getFullStudent(@Path("student_id") studentId: String): Response<StudentFull>
 }
