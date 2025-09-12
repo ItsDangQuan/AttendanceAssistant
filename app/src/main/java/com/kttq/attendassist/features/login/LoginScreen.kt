@@ -143,13 +143,13 @@ fun LoginScreen(
             },
         )
 
-        AppTextButton(
-            onClick = { /* TODO: Handle forgot password */ },
-            content = { AppBodySecondary("Forgot Password?") },
-            modifier = Modifier.align(Alignment.End),
-        )
+        // AppTextButton(
+        //     onClick = { /* TODO: Handle forgot password */ },
+        //     content = { AppBodySecondary("Forgot Password?") },
+        //     modifier = Modifier.align(Alignment.End),
+        // )
 
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_sm)))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_xl)))
 
         AppButton(
             onClick = onLogin,
@@ -164,11 +164,11 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            AppBodySecondary("Don't have an account?")
-            AppTextButton(
-                onClick = { /* TODO: Handle sign up navigation */ },
-                content = { AppLabelPrimary("Sign Up") },
-            )
+            AppBodySecondary("Don't have an account? Contact your administrator")
+            // AppTextButton(
+            //     onClick = { /* TODO: Handle sign up navigation */ },
+            //     content = { AppLabelPrimary("Sign Up") },
+            // )
         }
     }
 }

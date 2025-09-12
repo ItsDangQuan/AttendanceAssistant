@@ -53,7 +53,7 @@ fun StudentClassListScreen(
     ) {
         AppScreenTitle("Current Course")
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -73,34 +73,34 @@ fun StudentClassListScreen(
                 }
             }
         }
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_large)),
-            thickness = dimensionResource(R.dimen.divider_height),
-            )
-        AppScreenTitle("Pass Course")
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            items(
-                pastClasses.size
-            ) {
-                AppCard (
-                    clickable = true,
-                    onClick = { navigateToClass(pastClasses[it].classId) }
-                ) {
-                    AppLabelPrimary(pastClasses[it].classId)
-                    AppLabelSecondary(
-                        pastClasses[it].courseId + " - " +
-                                pastClasses[it].courseName
-                    )
-                    AppLabelSecondary(pastClasses[it].teacherName)
-                }
-            }
+        // HorizontalDivider(
+        //     modifier = Modifier.fillMaxWidth()
+        //         .padding(dimensionResource(R.dimen.padding_large)),
+        //     thickness = dimensionResource(R.dimen.divider_height),
+        //     )
+        // AppScreenTitle("Pass Course")
+        // LazyColumn(
+        //     modifier = Modifier.fillMaxWidth(),
+        //     horizontalAlignment = Alignment.CenterHorizontally,
+        //     verticalArrangement = Arrangement.Top
+        // ) {
+        //     items(
+        //         pastClasses.size
+        //     ) {
+        //         AppCard (
+        //             clickable = true,
+        //             onClick = { navigateToClass(pastClasses[it].classId) }
+        //         ) {
+        //             AppLabelPrimary(pastClasses[it].classId)
+        //             AppLabelSecondary(
+        //                 pastClasses[it].courseId + " - " +
+        //                         pastClasses[it].courseName
+        //             )
+        //             AppLabelSecondary(pastClasses[it].teacherName)
+        //         }
+        //     }
 
-        }
+        // }
     }
 
 }
