@@ -8,7 +8,7 @@ import com.kttq.attendassist.core.data.repositories.student.StudentProfileReposi
 import com.kttq.attendassist.core.data.repositories.student.StudentRecordRepository
 import com.kttq.attendassist.core.model.Record
 import com.kttq.attendassist.core.model.StudentProfile
-import com.kttq.attendassist.core.util.DateManager
+import com.kttq.attendassist.core.util.DateTimeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,7 +35,7 @@ data class StudentHomeStatSummary(
 
 @HiltViewModel
 class StudentHomeViewModel @Inject constructor(
-    dateManager: DateManager,
+    dateTimeManager: DateTimeManager,
     private val studentProfileRepository: StudentProfileRepository,
     private val studentRecordRepository: StudentRecordRepository,
     private val studentClassRepository: StudentClassRepository,
@@ -52,7 +52,7 @@ class StudentHomeViewModel @Inject constructor(
     private val _allRecords = MutableStateFlow<List<Record>>(emptyList())
     val allRecords: StateFlow<List<Record>> = _allRecords.asStateFlow()
 
-    val formattedDate = dateManager.formattedDate
+    val formattedDate = dateTimeManager.formattedDate
 
     val statSummary: StateFlow<StudentHomeStatSummary> =
         allRecords.map { records ->

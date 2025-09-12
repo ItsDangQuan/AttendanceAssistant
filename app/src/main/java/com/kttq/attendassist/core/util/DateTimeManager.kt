@@ -11,16 +11,55 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.Duration
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoField
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DateManager @Inject constructor(
+class DateTimeManager @Inject constructor(
     @param:ApplicationContext private val context: Context
 ) {
+    companion object {
+        fun localTimeAsFormattedString(
+            positiveMinuteOffset: Long = 0
+        ): String {
+            val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+            return fmt.withZone(ZoneOffset.UTC)
+                .format(Instant.now().plus(Duration.ofMinutes(positiveMinuteOffset)))
+        }
+
+        fun serverUtcStringToLocalDisplay(
+            server: String,
+            outputPattern: String = "HH:mm"
+        ): String? {
+            val parser = DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM-dd HH:mm:ss")
+                .optionalStart()
+                .appendFraction(ChronoField.NANO_OF_SECOND, 1, 9, true)
+                .optionalEnd()
+                .toFormatter()
+
+            return try {
+                val ldt = LocalDateTime.parse(server, parser)
+                val instant = ldt.toInstant(ZoneOffset.UTC)
+                val zdtLocal = instant.atZone(ZoneId.systemDefault())
+                zdtLocal.format(DateTimeFormatter.ofPattern(outputPattern))
+            } catch (_: DateTimeParseException) {
+                null
+            }
+        }
+    }
+
     private val _formattedDate = MutableStateFlow(getCurrentDateAsString())
     val formattedDate: StateFlow<String> = _formattedDate
 
