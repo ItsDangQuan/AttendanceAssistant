@@ -48,7 +48,8 @@ fun TeacherProfileRoute(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentSize(Alignment.Center)
+                .wrapContentSize(Alignment.Center),
+            contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
         }

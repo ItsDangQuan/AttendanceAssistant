@@ -69,11 +69,11 @@ class TeacherSessionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRecentSession(n: Int): List<TeacherSession> {
+    override suspend fun getRecentSession(n: Int): List<TeacherSession>? {
         // TODO("Not yet implemented. Filter by time how?")
         // Hmm, from my opinion, we can sort by the start_time of the teacher session, and may be, get the
         //  5 latest ones.
-        return getAllSession()?.sortedBy { it.startTime }?.takeLast(n)?.reversed() ?: emptyList()
+        return getAllSession()?.sortedBy { it.startTime }?.takeLast(n)?.reversed()
     }
 
     override suspend fun getSessionByClassId(classId: Int): List<TeacherSession>? {

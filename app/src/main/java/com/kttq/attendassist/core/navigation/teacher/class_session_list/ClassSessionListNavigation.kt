@@ -18,8 +18,11 @@ fun NavController.navigateToTeacherSessionList(
 }
 
 fun NavGraphBuilder.teacherSessionList(
+    navigateToSession: (Int) -> Unit
 ) {
     composable<Destination.Teacher.ClassSessionList> {
-        ClassSessionListRoute()
+        ClassSessionListRoute(
+            navigateToSession = navigateToSession
+        )
     }
 }

@@ -21,6 +21,7 @@ import com.kttq.attendassist.core.ui.components.AppCard
 
 @Composable
 fun ClassSessionListRoute(
+    navigateToSession: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClassSessionListViewModel = hiltViewModel()
 ) {
@@ -36,6 +37,7 @@ fun ClassSessionListRoute(
     }
     else {
         ClassSessionListScreen(
+            navigateToSession = navigateToSession,
             sessionList = sessionList
         )
     }
@@ -43,6 +45,7 @@ fun ClassSessionListRoute(
 
 @Composable
 fun ClassSessionListScreen(
+    navigateToSession: (Int) -> Unit,
     sessionList: List<TeacherSession>,
     modifier: Modifier = Modifier
 ) {
@@ -51,7 +54,10 @@ fun ClassSessionListScreen(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
     ){
         items(sessionList) { session ->
-            AppCard {
+            AppCard (
+                clickable = true,
+                onClick = { navigateToSession(session.sessionId) }
+            ) {
                 AppBodyPrimary(text = "Session ${session.sessionId}")
                 AppBodyPrimary(text = "Start time: ${session.startTime}")
             }

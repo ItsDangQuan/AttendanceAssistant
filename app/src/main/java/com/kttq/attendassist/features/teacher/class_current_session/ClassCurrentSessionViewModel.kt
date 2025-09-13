@@ -39,11 +39,11 @@ class ClassCurrentSessionViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ClassCurrentSessionUiState())
     val uiState: StateFlow<ClassCurrentSessionUiState> = _uiState.asStateFlow()
 
-    private val _studentsList = MutableStateFlow<List<StudentProfile>>(emptyList())
-    val studentsList: StateFlow<List<StudentProfile>> = _studentsList.asStateFlow()
+    private val _studentsList = MutableStateFlow<List<StudentProfile>?>(null)
+    val studentsList: StateFlow<List<StudentProfile>?> = _studentsList.asStateFlow()
 
-    private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>>(emptyList())
-    val currentsStudentsList: StateFlow<List<StudentProfile>> = _currentsStudentsList.asStateFlow()
+    private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>?>(null)
+    val currentsStudentsList: StateFlow<List<StudentProfile>?> = _currentsStudentsList.asStateFlow()
 
     private var pollingJob: Job? = null
 
@@ -55,20 +55,20 @@ class ClassCurrentSessionViewModel @Inject constructor(
         pollingJob?.cancel() // prevent duplicate jobs
         pollingJob = viewModelScope.launch {
             val currentSession = teacherSessionRepository.getSessionBySessionId(sessionId)
-            if (currentSession == null) return@launch
-
+            if (currentSession == null)
+                return@launch
             while (isActive) {
                 try {
                     _studentsList.value =
-                        teacherClassRepository.getAllStudentProfileInClass(currentSession.classId)?:emptyList()
+                        teacherClassRepository.getAllStudentProfileInClass(currentSession.classId)
 
                     _currentsStudentsList.value =
                         teacherSessionRepository.getStudentInSession(
                             currentSession.classId,
                             currentSession.sessionId
-                        ) ?:emptyList()
-                } catch (e: Exception) {
-                    // log error or update UI state
+                        )
+                } catch (_: Exception) {
+                    return@launch
                 }
 
                 delay(5_000) // refresh every 5 seconds

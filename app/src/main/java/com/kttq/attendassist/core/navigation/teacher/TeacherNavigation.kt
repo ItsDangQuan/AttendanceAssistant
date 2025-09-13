@@ -56,6 +56,8 @@ fun NavGraphBuilder.teacherNavigation(
         teacherClassPastSession()
 
         teacherClassStudentList()
-        teacherSessionList()
+        teacherSessionList(
+            navigateToSession = navigateToSessionDetail
+        )
     }
 }

@@ -29,8 +29,8 @@ class TeacherHomeViewModel @Inject constructor(
 
     val formattedDate = dateTimeManager.formattedDate
 
-    private val _recentSession = MutableStateFlow<List<TeacherSession>>(emptyList())
-    val recentSession: StateFlow<List<TeacherSession>> = _recentSession.asStateFlow()
+    private val _recentSession = MutableStateFlow<List<TeacherSession>?>(null)
+    val recentSession: StateFlow<List<TeacherSession>?> = _recentSession.asStateFlow()
 
     init {
         fetchCurrentUser()

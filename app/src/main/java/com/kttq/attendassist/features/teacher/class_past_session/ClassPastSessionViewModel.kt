@@ -27,8 +27,8 @@ class ClassPastSessionViewModel @Inject constructor(
     private val _session = MutableStateFlow<TeacherSession?>(null)
     val session: StateFlow<TeacherSession?> = _session.asStateFlow()
 
-    private val _studentsList = MutableStateFlow<List<StudentProfile>>(emptyList())
-    val studentsList: StateFlow<List<StudentProfile>> = _studentsList.asStateFlow()
+    private val _studentsList = MutableStateFlow<List<StudentProfile>?>(null)
+    val studentsList: StateFlow<List<StudentProfile>?> = _studentsList.asStateFlow()
 
     private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>?>(null)
     val currentsStudentsList: StateFlow<List<StudentProfile>?> = _currentsStudentsList.asStateFlow()
@@ -48,7 +48,7 @@ class ClassPastSessionViewModel @Inject constructor(
             if (session == null) return@launch
             _session.value = session
             _studentsList.value =
-                teacherClassRepository.getAllStudentProfileInClass(session.classId)?:emptyList()
+                teacherClassRepository.getAllStudentProfileInClass(session.classId)
             _currentsStudentsList.value = teacherSessionRepository.getStudentInSession(session.classId, session.sessionId)
 
         }

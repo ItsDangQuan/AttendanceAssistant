@@ -2,10 +2,13 @@ package com.kttq.attendassist.features.teacher.home
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -57,7 +60,7 @@ fun TeacherHomeRoute(
 fun TeacherHomeScreen(
     userName: String,
     date: String,
-    recentSessions: List<TeacherSession>,
+    recentSessions: List<TeacherSession>?,
     navigateToSession: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -75,31 +78,49 @@ fun TeacherHomeScreen(
             thickness = dimensionResource(R.dimen.divider_height),
         )
         AppSectionTitle("Recent Sessions")
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            items(
-                recentSessions.size
+        if (recentSessions == null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
             ) {
-                AppCard(
-                    clickable = true,
-                    onClick = {
-                        navigateToSession(recentSessions[it].sessionId)
-                    }
+                CircularProgressIndicator()
+            }
+        }
+        else {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(
+                    dimensionResource(R.dimen.padding_medium)
+                ),
+                contentPadding = PaddingValues(
+                    vertical = dimensionResource(R.dimen.padding_small)
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
+
+
+            ) {
+                items(
+                    recentSessions.size
                 ) {
-                    AppBodyPrimary(
-                        ("Session " + recentSessions[it].sessionId.toString() + " - ") +
-                                (recentSessions[it].className ?: "")
-                    )
-                    AppBodySecondary(
-                        recentSessions[it].courseId + " - " +
-                                recentSessions[it].courseName
-                    )
+                    AppCard(
+                        clickable = true,
+                        onClick = {
+                            navigateToSession(recentSessions[it].sessionId)
+                        },
+                    ) {
+                        AppBodyPrimary(
+                            ("Session " + recentSessions[it].sessionId.toString() + " - ") +
+                                    (recentSessions[it].className ?: "")
+                        )
+                        AppBodySecondary(
+                            recentSessions[it].courseId + " - " +
+                                    recentSessions[it].courseName
+                        )
+                    }
                 }
             }
-
         }
     }
 }
