@@ -129,6 +129,7 @@ class StudentHomeViewModel @Inject constructor(
         _uiState.update { it.copy(isScanning = true) }
         bleScanner.startScan(
             onSuccess = { result ->
+                Log.d("StudentHomeViewModel", "Scan result: $result")
                 //  Hmm, may be the result should combine classId and sessionId,
                 //  The actual data may be not like this, i have just give an example
                 val res = ClassSessionCodec.unpack(result)

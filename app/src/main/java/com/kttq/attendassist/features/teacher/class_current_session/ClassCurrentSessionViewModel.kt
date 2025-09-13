@@ -13,8 +13,12 @@ import com.kttq.attendassist.core.data.repositories.teacher.TeacherClassReposito
 import com.kttq.attendassist.core.data.repositories.teacher.TeacherSessionRepository
 import com.kttq.attendassist.core.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,37 +33,55 @@ class ClassCurrentSessionViewModel @Inject constructor(
     private val teacherSessionRepository: TeacherSessionRepository,
     private val bleAdvertiser: BleAdvertiser
 ) : ViewModel() {
+
     val sessionId = savedStateHandle.toRoute<Destination.Teacher.ClassCurrentSession>().sessionId
 
     private val _uiState = MutableStateFlow(ClassCurrentSessionUiState())
-    val uiState = _uiState.asStateFlow()
+    val uiState: StateFlow<ClassCurrentSessionUiState> = _uiState.asStateFlow()
 
-    private val _studentsList = MutableStateFlow<List<StudentProfile>?>(null)
-    val studentsList = _studentsList.asStateFlow()
+    private val _studentsList = MutableStateFlow<List<StudentProfile>>(emptyList())
+    val studentsList: StateFlow<List<StudentProfile>> = _studentsList.asStateFlow()
 
-    private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>?>(null)
-    val currentsStudentsList = _currentsStudentsList.asStateFlow()
+    private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>>(emptyList())
+    val currentsStudentsList: StateFlow<List<StudentProfile>> = _currentsStudentsList.asStateFlow()
+
+    private var pollingJob: Job? = null
 
     init {
-        fetchData()
+        startPolling()
     }
 
-    fun fetchData() {
-        viewModelScope.launch {
+    private fun startPolling() {
+        pollingJob?.cancel() // prevent duplicate jobs
+        pollingJob = viewModelScope.launch {
             val currentSession = teacherSessionRepository.getSessionBySessionId(sessionId)
-            if (currentSession == null) {
-                return@launch
-            }
+            if (currentSession == null) return@launch
 
-            _studentsList.value = teacherClassRepository.getAllStudentProfileInClass(currentSession.classId)
-            _currentsStudentsList.value = teacherSessionRepository.getStudentInSession(currentSession.classId, currentSession.sessionId)
+            while (isActive) {
+                try {
+                    _studentsList.value =
+                        teacherClassRepository.getAllStudentProfileInClass(currentSession.classId)?:emptyList()
+
+                    _currentsStudentsList.value =
+                        teacherSessionRepository.getStudentInSession(
+                            currentSession.classId,
+                            currentSession.sessionId
+                        ) ?:emptyList()
+                } catch (e: Exception) {
+                    // log error or update UI state
+                }
+
+                delay(5_000) // refresh every 5 seconds
+            }
         }
     }
+
     fun stopCurrentAttendanceSession() {
         viewModelScope.launch {
             bleAdvertiser.stopAdvertising()
+            pollingJob?.cancel() // ⬅️ stops refresh loop immediately
             _uiState.value = _uiState.value.copy(isStop = true)
         }
-     }
-
+    }
 }
+

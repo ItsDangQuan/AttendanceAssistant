@@ -67,7 +67,7 @@ fun ClassCurrentSessionScreen(
             .padding(dimensionResource(R.dimen.padding_medium))
     ) {
         AppSectionTitle("Student in class")
-        LazyColumn (
+        LazyColumn(
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ){
@@ -82,6 +82,7 @@ fun ClassCurrentSessionScreen(
         AppSectionTitle("Absent student")
         LazyColumn (
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
+
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ){
             items(absentStudent) { student ->
