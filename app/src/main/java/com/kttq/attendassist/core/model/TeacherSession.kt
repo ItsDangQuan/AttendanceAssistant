@@ -3,6 +3,7 @@ package com.kttq.attendassist.core.model
 import com.kttq.attendassist.core.data.network.dtos.ClassInformation
 import com.kttq.attendassist.core.data.network.dtos.SessionInfo
 import com.kttq.attendassist.core.data.network.dtos.SessionOut
+import com.kttq.attendassist.core.util.DateTimeManager
 
 data class TeacherSession(
     val sessionId: Int,
@@ -21,8 +22,8 @@ data class TeacherSession(
         classInformation.className,
         classInformation.courseId,
         classInformation.courseName,
-        sessionOut.startTime,
-        sessionOut.endTime
+        DateTimeManager.serverUtcStringToLocalDisplay(sessionOut.startTime) ?: "",
+        DateTimeManager.serverUtcStringToLocalDisplay(sessionOut.endTime) ?: "",
     )
 
     constructor(
@@ -34,7 +35,7 @@ data class TeacherSession(
         classInformation.className,
         classInformation.courseId,
         classInformation.courseName,
-        sessionInfo.startTime,
-        sessionInfo.endTime
+        DateTimeManager.serverUtcStringToLocalDisplay(sessionInfo.startTime) ?: "",
+        DateTimeManager.serverUtcStringToLocalDisplay(sessionInfo.endTime) ?: "",
     )
 }

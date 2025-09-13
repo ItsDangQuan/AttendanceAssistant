@@ -1,13 +1,16 @@
-package com.kttq.attendassist.features.teacher.class_past_session
+package com.kttq.attendassist.features.teacher.class_current_session
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,96 +18,100 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.model.StudentProfile
-import com.kttq.attendassist.core.model.TeacherSession
-import com.kttq.attendassist.core.ui.components.AppBodySecondary
+import com.kttq.attendassist.core.ui.components.AppBodyPrimary
+import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppCard
+import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
-@Composable
-fun ClassPastSessionRoute(
-    modifier: Modifier = Modifier,
-    viewModel: ClassPastSessionViewModel = hiltViewModel()
-) {
-    val totalStudent = viewModel.studentsList.collectAsStateWithLifecycle().value
-    val currentStudent =
-        viewModel.currentsStudentsList.collectAsStateWithLifecycle().value ?: emptyList()
-    val absentStudent = totalStudent - currentStudent
-    val session = viewModel.session.collectAsStateWithLifecycle().value
 
-    ClassPastSessionScreen(
-        session = session,
+@Composable
+fun ClassCurrentSessionRoute(
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: ClassCurrentSessionViewModel = hiltViewModel()
+) {
+
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val totalStudent = viewModel.studentsList.collectAsStateWithLifecycle().value
+    val currentStudent = viewModel.currentsStudentsList.collectAsStateWithLifecycle().value
+    val absentStudent = totalStudent - currentStudent
+
+
+    LaunchedEffect(uiState.isStop) {
+        if (uiState.isStop) {
+            onNavigateBack()
+        }
+    }
+
+    ClassCurrentSessionScreen(
         currentStudent = currentStudent,
         absentStudent = absentStudent,
+        onStopAdvertise = {
+            viewModel.stopCurrentAttendanceSession()
+        },
         modifier = modifier
     )
 }
 
 @Composable
-fun ClassPastSessionScreen(
-    session: TeacherSession?,
+fun ClassCurrentSessionScreen(
     currentStudent: List<StudentProfile>,
     absentStudent: List<StudentProfile>,
+    onStopAdvertise: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+            .fillMaxSize()
+            .padding(dimensionResource(R.dimen.padding_medium))
     ) {
-        AppSectionTitle("Session Information")
-        AppBodySecondary("Session ID: ${session?.sessionId}")
-        AppBodySecondary("Course ID: ${session?.courseId}")
-        AppBodySecondary("Course Name: ${session?.courseName}")
-        AppBodySecondary("Class Name: ${session?.className}")
-
-        HorizontalDivider(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)))
-        AppSectionTitle("Student in class")
-        LazyColumn(
-            modifier = Modifier
-                .padding(bottom = dimensionResource(R.dimen.padding_medium))
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1f)
         ) {
-            items(currentStudent) { student ->
-                AppCard(modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_small)))
-                {
-                    AppBodySecondary(text = student.studentId)
-                    AppBodySecondary(text = student.firstName + " " + student.lastName)
+            AppSectionTitle("Student in class")
+            LazyColumn(
+                contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
+                modifier = Modifier.weight(1f)
+            ) {
+                items(currentStudent) { student ->
+                    AppCard {
+                        AppBodyPrimary(text = student.studentId)
+                        AppBodyPrimary(text = student.firstName + " " + student.lastName)
+                    }
+                }
+            }
+            HorizontalDivider(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)))
+            AppSectionTitle("Absent student")
+            LazyColumn(
+                contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
+                modifier = Modifier.weight(1f)
+            ) {
+                items(absentStudent) { student ->
+                    AppCard {
+                        AppBodyPrimary(text = student.studentId)
+                        AppBodyPrimary(text = student.firstName + " " + student.lastName)
+                    }
                 }
             }
         }
-        HorizontalDivider(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)))
-        AppSectionTitle("Absent student")
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
-        ) {
-            items(absentStudent) { student ->
-                AppCard {
-                    AppBodySecondary(text = student.studentId)
-                    AppBodySecondary(text = student.firstName + " " + student.lastName)
-                }
-            }
+        AppButton(onClick = onStopAdvertise, modifier = modifier.fillMaxWidth()) {
+            AppLabelPrimary("Stop Attendance")
         }
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
-private fun ClassPastSessionScreenPreview() {
+private fun CurrentSessionScreenPreview() {
     AttendanceAssistantTheme {
-        ClassPastSessionScreen(
-            session = TeacherSession(
-                sessionId = 0,
-                classId = 0,
-                className = "ClassName",
-                courseId = "CourseId",
-                courseName = "CourseName",
-                startTime = "2025-09-14 02:21",
-                endTime = "2025-09-14 04:21"
-            ),
-            currentStudent = listOf(
+        ClassCurrentSessionScreen(
+            listOf(
                 StudentProfile(
                     studentId = "InClassStudentIdStart",
                     email = "Email",
@@ -166,7 +173,7 @@ private fun ClassPastSessionScreenPreview() {
                     lastName = "LastName",
                 ),
             ),
-            absentStudent = listOf(
+            listOf(
                 StudentProfile(
                     studentId = "AbsentStudentIdStart",
                     email = "Email",
@@ -227,7 +234,8 @@ private fun ClassPastSessionScreenPreview() {
                     firstName = "FirstName",
                     lastName = "LastName",
                 ),
-            )
+            ),
+            {}
         )
     }
 }

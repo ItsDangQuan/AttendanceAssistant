@@ -2,6 +2,7 @@ package com.kttq.attendassist.core.model
 
 import com.kttq.attendassist.core.data.network.dtos.ClassInformation
 import com.kttq.attendassist.core.data.network.dtos.SessionOut
+import com.kttq.attendassist.core.util.DateTimeManager
 
 data class StudentSession(
     val sessionId: Int,
@@ -23,8 +24,8 @@ data class StudentSession(
         classInformation.teacherName,
         classInformation.courseId,
         classInformation.courseName,
-        sessionOut.startTime,
-        sessionOut.endTime
+        DateTimeManager.serverUtcStringToLocalDisplay(sessionOut.startTime) ?: "",
+        DateTimeManager.serverUtcStringToLocalDisplay(sessionOut.endTime) ?: "",
     )
 }
 
