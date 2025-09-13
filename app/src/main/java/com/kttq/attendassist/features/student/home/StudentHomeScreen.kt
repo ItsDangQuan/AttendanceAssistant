@@ -5,6 +5,7 @@ package com.kttq.attendassist.features.student.home
 // import androidx.compose.runtime.rememberCoroutineScope // Not needed here as LaunchedEffect provides a scope
 // import androidx.compose.ui.unit.dp // Commented out as it's not used in current code
 import android.bluetooth.le.ScanCallback
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,8 +51,7 @@ fun StudentHomeRoute(
     val statSummary by viewModel.statSummary.collectAsStateWithLifecycle() // Collect statSummary
     val userProfile by viewModel.userProfile.collectAsStateWithLifecycle()
     val date by viewModel.formattedDate.collectAsStateWithLifecycle()
-    val classId = viewModel.classId.collectAsStateWithLifecycle().value
-    val sessionId = viewModel.sessionId.collectAsStateWithLifecycle().value
+    val scanRes = viewModel.scanResult.collectAsStateWithLifecycle().value
     BackHandler {
         onSentToBack()
     }
@@ -63,9 +63,13 @@ fun StudentHomeRoute(
         }
     }
 
-    LaunchedEffect(classId, sessionId) {
-        if (classId != null && sessionId != null) {
+    LaunchedEffect(scanRes) {
+        if (scanRes.isNotEmpty() && uiState.isScanning) {
+            Log.d("StudentHomeRoute", "Scan res size: ${scanRes.size}")
+            val sessionId = scanRes.first().second
+            Log.d("StudentHomeRoute", "Session ID: $sessionId")
             viewModel.stopScan()
+            viewModel.clearScanResult()
             navigateToNewSession(sessionId)
         }
     }

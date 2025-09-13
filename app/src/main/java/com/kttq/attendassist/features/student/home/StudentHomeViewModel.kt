@@ -1,5 +1,6 @@
 package com.kttq.attendassist.features.student.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.ble.scanner.BleScanner
@@ -53,12 +54,8 @@ class StudentHomeViewModel @Inject constructor(
     private val _allRecords = MutableStateFlow<List<Record>>(emptyList())
     val allRecords: StateFlow<List<Record>> = _allRecords.asStateFlow()
 
-    private val _classId = MutableStateFlow<String?>(null)
-    val classId: StateFlow<String?> = _classId.asStateFlow()
-
-    private val _sessionId = MutableStateFlow<String?>(null)
-    val sessionId: StateFlow<String?> = _sessionId.asStateFlow()
-
+    private val _scanResult = MutableStateFlow<List<Pair<String, String>>>(emptyList())
+    val scanResult: StateFlow<List<Pair<String, String>>> = _scanResult.asStateFlow()
     val formattedDate = dateTimeManager.formattedDate
 
     val statSummary: StateFlow<StudentHomeStatSummary> =
@@ -127,6 +124,8 @@ class StudentHomeViewModel @Inject constructor(
     ) {
         // TODO: Ensure Bluetooth permissions are granted before calling startScan
 
+        clearScanResult()
+        Log.d("StudentHomeViewModel", "Scan started")
         _uiState.update { it.copy(isScanning = true) }
         bleScanner.startScan(
             onSuccess = { result ->
@@ -139,19 +138,20 @@ class StudentHomeViewModel @Inject constructor(
                 val sessionIdRes = res.second.toString()
                 viewModelScope.launch {
                     if (studentClassRepository.haveStudent(classIdRes) == true) {
-                        _classId.value = classIdRes
-                        _sessionId.value = sessionIdRes
+                        _scanResult.update {
+                            it + Pair(classIdRes, sessionIdRes)
+                        }
                     }
                 }
-                if (classId.value != null && sessionId.value != null) {
-                    stopScan()
+                if (_scanResult.value.isNotEmpty()) {
+                    bleScanner.stopScan()
                     true
                 }
                 else false
 
             },
             onFail = { errorCode ->
-                stopScan()
+                bleScanner.stopScan()
                 onScanFailure(errorCode)
             }
         )
@@ -159,10 +159,12 @@ class StudentHomeViewModel @Inject constructor(
 
     fun stopScan() {
         bleScanner.stopScan()
+        Log.d("StudentHomeViewModel", "Scan stopped")
         _uiState.update { it.copy(isScanning = false) }
     }
-
-
+    fun clearScanResult() {
+        _scanResult.value = emptyList()
+    }
     fun updateError(error: String?) {
         _uiState.update { it.copy(error = error) }
     }

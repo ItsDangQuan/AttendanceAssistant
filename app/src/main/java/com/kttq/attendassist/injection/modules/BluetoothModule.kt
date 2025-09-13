@@ -50,7 +50,6 @@ class BluetoothComponent {
     fun provideDefaultScanSettings(): ScanSettings {
         return ScanSettings.Builder()
             .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-            .setReportDelay(200)
             .build()
     }
 

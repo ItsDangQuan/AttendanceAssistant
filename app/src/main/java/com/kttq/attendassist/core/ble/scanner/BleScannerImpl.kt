@@ -43,24 +43,32 @@ class BleScannerImpl @Inject constructor(
             override fun onScanFailed(errorCode: Int) {
                 super.onScanFailed(errorCode)
                 onFail(errorCode)
+                Log.d("BleScannerImpl", "onScanFailed: $errorCode")
                 scanningState = false
             }
-            // @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
-            // override fun onScanResult(callbackType: Int, result: ScanResult) {
-            //     super.onScanResult(callbackType, result)
-            //     Log.d("BleScannerImpl", "onScanResult: ${result.toString()}")
-            //     val data = result.scanRecord?.serviceData?.values?.firstOrNull() ?: return
-            //     if (onSuccess(data)) stopScan()
-            //     scanningState = false
-            // }
+
+            @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
+            override fun onScanResult(callbackType: Int, result: ScanResult) {
+                super.onScanResult(callbackType, result)
+                Log.d("BleScannerImpl", "onScanResult: ${result.toString()}")
+                val data = result.scanRecord?.serviceData?.values?.firstOrNull() ?: return
+                if (onSuccess(data)) {
+                    bleScanner?.stopScan(this)
+                    Log.d("BleScannerImpl", "Stop scanning")
+                    scanningState = false
+                }
+            }
 
              @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
              override fun onBatchScanResults(results: List<ScanResult>) {
                  super.onBatchScanResults(results)
                  Log.d("BleScannerImpl", "onBatchScanResults: ${results.toString()}")
                  val data = results.firstOrNull()?.scanRecord?.serviceData?.values?.firstOrNull() ?: return
-                 if (onSuccess(data)) stopScan()
-                 scanningState = false
+                 if (onSuccess(data)) {
+                     bleScanner?.stopScan(this)
+                     Log.d("BleScannerImpl", "Stop scanning")
+                     scanningState = false
+                 }
              }
 
         }
