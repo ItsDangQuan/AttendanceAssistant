@@ -48,9 +48,19 @@ class ClassCurrentSessionViewModel @Inject constructor(
     private var pollingJob: Job? = null
 
     init {
+        fetchData()
         startPolling()
     }
 
+    private fun fetchData() {
+        viewModelScope.launch {
+            val currentSession = teacherSessionRepository.getSessionBySessionId(sessionId)
+            if (currentSession == null)
+                return@launch
+            _studentsList.value =
+                teacherClassRepository.getAllStudentProfileInClass(currentSession.classId)
+        }
+    }
     private fun startPolling() {
         pollingJob?.cancel() // prevent duplicate jobs
         pollingJob = viewModelScope.launch {
@@ -59,9 +69,6 @@ class ClassCurrentSessionViewModel @Inject constructor(
                 return@launch
             while (isActive) {
                 try {
-                    _studentsList.value =
-                        teacherClassRepository.getAllStudentProfileInClass(currentSession.classId)
-
                     _currentsStudentsList.value =
                         teacherSessionRepository.getStudentInSession(
                             currentSession.classId,
@@ -71,7 +78,7 @@ class ClassCurrentSessionViewModel @Inject constructor(
                     return@launch
                 }
 
-                delay(5_000) // refresh every 5 seconds
+                delay(10_000) // refresh every 5 seconds
             }
         }
     }

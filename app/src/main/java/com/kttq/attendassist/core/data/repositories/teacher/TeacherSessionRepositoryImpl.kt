@@ -131,6 +131,8 @@ class TeacherSessionRepositoryImpl @Inject constructor(
     ): List<StudentProfile>? {
         try {
             val response = recordService.getSessionRecords(sessionId)
+            if (response.code() == 404)
+                return emptyList()
             if (!response.isSuccessful) {
                 return null
             }
