@@ -77,16 +77,15 @@ class ClassSummaryViewModel @Inject constructor(
         )
 
     init {
-        if (classId.isNotBlank()) {
-            fetchData()
-        } else {
-            _uiState.update {
-                it.copy(
-                    isLoading = false,
-                    error = "Class ID not provided or invalid."
-                )
-            }
-        }
+        fetchData()
+//        } else {
+//            _uiState.update {
+//                it.copy(
+//                    isLoading = false,
+//                    error = "Class ID not provided or invalid."
+//                )
+//            }
+//        }
     }
 
     private fun fetchData() {

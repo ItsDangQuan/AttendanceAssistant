@@ -23,9 +23,9 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 @Composable
 fun ClassDetailRoute(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    navigateToSessionDetail: (String) -> Unit,
-    navigateToStudentDetail: (String) -> Unit,
-    navigateToCurrentSession: (String) -> Unit,
+    navigateToSessionDetail: (Int) -> Unit,
+    navigateToStudentDetail: (Int) -> Unit,
+    navigateToCurrentSession: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClassDetailViewModel = hiltViewModel(),
 ) {
@@ -52,7 +52,7 @@ fun ClassDetailRoute(
         }
     }
     LaunchedEffect(uiState.error) {
-        if(uiState.error != null) {
+        if (uiState.error != null) {
             onShowSnackbar(uiState.error, "OK")
             viewModel.clearError()
         }
@@ -63,8 +63,8 @@ fun ClassDetailRoute(
 fun ClassDetailScreen(
     classDetail: Class?,
     // isAdvertising: Boolean,
-    navigateToSessionDetail: (String) -> Unit,
-    navigateToStudentDetail: (String) -> Unit,
+    navigateToSessionDetail: (Int) -> Unit,
+    navigateToStudentDetail: (Int) -> Unit,
     startAdvertise: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -74,12 +74,12 @@ fun ClassDetailScreen(
             .padding(dimensionResource(R.dimen.padding_medium))
     ) {
         AppSectionTitle("Overview")
-        AppBodyPrimary("Class ID: ${classDetail?.classId?:"Loading..."}")
-        AppBodyPrimary("Course ID: ${classDetail?.classId?:"Loading..."}")
-        AppBodyPrimary("Course Name: ${classDetail?.courseName?:"Loading..."}")
+        AppBodyPrimary("Class ID: ${classDetail?.classId ?: "Loading..."}")
+        AppBodyPrimary("Course ID: ${classDetail?.classId ?: "Loading..."}")
+        AppBodyPrimary("Course Name: ${classDetail?.courseName ?: "Loading..."}")
         AppTextButton(
             onClick = {
-                if(classDetail != null) navigateToSessionDetail(classDetail.classId)
+                if (classDetail != null) navigateToSessionDetail(classDetail.classId)
             },
             content = {
                 AppLabelPrimary(
@@ -111,7 +111,8 @@ private fun ClassDetailScreenPreview() {
     AttendanceAssistantTheme {
         ClassDetailScreen(
             classDetail = Class(
-                classId = "123",
+                classId = 0,
+                className = "23TT2",
                 semester = "Autumn",
                 year = 2025,
                 courseId = "CS161",

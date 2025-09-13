@@ -46,7 +46,7 @@ fun ClassPastSessionScreen(
         ) {
             items(sessionList?:emptyList()) { session ->
                 AppCard {
-                    AppLabelPrimary(session.sessionId)
+                    AppLabelPrimary(session.sessionId.toString())
                     AppLabelPrimary(session.endTime)
                 }
             }

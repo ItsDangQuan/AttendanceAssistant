@@ -41,7 +41,7 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 fun StudentHomeRoute(
     onSentToBack: () -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    navigateToNewSession: (String) -> Unit,
+    navigateToNewSession: (Int) -> Unit,
 
     modifier: Modifier = Modifier,
     navigateToSummary: () -> Unit = {},

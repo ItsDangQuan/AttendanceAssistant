@@ -23,6 +23,7 @@ sealed class Destination {
         private fun listDestinations(): List<KClass<out Destination>> =
             collectClasses(Destination::class)
                 .filter { it.findAnnotation<Subgraph>() == null }
+
         val destinations: List<KClass<out Destination>> = listDestinations()
     }
 
@@ -49,12 +50,12 @@ sealed class Destination {
 
         @Serializable
         data class SessionConfirm(
-            val sessionId: String,
+            val sessionId: Int,
         ) : Student()
 
         @Serializable
         data class ClassSummary(
-            val classId: String,
+            val classId: Int,
         ) : Student()
     }
 
@@ -75,22 +76,22 @@ sealed class Destination {
 
         @Serializable
         data class ClassDetail(
-            val classId: String,
+            val classId: Int,
         ) : Teacher()
 
         @Serializable
         data class ClassStudentList(
-            val classId: String,
+            val classId: Int,
         ) : Teacher()
 
         @Serializable
         data class ClassPastSession(
-            val classId: String,
+            val classId: Int,
         ) : Teacher()
 
         @Serializable
         data class ClassCurrentSession(
-            val sessionId: String
+            val sessionId: Int
         ) : Teacher()
     }
 
@@ -105,7 +106,7 @@ data class UiMeta(
     @field:DrawableRes @param:DrawableRes val unselectedIconRes: Int? = null,
     @field:StringRes @param:StringRes val iconTextRes: Int? = null,
 
-)
+    )
 
 val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
     Destination.Redirect::class to UiMeta(
@@ -186,8 +187,7 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         showTopBar = false,
         selectedIconRes = R.drawable.ic_view_kanban,
         unselectedIconRes = R.drawable.ic_view_kanban
-    )
-    ,
+    ),
     Destination.Teacher.ClassDetail::class to UiMeta(
         isTopLevel = true,
         showNavigation = false,
@@ -206,8 +206,7 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         showNavigation = false,
         showTopBar = true,
         title = "Class Past Session"
-    )
-    ,
+    ),
     Destination.Teacher.ClassCurrentSession::class to UiMeta(
         isTopLevel = true,
         showNavigation = false,
@@ -215,6 +214,7 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         title = "Class Current Session"
     )
 )
+
 fun Destination.uiMeta(): UiMeta = uiMetaRegistry[this::class] ?: UiMeta()
 
 // TODO: Using these for testing. These should be moved to somewhere in the future.

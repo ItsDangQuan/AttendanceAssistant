@@ -27,7 +27,7 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 @Composable
 fun TeacherHomeRoute(
     onSentToBack: () -> Unit,
-    navigateToSession: (String) -> Unit,
+    navigateToSession: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TeacherHomeViewModel = hiltViewModel()
 ) {
@@ -43,7 +43,7 @@ fun TeacherHomeRoute(
     //     modifier = modifier
     // )
     TeacherHomeScreen(
-        userName = teacherProfile?.firstName?: "User",
+        userName = teacherProfile?.firstName ?: "User",
         date = date,
         recentSessions = viewModel.recentSession.collectAsStateWithLifecycle().value,
         navigateToSession = navigateToSession,
@@ -56,7 +56,7 @@ fun TeacherHomeScreen(
     userName: String,
     date: String,
     recentSessions: List<TeacherSession>,
-    navigateToSession: (String) -> Unit,
+    navigateToSession: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -87,7 +87,7 @@ fun TeacherHomeScreen(
                         navigateToSession(recentSessions[it].sessionId)
                     }
                 ) {
-                    AppLabelPrimary(recentSessions[it].classId)
+                    AppLabelPrimary(recentSessions[it].className ?: "")
                     AppLabelSecondary(
                         recentSessions[it].courseId + " - " +
                                 recentSessions[it].courseName

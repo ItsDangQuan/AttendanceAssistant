@@ -54,8 +54,8 @@ class StudentHomeViewModel @Inject constructor(
     private val _allRecords = MutableStateFlow<List<Record>>(emptyList())
     val allRecords: StateFlow<List<Record>> = _allRecords.asStateFlow()
 
-    private val _scanResult = MutableStateFlow<List<Pair<String, String>>>(emptyList())
-    val scanResult: StateFlow<List<Pair<String, String>>> = _scanResult.asStateFlow()
+    private val _scanResult = MutableStateFlow<List<Pair<Int, Int>>>(emptyList())
+    val scanResult: StateFlow<List<Pair<Int, Int>>> = _scanResult.asStateFlow()
     val formattedDate = dateTimeManager.formattedDate
 
     val statSummary: StateFlow<StudentHomeStatSummary> =
@@ -119,7 +119,7 @@ class StudentHomeViewModel @Inject constructor(
 
     // onScanSuccess takes the session id as a string
     fun startScan(
-        onScanSuccess: (String) -> Unit,
+        onScanSuccess: (Int) -> Unit,
         onScanFailure: (Int) -> Unit
     ) {
         // TODO: Ensure Bluetooth permissions are granted before calling startScan
@@ -135,7 +135,7 @@ class StudentHomeViewModel @Inject constructor(
                 // I think that you will not agree with this,
                 //  but this may be the best way to do it
                 val classIdRes = res.first
-                val sessionIdRes = res.second.toString()
+                val sessionIdRes = res.second
                 viewModelScope.launch {
                     if (studentClassRepository.haveStudent(classIdRes) == true) {
                         _scanResult.update {
@@ -146,8 +146,7 @@ class StudentHomeViewModel @Inject constructor(
                 if (_scanResult.value.isNotEmpty()) {
                     bleScanner.stopScan()
                     true
-                }
-                else false
+                } else false
 
             },
             onFail = { errorCode ->
@@ -162,9 +161,11 @@ class StudentHomeViewModel @Inject constructor(
         Log.d("StudentHomeViewModel", "Scan stopped")
         _uiState.update { it.copy(isScanning = false) }
     }
+
     fun clearScanResult() {
         _scanResult.value = emptyList()
     }
+
     fun updateError(error: String?) {
         _uiState.update { it.copy(error = error) }
     }

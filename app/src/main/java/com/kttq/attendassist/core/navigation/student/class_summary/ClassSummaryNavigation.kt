@@ -9,7 +9,7 @@ import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.features.student.class_summary.ClassSummaryRoute
 
 fun NavController.navigateToClassSummary(
-    classId: String,
+    classId: Int,
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
     },

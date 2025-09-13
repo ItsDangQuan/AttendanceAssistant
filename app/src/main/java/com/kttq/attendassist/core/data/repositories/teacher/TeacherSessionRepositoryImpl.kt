@@ -88,7 +88,7 @@ class TeacherSessionRepositoryImpl @Inject constructor(
             }
             val sessionInfoList = sessionInfoResponse.body() ?: return null
             return sessionInfoList.map {
-                return@map TeacherSession(it, classId, classInformation)
+                return@map TeacherSession(it, classInformation)
             }
         } catch (_: Exception) {
             return null

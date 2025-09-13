@@ -18,14 +18,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.UUID
 import javax.inject.Inject
 
 
 data class ClassDetailUiState(
     val isLoading: Boolean = true,
     val classDetails: Class? = null,
-    val activeSessionId: String? = null,            // ID of the session currently being advertised
+    val activeSessionId: Int? = null,            // ID of the session currently being advertised
     // val isAdvertising: Boolean = false,             // Reflects ViewModel's understanding of advertising state
     val error: String? = null
 )
@@ -39,7 +38,7 @@ class ClassDetailViewModel @Inject constructor(
     private val teacherUserRepository: TeacherProfileRepository,
 ) : ViewModel() {
 
-    val classId: String = savedStateHandle.toRoute<Destination.Teacher.ClassDetail>().classId
+    val classId = savedStateHandle.toRoute<Destination.Teacher.ClassDetail>().classId
 
     private val _uiState = MutableStateFlow(ClassDetailUiState())
     val uiState: StateFlow<ClassDetailUiState> = _uiState.asStateFlow()
@@ -49,15 +48,13 @@ class ClassDetailViewModel @Inject constructor(
     // For a reactive approach, BleAdvertiser should expose its state as a Flow.
 
     init {
-
-        if (classId.isNotBlank()) {
-            fetchData()
+        fetchData()
             // TODO: If BleAdvertiser offers a way to get initial advertising state (e.g., a simple boolean getter),
             // you might want to initialize _uiState.isAdvertising with it here, though it won't be reactive.
             // For now, it defaults to false in ClassDetailUiState.
-        } else {
-            _uiState.update { it.copy(isLoading = false, error = "Class ID not found.") }
-        }
+//        } else {
+//            _uiState.update { it.copy(isLoading = false, error = "Class ID not found.") }
+//        }
     }
 
     fun fetchData() {
@@ -70,7 +67,7 @@ class ClassDetailViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         classDetails = details,
-                        error = if (details == null && classId.isNotBlank()) "Could not load class details for ID: $classId" else null
+                        error = if (details == null) "Could not load class details for ID: $classId" else null
                     )
                 }
             } catch (e: Exception) {
@@ -99,11 +96,10 @@ class ClassDetailViewModel @Inject constructor(
                 val teacherId = teacherUserRepository.getCurrentTeacherProfile()?.teacherId
                 val newSession =
                     teacherSessionRepository.createNewSession(classId, teacherId ?: "N/A")
-                val sessionUuid = UUID.fromString(newSession.sessionId)
 
 
                 bleAdvertiser.startAdvertising(
-                    ClassSessionCodec.pack(newSession.classId, sessionUuid)
+                    ClassSessionCodec.pack(newSession.classId, newSession.sessionId)
                 )
                 _uiState.update {
                     it.copy(
@@ -162,7 +158,7 @@ class ClassDetailViewModel @Inject constructor(
         _uiState.update { it.copy(error = null) }
     }
 
-    fun resetUiState(){
+    fun resetUiState() {
         _uiState.update {
             it.copy(
                 isLoading = true,

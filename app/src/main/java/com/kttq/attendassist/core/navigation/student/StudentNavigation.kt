@@ -24,9 +24,9 @@ fun NavController.navigateToStudent(
 fun NavGraphBuilder.studentNavigation(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onSentToBack: () -> Unit,
-    navigateToNewSession: (String) -> Unit,
+    navigateToNewSession: (Int) -> Unit,
     navigateToRedirect: () -> Unit,
-    navigateToClassSummary: (String) -> Unit
+    navigateToClassSummary: (Int) -> Unit
 ) {
     navigation<Destination.Student.Graph>(
         startDestination = Destination.Student.Home

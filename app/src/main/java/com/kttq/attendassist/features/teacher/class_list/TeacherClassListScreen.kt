@@ -24,7 +24,7 @@ import com.kttq.attendassist.core.model.Class
 
 @Composable
 fun TeacherClassListRoute(
-    navigateToClass: (String) -> Unit,
+    navigateToClass: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TeacherClassListViewModel = hiltViewModel()
 ) {
@@ -40,7 +40,7 @@ fun TeacherClassListRoute(
 fun TeacherClassListScreen(
     currentClasses: List<Class>,
     pastClasses: List<Class>,
-    navigateToClass: (String) -> Unit,
+    navigateToClass: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -63,7 +63,7 @@ fun TeacherClassListScreen(
                     clickable = true,
                     onClick = { navigateToClass(currentClasses[it].classId) }
                 ) {
-                    AppLabelPrimary(currentClasses[it].classId)
+                    AppLabelPrimary(currentClasses[it].className ?: "")
                     AppLabelSecondary(
                         currentClasses[it].courseId + " - " +
                                 currentClasses[it].courseName

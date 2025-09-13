@@ -10,7 +10,7 @@ import com.kttq.attendassist.features.teacher.class_detail.ClassDetailRoute
 
 
 fun NavController.navigateToClassDetail(
-    classId: String,
+    classId: Int,
     navOptions: NavOptions? = navOptions {
         launchSingleTop = true
     }
@@ -20,9 +20,9 @@ fun NavController.navigateToClassDetail(
 
 fun NavGraphBuilder.teacherClassDetail(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    navigateToSessionDetail: (String) -> Unit,
-    navigateToStudentDetail: (String) -> Unit,
-    navigateToCurrentSession: (String) -> Unit,
+    navigateToSessionDetail: (Int) -> Unit,
+    navigateToStudentDetail: (Int) -> Unit,
+    navigateToCurrentSession: (Int) -> Unit,
 ) {
     composable<Destination.Teacher.ClassDetail> {
         ClassDetailRoute(

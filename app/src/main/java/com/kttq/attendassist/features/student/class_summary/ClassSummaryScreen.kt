@@ -125,7 +125,7 @@ fun ClassSummaryScreen(
                     items = records, // Changed to use records directly for better stability with keys if available
                     key = { record -> record.recordId } // Assuming recordId is a stable unique key
                 ) { record ->
-                    AppCard (
+                    AppCard(
                         modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
                     ) {
                         Row(
@@ -157,7 +157,8 @@ fun ClassSummaryScreen(
 @Composable
 private fun ClassSummaryScreenPreview() {
     val sampleClassDetail = Class(
-        classId = "CLS101",
+        classId = 0,
+        className = "23TT2",
         courseId = "CSE303",
         semester = "Spring",
         year = 2024,
@@ -171,25 +172,25 @@ private fun ClassSummaryScreenPreview() {
             recordId = "REC001",
             studentId = "STU001",
             status = "Attended",
-            sessionId = "SES001"
+            sessionId = 0,
         ),
         Record(
             recordId = "REC003",
             studentId = "STU001",
             status = "LeaveAccepted",
-            sessionId = "SES003"
+            sessionId = 1,
         ),
         Record(
             recordId = "REC004",
             studentId = "STU001",
             status = "LeaveUnaccepted",
-            sessionId = "SES004"
+            sessionId = 2
         ),
         Record(
             recordId = "REC005",
             studentId = "STU001",
             status = "Attended",
-            sessionId = "SES005",
+            sessionId = 3
         )
     )
 
@@ -213,7 +214,8 @@ private fun ClassSummaryScreenPreview() {
 @Composable
 private fun ClassSummaryScreenEmptyRecordsPreview() {
     val sampleClassDetail = Class(
-        classId = "CLS102",
+        classId = 0,
+        className = "23TT2",
         courseId = "MAT201",
         semester = "Fall",
         year = 2023,

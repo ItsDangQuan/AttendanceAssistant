@@ -7,6 +7,7 @@ import com.kttq.attendassist.core.data.network.dtos.SessionOut
 data class TeacherSession(
     val sessionId: Int,
     val classId: Int,
+    val className: String?,
     val courseId: String,
     val courseName: String,
 
@@ -17,6 +18,7 @@ data class TeacherSession(
     constructor(sessionOut: SessionOut, classInformation: ClassInformation) : this(
         sessionOut.sessionId,
         sessionOut.classId,
+        classInformation.className,
         classInformation.courseId,
         classInformation.courseName,
         sessionOut.startTime,
@@ -25,11 +27,11 @@ data class TeacherSession(
 
     constructor(
         sessionInfo: SessionInfo,
-        classId: Int,
         classInformation: ClassInformation
     ) : this(
         sessionInfo.sessionId,
-        classId,
+        classInformation.classId,
+        classInformation.className,
         classInformation.courseId,
         classInformation.courseName,
         sessionInfo.startTime,

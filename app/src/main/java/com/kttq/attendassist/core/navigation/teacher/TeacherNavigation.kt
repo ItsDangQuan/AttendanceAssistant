@@ -6,14 +6,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.kttq.attendassist.core.navigation.Destination
+import com.kttq.attendassist.core.navigation.teacher.class_current_session.teacherCurrentSession
 import com.kttq.attendassist.core.navigation.teacher.class_detail.teacherClassDetail
+import com.kttq.attendassist.core.navigation.teacher.class_list.teacherClassList
 import com.kttq.attendassist.core.navigation.teacher.class_pass_session.teacherClassPastSession
 import com.kttq.attendassist.core.navigation.teacher.class_student_list.teacherClassStudentList
 import com.kttq.attendassist.core.navigation.teacher.home.teacherHome
 import com.kttq.attendassist.core.navigation.teacher.profile.teacherProfile
-import com.kttq.attendassist.core.model.Class
-import com.kttq.attendassist.core.navigation.teacher.class_current_session.teacherCurrentSession
-import com.kttq.attendassist.core.navigation.teacher.class_list.teacherClassList
 
 fun NavController.navigateToTeacher(
     navOptions: NavOptions? = navOptions {
@@ -27,10 +26,10 @@ fun NavController.navigateToTeacher(
 fun NavGraphBuilder.teacherNavigation(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     onSentToBack: () -> Unit,
-    navigationToClassDetail: (String) -> Unit,
-    navigateToSessionDetail: (String) -> Unit,
-    navigateToStudentDetail: (String) -> Unit,
-    navigateToCurrentSession: (String) -> Unit,
+    navigationToClassDetail: (Int) -> Unit,
+    navigateToSessionDetail: (Int) -> Unit,
+    navigateToStudentDetail: (Int) -> Unit,
+    navigateToCurrentSession: (Int) -> Unit,
     navigateToRedirect: () -> Unit,
     navigateBack: () -> Unit
 ) {

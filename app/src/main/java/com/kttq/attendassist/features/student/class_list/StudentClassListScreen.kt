@@ -5,16 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.kttq.attendassist.core.model.Class
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kttq.attendassist.R
+import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
@@ -24,16 +23,16 @@ import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 @Composable
 fun StudentClassListRoute(
-    navigateToClass: (String) -> Unit,
+    navigateToClass: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: StudentClassListViewModel = hiltViewModel()
 ) {
-   StudentClassListScreen(
-       viewModel.currentClasses.collectAsState().value,
-       viewModel.pastClasses.collectAsState().value,
-       navigateToClass,
-       modifier = modifier
-   )
+    StudentClassListScreen(
+        viewModel.currentClasses.collectAsState().value,
+        viewModel.pastClasses.collectAsState().value,
+        navigateToClass,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -41,7 +40,7 @@ fun StudentClassListScreen(
 
     currentClasses: List<Class>,
     pastClasses: List<Class>,
-    navigateToClass: (String) -> Unit,
+    navigateToClass: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -53,18 +52,20 @@ fun StudentClassListScreen(
     ) {
         AppScreenTitle("Current Course")
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().weight(1f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
             items(
                 currentClasses.size
             ) {
-                AppCard (
+                AppCard(
                     clickable = true,
                     onClick = { navigateToClass(currentClasses[it].classId) }
                 ) {
-                    AppLabelPrimary(currentClasses[it].classId)
+                    AppLabelPrimary(currentClasses[it].className ?: "")
                     AppLabelSecondary(
                         currentClasses[it].courseId + " - " +
                                 currentClasses[it].courseName
@@ -105,7 +106,7 @@ fun StudentClassListScreen(
 
 }
 
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 @Composable
 private fun StudentClassListScreenPreview() {
     AttendanceAssistantTheme {

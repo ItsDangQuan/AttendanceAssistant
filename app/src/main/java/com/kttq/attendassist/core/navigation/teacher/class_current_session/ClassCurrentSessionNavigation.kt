@@ -9,7 +9,7 @@ import com.kttq.attendassist.core.navigation.Destination
 import com.kttq.attendassist.features.teacher.class_current_session.ClassCurrentSessionRoute
 
 fun NavController.navigateToCurrentSession(
-    sessionId: String,
+    sessionId: Int,
     navOptions: NavOptions = navOptions {
         launchSingleTop = true
     }
@@ -20,7 +20,7 @@ fun NavController.navigateToCurrentSession(
 fun NavGraphBuilder.teacherCurrentSession(
     onNavigateBack: () -> Unit
 ) {
-    composable<Destination.Teacher.ClassCurrentSession>{
+    composable<Destination.Teacher.ClassCurrentSession> {
         ClassCurrentSessionRoute(
             onNavigateBack = onNavigateBack
         )

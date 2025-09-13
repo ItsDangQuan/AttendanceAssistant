@@ -34,14 +34,13 @@ class SessionConfirmViewModel @Inject constructor(
     private val sessionId = savedStateHandle.toRoute<Destination.Student.SessionConfirm>().sessionId
 
     init {
-        if (sessionId.isNotBlank()) {
-            fetchCurrentSessionDetails(sessionId)
-        } else {
-            _uiState.update { it.copy(error = "Invalid Session ID provided.", isLoading = false) }
-        }
+        fetchCurrentSessionDetails(sessionId)
+//        } else {
+//            _uiState.update { it.copy(error = "Invalid Session ID provided.", isLoading = false) }
+//        }
     }
 
-    private fun fetchCurrentSessionDetails(sessionId: String) {
+    private fun fetchCurrentSessionDetails(sessionId: Int) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {

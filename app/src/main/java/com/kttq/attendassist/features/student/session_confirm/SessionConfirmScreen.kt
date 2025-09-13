@@ -87,8 +87,8 @@ private fun SessionConfirmScreenPreview() {
         SessionConfirmScreen(
             uiState = SessionConfirmUiState(
                 studentSession = StudentSession(
-                    sessionId = "",
-                    classId = "",
+                    sessionId = 0,
+                    classId = 0,
                     startTime = "",
                     endTime = "",
                     teacherId = "",

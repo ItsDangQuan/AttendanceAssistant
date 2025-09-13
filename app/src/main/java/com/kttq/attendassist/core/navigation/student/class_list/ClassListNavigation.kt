@@ -18,7 +18,7 @@ fun NavController.navigateToStudentClassList(
 }
 
 fun NavGraphBuilder.studentClassList(
-    navigateToClass: (String) -> Unit
+    navigateToClass: (Int) -> Unit
 ) {
     composable<Destination.Student.ClassList> {
         StudentClassListRoute(
