@@ -11,7 +11,7 @@ interface TeacherSessionRepository {
     suspend fun getSessionBySessionId(sessionId: Int): TeacherSession?
 
     // Same as above, but filter by time, ig ?
-    suspend fun getRecentSession(): List<TeacherSession>
+    suspend fun getRecentSession(n: Int): List<TeacherSession>
 
     // Use the api /api/v1/class/{classId}/sessions
     suspend fun getSessionByClassId(classId: Int): List<TeacherSession>?

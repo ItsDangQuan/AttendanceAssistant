@@ -45,34 +45,25 @@ class ClassSummaryViewModel @Inject constructor(
             val records = state.records
             val totalCount = records.size
             // TODO: Define status strings consistently (e.g., as enums or constants)
-            val attendedCount = records.count { it.status.equals("attended", ignoreCase = true) }
+            val attendedCount = records.count { it.status.equals("present", ignoreCase = true) }
             val absentCount = records.count {
                 it.status.equals(
                     "absent",
                     ignoreCase = true
                 )
-            } // Assuming "absent" status
-            val leaveAcceptedCount =
-                records.count { it.status.equals("leaveAccepted", ignoreCase = true) }
-            val leaveUnacceptedCount =
-                records.count { it.status.equals("leaveUnaccepted", ignoreCase = true) }
-
+            }
             listOf(
                 "Total Sessions" to totalCount.toString(),
-                "Attended" to attendedCount.toString(),
-                "Absent" to absentCount.toString(),
-                "Leave Accepted" to leaveAcceptedCount.toString(),
-                "Leave Unaccepted" to leaveUnacceptedCount.toString()
+                "Attended Sessions" to attendedCount.toString(),
+                "Absent Sessions" to absentCount.toString(),
             )
         }.stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.Lazily,
             initialValue = listOf(
                 "Total Sessions" to "0",
-                "Attended" to "0",
-                "Absent" to "0",
-                "Leave Accepted" to "0",
-                "Leave Unaccepted" to "0"
+                "Attended Sessions" to "0",
+                "Absent Sessions" to "0",
             )
         )
 

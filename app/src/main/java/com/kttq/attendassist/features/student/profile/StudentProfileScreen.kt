@@ -2,11 +2,12 @@ package com.kttq.attendassist.features.student.profile
 
 // Removed App import as it's unused after changes
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -17,13 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.ui.components.AppAvatarImage
 import com.kttq.attendassist.core.ui.components.AppButton
-import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
+import com.kttq.attendassist.core.ui.components.AppAvatarLetter
 import com.kttq.attendassist.core.ui.components.AppOutlineTextField
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.components.AppSectionTitle
@@ -72,7 +73,11 @@ fun StudentProfileScreen(
             .padding(dimensionResource(R.dimen.padding_large))
             .verticalScroll(rememberScrollState())
     ) {
-        AppAvatarImage() // Assuming this doesn't need data from ViewModel for now
+        AppAvatarLetter(
+            letter = name.first().toString(),
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+                .size(130.dp)
+        )
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.space_8)))
 

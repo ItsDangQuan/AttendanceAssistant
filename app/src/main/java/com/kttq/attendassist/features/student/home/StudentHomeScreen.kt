@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
+import com.kttq.attendassist.core.ui.components.AppBodyCaption
+import com.kttq.attendassist.core.ui.components.AppBodyPrimary
+import com.kttq.attendassist.core.ui.components.AppBodySecondary
 import com.kttq.attendassist.core.ui.components.AppButton
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppIconButton
@@ -115,7 +120,8 @@ fun StudentHomeScreen(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_medium)),
+            .padding(dimensionResource(R.dimen.padding_medium))
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
@@ -133,51 +139,34 @@ fun StudentHomeScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             AppSectionTitle(text = "Summary")
-            AppIconButton(
-                iconId = R.drawable.ic_arrow_forward,
-                onClick = onSummaryClicked, // Directly use the passed lambda
-                modifier = Modifier.wrapContentSize()
-            )
+            // AppIconButton(
+            //     iconId = R.drawable.ic_arrow_forward,
+            //     onClick = onSummaryClicked, // Directly use the passed lambda
+            //     modifier = Modifier.wrapContentSize()
+            // )
         }
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .fillMaxWidth(),
+        Column (
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            item {
-                AppCard(
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-                ) {
-                    AppLabelPrimary("Total")
-                    AppLabelSecondary(statSummary.total.toString())
-                }
+            AppCard(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+            ) {
+                AppBodyPrimary("Total sessions")
+                AppBodySecondary(statSummary.total.toString())
             }
-            item {
-                AppCard(
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-                ) {
-                    AppLabelPrimary("Attended")
-                    AppLabelSecondary(statSummary.attended.toString())
-                }
+            AppCard(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+            ) {
+                AppBodyPrimary("Attended sessions")
+                AppBodySecondary(statSummary.attended.toString())
             }
-            item {
-                AppCard(
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-                ) {
-                    AppLabelPrimary("Leave Accepted")
-                    AppLabelSecondary(statSummary.leaveAccepted.toString())
-                }
+            AppCard(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+            ) {
+                AppBodyPrimary("Absented sessions")
+                AppBodySecondary(statSummary.absent.toString())
             }
-            item {
-                AppCard(
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-                ) {
-                    AppLabelPrimary("Leave Unaccepted")
-                    AppLabelSecondary(statSummary.leaveUnaccepted.toString())
-                }
-            }
-
         }
         HorizontalDivider(
             modifier = Modifier
@@ -211,8 +200,6 @@ private fun StudentHomeScreenPreview() {
             statSummary = StudentHomeStatSummary(
                 total = 10,
                 attended = 5,
-                leaveAccepted = 2,
-                leaveUnaccepted = 3
             ),
             onScanClicked = {},
             onSummaryClicked = {}
@@ -230,8 +217,6 @@ private fun StudentHomeScreenScanningPreview() {
             statSummary = StudentHomeStatSummary(
                 total = 10,
                 attended = 5,
-                leaveAccepted = 2,
-                leaveUnaccepted = 3
             ),
             isScanning = true,
             onScanClicked = {},

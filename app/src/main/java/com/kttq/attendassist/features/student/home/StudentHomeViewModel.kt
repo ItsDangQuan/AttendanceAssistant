@@ -31,8 +31,7 @@ data class StudentHomeUiState(
 data class StudentHomeStatSummary(
     val total: Int = 0,
     val attended: Int = 0,
-    val leaveAccepted: Int = 0,
-    val leaveUnaccepted: Int = 0
+    val absent: Int = 0,
 )
 
 @HiltViewModel
@@ -60,26 +59,14 @@ class StudentHomeViewModel @Inject constructor(
 
     val statSummary: StateFlow<StudentHomeStatSummary> =
         allRecords.map { records ->
-            // TODO: Potentially add other statuses like "absent" if they become relevant
             StudentHomeStatSummary(
                 total = records.size,
-                attended = records.count { it.status.equals("attended", ignoreCase = true) },
-                leaveAccepted = records.count {
-                    it.status.equals(
-                        "leaveAccepted",
-                        ignoreCase = true
-                    )
-                },
-                leaveUnaccepted = records.count {
-                    it.status.equals(
-                        "leaveUnaccepted",
-                        ignoreCase = true
-                    )
-                }
+                attended = records.count { it.status.equals("presented", ignoreCase = true) },
+                absent = records.count { it.status.equals("absent", ignoreCase = true) }
             )
         }.stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.Lazily,
             initialValue = StudentHomeStatSummary() // Uses default values (all 0)
         )
 
@@ -90,31 +77,27 @@ class StudentHomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchStudentProfile() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            val profile = studentProfileRepository.getCurrentStudentProfile()
-            if (profile == null) {
-                _uiState.update { it.copy(error = "User profile not found", isLoading = false) }
-                return@launch
-            }
-            _userProfile.value = profile
-            _uiState.update { it.copy(isLoading = false) }
+    private suspend fun fetchStudentProfile() {
+        _uiState.update { it.copy(isLoading = true) }
+        val profile = studentProfileRepository.getCurrentStudentProfile()
+        if (profile == null) {
+            _uiState.update { it.copy(error = "User profile not found", isLoading = false) }
+            return
         }
+        _userProfile.value = profile
+        _uiState.update { it.copy(isLoading = false) }
     }
 
 
-    private fun fetchAllStudentRecords() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            if (_userProfile.value == null) {
-                return@launch
-            }
-            val records =
-                studentRecordRepository.getRecordByStudentId(_userProfile.value!!.studentId)!!
-            _allRecords.value = records
-            _uiState.update { it.copy(isLoading = false) }
+    private suspend fun fetchAllStudentRecords() {
+        _uiState.update { it.copy(isLoading = true) }
+        if (_userProfile.value == null) {
+            Log.d("StudentHomeViewModel", "User profile is null")
+            return
         }
+        val records = studentRecordRepository.getRecordByStudentId(_userProfile.value!!.studentId)!!
+        _allRecords.value = records
+        _uiState.update { it.copy(isLoading = false) }
     }
 
     // onScanSuccess takes the session id as a string

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -14,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.model.Class
+import com.kttq.attendassist.core.ui.components.AppBodyPrimary
+import com.kttq.attendassist.core.ui.components.AppBodySecondary
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
@@ -29,7 +33,6 @@ fun StudentClassListRoute(
 ) {
     StudentClassListScreen(
         viewModel.currentClasses.collectAsState().value,
-        viewModel.pastClasses.collectAsState().value,
         navigateToClass,
         modifier = modifier
     )
@@ -37,16 +40,15 @@ fun StudentClassListRoute(
 
 @Composable
 fun StudentClassListScreen(
-
     currentClasses: List<Class>,
-    pastClasses: List<Class>,
     navigateToClass: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_medium)),
+            .padding(dimensionResource(R.dimen.padding_medium))
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
@@ -65,12 +67,12 @@ fun StudentClassListScreen(
                     clickable = true,
                     onClick = { navigateToClass(currentClasses[it].classId) }
                 ) {
-                    AppLabelPrimary(currentClasses[it].className ?: "")
-                    AppLabelSecondary(
+                    AppBodyPrimary(
                         currentClasses[it].courseId + " - " +
                                 currentClasses[it].courseName
                     )
-                    AppLabelSecondary(currentClasses[it].teacherName)
+                    AppBodyPrimary(currentClasses[it].className ?: "")
+                    AppBodySecondary(currentClasses[it].teacherName)
                 }
             }
         }
@@ -112,7 +114,6 @@ private fun StudentClassListScreenPreview() {
     AttendanceAssistantTheme {
         StudentClassListScreen(
             currentClasses = emptyList(),
-            pastClasses = emptyList(),
             navigateToClass = {}
         )
     }

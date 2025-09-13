@@ -17,6 +17,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.model.TeacherSession
+import com.kttq.attendassist.core.ui.components.AppBodyPrimary
+import com.kttq.attendassist.core.ui.components.AppBodySecondary
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
 import com.kttq.attendassist.core.ui.components.AppLabelSecondary
@@ -87,8 +89,11 @@ fun TeacherHomeScreen(
                         navigateToSession(recentSessions[it].sessionId)
                     }
                 ) {
-                    AppLabelPrimary(recentSessions[it].className ?: "")
-                    AppLabelSecondary(
+                    AppBodyPrimary(
+                        ("Session " + recentSessions[it].sessionId.toString() + " - ") +
+                                (recentSessions[it].className ?: "")
+                    )
+                    AppBodySecondary(
                         recentSessions[it].courseId + " - " +
                                 recentSessions[it].courseName
                     )

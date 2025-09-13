@@ -14,6 +14,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kttq.attendassist.R
 import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.model.Record
+import com.kttq.attendassist.core.ui.components.AppBodyCaption
 import com.kttq.attendassist.core.ui.components.AppCard
 import com.kttq.attendassist.core.ui.components.AppIconButton
 import com.kttq.attendassist.core.ui.components.AppLabelPrimary
@@ -81,31 +84,26 @@ fun ClassSummaryScreen(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_medium))
+            .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+            .verticalScroll(rememberScrollState())
     ) {
         AppSectionTitle("Class Information")
-        AppLabelPrimary("Course ID: ${classDetail.courseId}")
-        AppLabelPrimary("Course Name: ${classDetail.courseName}")
-        AppLabelPrimary("Class ID: ${classDetail.classId}")
-        AppLabelPrimary("Semester: ${classDetail.semester}")
-        AppLabelPrimary("Year: ${classDetail.year}")
+        AppBodyCaption("Course ID: ${classDetail.courseId}")
+        AppBodyCaption("Course Name: ${classDetail.courseName}")
+        AppBodyCaption("Class Name: ${classDetail.className}")
+        AppBodyCaption("Semester: ${classDetail.semester}")
+        AppBodyCaption("Year: ${classDetail.year}")
 
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
         AppSectionTitle("Summary")
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = dimensionResource(R.dimen.padding_small)), // Added vertical padding
+        Row (
+            modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small)), // Added vertical padding
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            items(
-                items = statSummary,
-                key = { it.first } // use label as stable key
-            ) { pair ->
+            statSummary.forEach { pair ->
                 AppCard(
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)).weight(1f)
                 ) {
                     AppLabelPrimary(pair.first)
                     AppLabelSecondary(pair.second)
@@ -138,13 +136,13 @@ fun ClassSummaryScreen(
                                 AppLabelPrimary("Session: ${record.sessionId}") // Changed to show session ID
                                 AppLabelSecondary("Status: ${record.status}")
                             }
-                            // Consider making status comparison case-insensitive and using constants
-                            if (record.status.equals("leaveUnaccepted", ignoreCase = true)) {
-                                AppIconButton(
-                                    iconId = R.drawable.ic_edit, // Ensure this drawable exists
-                                    onClick = { /*TODO: Create another bottom sheet to handle or navigate*/ }
-                                )
-                            }
+                            // // Consider making status comparison case-insensitive and using constants
+                            // if (record.status.equals("leaveUnaccepted", ignoreCase = true)) {
+                            //     AppIconButton(
+                            //         iconId = R.drawable.ic_edit, // Ensure this drawable exists
+                            //         onClick = { /*TODO: Create another bottom sheet to handle or navigate*/ }
+                            //     )
+                            // }
                         }
                     }
                 }
@@ -194,11 +192,10 @@ private fun ClassSummaryScreenPreview() {
         )
     )
 
-    val sampleStatSummary = listOf(
-        "Total Sessions" to "4",
-        "Attended" to "2",
-        "Leave Accepted" to "1",
-        "Leave Unaccepted" to "1"
+    val sampleStatSummary =  listOf(
+        "Total Sessions" to "0",
+        "Attended Sessions" to "0",
+        "Absent Sessions" to "0",
     )
 
     AttendanceAssistantTheme {

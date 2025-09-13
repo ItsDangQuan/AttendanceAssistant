@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -71,12 +73,18 @@ fun ClassDetailScreen(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_medium))
+            .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+            .verticalScroll(rememberScrollState())
     ) {
         AppSectionTitle("Overview")
-        AppBodyPrimary("Class ID: ${classDetail?.classId ?: "Loading..."}")
-        AppBodyPrimary("Course ID: ${classDetail?.classId ?: "Loading..."}")
+        AppBodyPrimary("Class: ${classDetail?.className ?: "Loading..."}")
+
+        AppBodyPrimary("Course ID: ${classDetail?.courseId ?: "Loading..."}")
         AppBodyPrimary("Course Name: ${classDetail?.courseName ?: "Loading..."}")
+
+        AppBodyPrimary("Semester: ${classDetail?.semester ?: "Loading..."}")
+        AppBodyPrimary("Year: ${classDetail?.year ?: "Loading..."}")
+
         AppTextButton(
             onClick = {
                 if (classDetail != null) navigateToSessionDetail(classDetail.classId)
@@ -99,8 +107,11 @@ fun ClassDetailScreen(
         AppButton(
             onClick = startAdvertise,
             // enabled = !isAdvertising
+            modifier = Modifier.fillMaxWidth()
         ) {
-            AppLabelPrimary(text = "Start new attendance session")
+            AppLabelPrimary(
+                text = "Start new attendance session"
+            )
         }
     }
 }

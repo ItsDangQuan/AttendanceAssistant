@@ -10,6 +10,7 @@ import com.kttq.attendassist.core.navigation.teacher.class_current_session.teach
 import com.kttq.attendassist.core.navigation.teacher.class_detail.teacherClassDetail
 import com.kttq.attendassist.core.navigation.teacher.class_list.teacherClassList
 import com.kttq.attendassist.core.navigation.teacher.class_pass_session.teacherClassPastSession
+import com.kttq.attendassist.core.navigation.teacher.class_session_list.teacherSessionList
 import com.kttq.attendassist.core.navigation.teacher.class_student_list.teacherClassStudentList
 import com.kttq.attendassist.core.navigation.teacher.home.teacherHome
 import com.kttq.attendassist.core.navigation.teacher.profile.teacherProfile
@@ -30,6 +31,7 @@ fun NavGraphBuilder.teacherNavigation(
     navigateToSessionDetail: (Int) -> Unit,
     navigateToStudentDetail: (Int) -> Unit,
     navigateToCurrentSession: (Int) -> Unit,
+    navigateToSessionList: (Int) -> Unit,
     navigateToRedirect: () -> Unit,
     navigateBack: () -> Unit
 ) {
@@ -46,12 +48,14 @@ fun NavGraphBuilder.teacherNavigation(
         teacherClassList(navigationToClassDetail)
         teacherClassDetail(
             onShowSnackbar,
-            navigateToSessionDetail = navigateToSessionDetail,
+            navigateToSessionDetail = navigateToSessionList,
             navigateToStudentDetail = navigateToStudentDetail,
             navigateToCurrentSession = navigateToCurrentSession
         )
         teacherCurrentSession(navigateBack)
         teacherClassPastSession()
+
         teacherClassStudentList()
+        teacherSessionList()
     }
 }

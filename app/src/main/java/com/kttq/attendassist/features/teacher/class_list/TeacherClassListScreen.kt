@@ -20,6 +20,8 @@ import com.kttq.attendassist.core.ui.components.AppLabelSecondary
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 import com.kttq.attendassist.core.model.Class
+import com.kttq.attendassist.core.ui.components.AppBodyPrimary
+import com.kttq.attendassist.core.ui.components.AppBodySecondary
 
 
 @Composable
@@ -30,7 +32,6 @@ fun TeacherClassListRoute(
 ) {
     TeacherClassListScreen(
         viewModel.currentClasses.collectAsState().value,
-        viewModel.pastClasses.collectAsState().value,
         navigateToClass,
         modifier = modifier
     )
@@ -39,7 +40,6 @@ fun TeacherClassListRoute(
 @Composable
 fun TeacherClassListScreen(
     currentClasses: List<Class>,
-    pastClasses: List<Class>,
     navigateToClass: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -63,12 +63,11 @@ fun TeacherClassListScreen(
                     clickable = true,
                     onClick = { navigateToClass(currentClasses[it].classId) }
                 ) {
-                    AppLabelPrimary(currentClasses[it].className ?: "")
-                    AppLabelSecondary(
+                    AppBodyPrimary(currentClasses[it].className ?: "")
+                    AppBodySecondary(
                         currentClasses[it].courseId + " - " +
                                 currentClasses[it].courseName
                     )
-                    AppLabelSecondary(currentClasses[it].teacherName)
                 }
             }
         }
@@ -112,7 +111,6 @@ fun TeacherClassListScreenPreview(modifier: Modifier = Modifier) {
     AttendanceAssistantTheme {
         TeacherClassListScreen(
             currentClasses = emptyList(),
-            pastClasses = emptyList(),
             navigateToClass = {}
         )
 

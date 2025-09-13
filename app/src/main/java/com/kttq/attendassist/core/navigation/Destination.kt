@@ -85,8 +85,13 @@ sealed class Destination {
         ) : Teacher()
 
         @Serializable
-        data class ClassPastSession(
+        data class ClassSessionList(
             val classId: Int,
+        ) : Teacher()
+
+        @Serializable
+        data class ClassPastSession(
+            val sessionId: Int
         ) : Teacher()
 
         @Serializable
@@ -200,6 +205,12 @@ val uiMetaRegistry: Map<KClass<out Destination>, UiMeta> = mapOf(
         showNavigation = false,
         showTopBar = true,
         title = "Class Student List"
+    ),
+    Destination.Teacher.ClassSessionList::class to UiMeta(
+        isTopLevel = true,
+        showNavigation = false,
+        showTopBar = true,
+        title = "Class Session List"
     ),
     Destination.Teacher.ClassPastSession::class to UiMeta(
         isTopLevel = true,

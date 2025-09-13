@@ -48,7 +48,7 @@ class TeacherHomeViewModel @Inject constructor(
     private fun fetchRecentSession() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            _recentSession.value = teacherSessionRepository.getRecentSession()
+            _recentSession.value = teacherSessionRepository.getRecentSession(6)
             _uiState.update { it.copy(isLoading = false) }
         }
     }

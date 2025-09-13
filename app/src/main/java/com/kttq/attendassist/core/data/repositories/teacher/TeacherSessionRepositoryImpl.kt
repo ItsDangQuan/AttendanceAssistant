@@ -39,6 +39,7 @@ class TeacherSessionRepositoryImpl @Inject constructor(
                     return@mapNotNull null
                 }
             }
+                .reversed()
         } catch (_: Exception) {
             return null
         }
@@ -68,11 +69,11 @@ class TeacherSessionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRecentSession(): List<TeacherSession> {
+    override suspend fun getRecentSession(n: Int): List<TeacherSession> {
         // TODO("Not yet implemented. Filter by time how?")
         // Hmm, from my opinion, we can sort by the start_time of the teacher session, and may be, get the
         //  5 latest ones.
-        return getAllSession()?.sortedBy { it.startTime }?.takeLast(5) ?: emptyList()
+        return getAllSession()?.sortedBy { it.startTime }?.takeLast(n)?.reversed() ?: emptyList()
     }
 
     override suspend fun getSessionByClassId(classId: Int): List<TeacherSession>? {
@@ -87,9 +88,11 @@ class TeacherSessionRepositoryImpl @Inject constructor(
                 return null
             }
             val sessionInfoList = sessionInfoResponse.body() ?: return null
-            return sessionInfoList.map {
-                return@map TeacherSession(it, classInformation)
-            }
+            return sessionInfoList
+                .map {
+                    return@map TeacherSession(it, classInformation)
+                }
+                .reversed()
         } catch (_: Exception) {
             return null
         }

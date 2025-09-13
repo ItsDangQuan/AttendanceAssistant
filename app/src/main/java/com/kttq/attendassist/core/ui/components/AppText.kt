@@ -121,11 +121,10 @@ fun AppBodySecondary(
 fun AppBodyCaption(
     text: String,
     modifier: Modifier = Modifier,
-    fontWeight: FontWeight = FontWeight.Light,
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.bodySmall.copy(fontWeight = fontWeight),
+        style = MaterialTheme.typography.bodySmall,
         modifier = modifier
     )
 }
