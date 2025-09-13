@@ -58,7 +58,7 @@ class TeacherClassRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getClassById(classId: String): Class? {
+    override suspend fun getClassById(classId: Int): Class? {
         try {
             val response = classService.getClassInformation(classId)
             if (!response.isSuccessful) {
@@ -71,7 +71,7 @@ class TeacherClassRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllStudentPerformanceInClass(classId: String): List<StudentPerformance>? {
+    override suspend fun getAllStudentPerformanceInClass(classId: Int): List<StudentPerformance>? {
         try {
             val response = classService.getClassStudents(classId)
             if (!response.isSuccessful) {
@@ -96,7 +96,7 @@ class TeacherClassRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllStudentProfileInClass(classId: String): List<StudentProfile>? {
+    override suspend fun getAllStudentProfileInClass(classId: Int): List<StudentProfile>? {
         try {
             val response = classService.getClassStudents(classId)
             if (!response.isSuccessful) {

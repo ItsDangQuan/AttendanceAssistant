@@ -13,12 +13,12 @@ interface TeacherClassRepository {
     suspend fun getPastClass(): List<Class>
 
     //  /api/v1/class/{classId}/information
-    suspend fun getClassById(classId: String): Class?
+    suspend fun getClassById(classId: Int): Class?
 
     //  /api/v1/class/{classId}/students
     //  /api/v1/class/{classId}/records
     //  /api/v1/class/{classId}/sessions
-    suspend fun getAllStudentPerformanceInClass(classId: String): List<StudentPerformance>?
+    suspend fun getAllStudentPerformanceInClass(classId: Int): List<StudentPerformance>?
 
-    suspend fun getAllStudentProfileInClass(classId: String): List<StudentProfile>?
+    suspend fun getAllStudentProfileInClass(classId: Int): List<StudentProfile>?
 }

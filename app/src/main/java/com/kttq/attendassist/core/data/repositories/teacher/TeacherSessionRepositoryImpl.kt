@@ -44,15 +44,13 @@ class TeacherSessionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSessionBySessionId(sessionId: String): TeacherSession? {
+    override suspend fun getSessionBySessionId(sessionId: Int): TeacherSession? {
         val response = sessionService.getSession(sessionId)
         if (!response.isSuccessful) {
             return null
-        }
-        else if(response.body() == null) {
+        } else if (response.body() == null) {
             return null
-        }
-        else {
+        } else {
             val sessionOut = response.body()
             if (sessionOut == null) {
                 return null
@@ -64,8 +62,7 @@ class TeacherSessionRepositoryImpl @Inject constructor(
                 }
                 val classInformation = response.body() ?: return null
                 return TeacherSession(sessionOut, classInformation)
-            }
-            catch (_: Exception) {
+            } catch (_: Exception) {
                 return null
             }
         }
@@ -78,7 +75,7 @@ class TeacherSessionRepositoryImpl @Inject constructor(
         return getAllSession()?.sortedBy { it.startTime }?.takeLast(5) ?: emptyList()
     }
 
-    override suspend fun getSessionByClassId(classId: String): List<TeacherSession>? {
+    override suspend fun getSessionByClassId(classId: Int): List<TeacherSession>? {
         try {
             val classInformationResponse = classService.getClassInformation(classId)
             if (!classInformationResponse.isSuccessful) {
@@ -98,12 +95,12 @@ class TeacherSessionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun createNewSession(classId: String, teacherId: String): TeacherSession {
+    override suspend fun createNewSession(classId: Int, teacherId: String): TeacherSession {
 
         // TODO("Not yet implemented. What should go into start_time and end_time?")
         // The start_time should be "LocalTime.now(). However, I also do not know how to put into end_time
         // Currently, the end time has the same value as start time
-        val currentDateTime:String = DateTimeManager.localTimeAsFormattedString()
+        val currentDateTime: String = DateTimeManager.localTimeAsFormattedString()
         val sessionCreate = SessionCreate(
             startTime = currentDateTime,
             endTime = currentDateTime,
@@ -126,8 +123,8 @@ class TeacherSessionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getStudentInSession(
-        classId: String,
-        sessionId: String
+        classId: Int,
+        sessionId: Int
     ): List<StudentProfile>? {
         try {
             val response = recordService.getSessionRecords(sessionId)
@@ -138,13 +135,12 @@ class TeacherSessionRepositoryImpl @Inject constructor(
             return recordList.mapNotNull {
                 try {
                     val response = studentService.getFullStudent(it.studentId)
-                    if(!response.isSuccessful) {
+                    if (!response.isSuccessful) {
                         return@mapNotNull null
                     }
                     val studentFull = response.body() ?: return@mapNotNull null
                     return@mapNotNull StudentProfile(studentFull)
-                    }
-                catch (_: Exception) {
+                } catch (_: Exception) {
                     return@mapNotNull null
                 }
             }

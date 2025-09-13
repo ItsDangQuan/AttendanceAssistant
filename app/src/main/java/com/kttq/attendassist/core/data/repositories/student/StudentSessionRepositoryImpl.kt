@@ -12,7 +12,7 @@ class StudentSessionRepositoryImpl @Inject constructor(
     private val classService: ClassService,
     private val studentService: StudentService
 ) : StudentSessionRepository {
-    override suspend fun getStudentSessionById(sessionId: String): StudentSession? {
+    override suspend fun getStudentSessionById(sessionId: Int): StudentSession? {
         try {
             val sessionOutResponse = sessionService.getSession(sessionId)
             if (!sessionOutResponse.isSuccessful) {
@@ -30,7 +30,7 @@ class StudentSessionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun confirmAttendance(sessionId: String): Boolean {
+    override suspend fun confirmAttendance(sessionId: Int): Boolean {
         try {
             val attendanceRequest = AttendanceRequest(sessionId, "Present")
             val response = studentService.studentRollCall(attendanceRequest)

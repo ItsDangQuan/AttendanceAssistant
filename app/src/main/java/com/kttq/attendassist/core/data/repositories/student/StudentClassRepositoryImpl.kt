@@ -9,7 +9,7 @@ class StudentClassRepositoryImpl @Inject constructor(
     private val classService: ClassService,
     private val studentService: StudentService
 ) : StudentClassRepository {
-    override suspend fun getClassById(classId: String): Class? {
+    override suspend fun getClassById(classId: Int): Class? {
         try {
             val response = classService.getClassInformation(classId)
             if (!response.isSuccessful) {
@@ -22,7 +22,7 @@ class StudentClassRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun haveStudent(classId: String): Boolean? {
+    override suspend fun haveStudent(classId: Int): Boolean? {
         try {
             val response = studentService.checkEnrollment(classId)
             if (!response.isSuccessful) {
