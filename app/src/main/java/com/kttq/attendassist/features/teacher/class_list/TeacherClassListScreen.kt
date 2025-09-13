@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -14,14 +13,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kttq.attendassist.R
-import com.kttq.attendassist.core.ui.components.AppCard
-import com.kttq.attendassist.core.ui.components.AppLabelPrimary
-import com.kttq.attendassist.core.ui.components.AppLabelSecondary
-import com.kttq.attendassist.core.ui.components.AppScreenTitle
-import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.ui.components.AppBodyPrimary
 import com.kttq.attendassist.core.ui.components.AppBodySecondary
+import com.kttq.attendassist.core.ui.components.AppCard
+import com.kttq.attendassist.core.ui.components.AppScreenTitle
+import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
 
 @Composable
@@ -50,16 +47,18 @@ fun TeacherClassListScreen(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        AppScreenTitle("Current Course")
+        AppScreenTitle("Current Classes")
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().weight(1f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
             items(
                 currentClasses.size
             ) {
-                AppCard (
+                AppCard(
                     clickable = true,
                     onClick = { navigateToClass(currentClasses[it].classId) }
                 ) {

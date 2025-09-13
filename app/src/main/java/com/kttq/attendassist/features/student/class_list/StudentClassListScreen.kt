@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,8 +19,6 @@ import com.kttq.attendassist.core.model.Class
 import com.kttq.attendassist.core.ui.components.AppBodyPrimary
 import com.kttq.attendassist.core.ui.components.AppBodySecondary
 import com.kttq.attendassist.core.ui.components.AppCard
-import com.kttq.attendassist.core.ui.components.AppLabelPrimary
-import com.kttq.attendassist.core.ui.components.AppLabelSecondary
 import com.kttq.attendassist.core.ui.components.AppScreenTitle
 import com.kttq.attendassist.core.ui.theme.AttendanceAssistantTheme
 
@@ -54,7 +50,7 @@ fun StudentClassListScreen(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-        AppScreenTitle("Current Course")
+        AppScreenTitle("Current Classes")
         if (currentClasses == null) {
             Box(
                 modifier = Modifier
