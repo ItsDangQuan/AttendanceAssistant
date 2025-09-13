@@ -13,17 +13,17 @@ import retrofit2.http.Path
 
 interface ClassService {
     @GET("/api/v1/class/{class_id}/information")
-    suspend fun getClassInformation(@Path("class_id") classId: String): Response<ClassInformation>
+    suspend fun getClassInformation(@Path("class_id") classId: Int): Response<ClassInformation>
 
     @POST("/api/v1/class")
     suspend fun createClass(@Body classCreate: ClassCreate): Response<ClassCreate>
 
     @GET("/api/v1/class/{class_id}/students")
-    suspend fun getClassStudents(@Path("class_id") classId: String): Response<List<StudentBase>>
+    suspend fun getClassStudents(@Path("class_id") classId: Int): Response<List<StudentBase>>
 
     @GET("/api/v1/class/{class_id}/sessions")
-    suspend fun getClassSessions(@Path("class_id") classId: String): Response<List<SessionInfo>>
+    suspend fun getClassSessions(@Path("class_id") classId: Int): Response<List<SessionInfo>>
 
     @GET("/api/v1/class/{class_id}/records")
-    suspend fun getClassRecords(@Path("class_id") classId: String): Response<List<RecordOut>>
+    suspend fun getClassRecords(@Path("class_id") classId: Int): Response<List<RecordOut>>
 }

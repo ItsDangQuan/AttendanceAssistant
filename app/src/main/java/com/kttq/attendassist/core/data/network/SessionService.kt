@@ -17,8 +17,8 @@ interface SessionService {
     suspend fun createSession(@Body sessionCreate: SessionCreate): Response<SessionOut>
 
     @GET("/api/v1/session/current_session")
-    suspend fun getCurrentSession(@Query("class_id") classId: String): Response<List<SessionOut>>
+    suspend fun getCurrentSession(@Query("class_id") classId: Int): Response<List<SessionOut>>
 
     @GET("/api/v1/session/{session_id}")
-    suspend fun getSession(@Path("session_id") sessionId: String): Response<SessionOut>
+    suspend fun getSession(@Path("session_id") sessionId: Int): Response<SessionOut>
 }

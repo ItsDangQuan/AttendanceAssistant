@@ -29,13 +29,13 @@ interface StudentService {
     suspend fun getAttendanceRecords(): Response<List<RecordOut>>
 
     @GET("/api/v1/student/check-enrollment/{class_id}")
-    suspend fun checkEnrollment(@Path("class_id") classId: String): Response<EnrollmentCheckResponse>
+    suspend fun checkEnrollment(@Path("class_id") classId: Int): Response<EnrollmentCheckResponse>
 
     @GET("/api/v1/student/all/class/enroll")
     suspend fun getAllClassEnrollments(): Response<List<EnrollmentCheckResponse>>
 
     @GET("/api/v1/student/{class_id}/all/attendance_records")
-    suspend fun getAllAttendanceRecords(@Path("class_id") classId: String): Response<List<RecordOut>>
+    suspend fun getAllAttendanceRecords(@Path("class_id") classId: Int): Response<List<RecordOut>>
 
     @POST("/api/v1/student/roll_call")
     suspend fun studentRollCall(@Body attendanceRequest: AttendanceRequest): Response<RecordOut>

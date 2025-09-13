@@ -16,5 +16,5 @@ interface RecordService {
     suspend fun createRecord(@Body recordCreate: RecordCreate): Response<RecordOut>
 
     @GET("/api/v1/record/{session_id}")
-    suspend fun getSessionRecords(@Path("session_id") sessionId: String): Response<List<RecordOut>>
+    suspend fun getSessionRecords(@Path("session_id") sessionId: Int): Response<List<RecordOut>>
 }
