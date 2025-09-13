@@ -9,14 +9,14 @@ data class StudentPerformance(
     val studentId: String,
     val studentName: String,
 
-    val classId: String,
+    val classId: Int,
 
     val studentAttendance: List<Record>
 
 ) {
     constructor(
         studentFull: StudentFull,
-        classId: String,
+        classId: Int,
         recordOutList: List<RecordOut>
     ) : this(
         studentFull.studentId,

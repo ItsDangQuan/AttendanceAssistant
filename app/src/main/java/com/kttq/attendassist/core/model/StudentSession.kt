@@ -4,8 +4,8 @@ import com.kttq.attendassist.core.data.network.dtos.ClassInformation
 import com.kttq.attendassist.core.data.network.dtos.SessionOut
 
 data class StudentSession(
-    val sessionId: String,
-    val classId: String,
+    val sessionId: Int,
+    val classId: Int,
     val teacherId: String,
 
     val teacherName: String,

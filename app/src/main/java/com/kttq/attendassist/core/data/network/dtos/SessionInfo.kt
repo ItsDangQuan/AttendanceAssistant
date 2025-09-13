@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SessionInfo(
     @SerialName("session_id")
-    val sessionId: Integer,
+    val sessionId: Int,
     @SerialName("start_time")
     val startTime: String,
     @SerialName("end_time")

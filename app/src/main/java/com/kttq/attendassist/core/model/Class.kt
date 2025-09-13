@@ -3,7 +3,7 @@ package com.kttq.attendassist.core.model
 import com.kttq.attendassist.core.data.network.dtos.ClassInformation
 
 data class Class(
-    val classId: String,
+    val classId: Int,
     val semester: String?,
     val year: Int?,
     val courseId: String,

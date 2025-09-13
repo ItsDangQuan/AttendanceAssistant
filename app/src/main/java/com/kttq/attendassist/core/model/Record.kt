@@ -6,7 +6,7 @@ data class Record(
     val recordId: String,
     val studentId: String,
     val status: String,
-    val sessionId: String
+    val sessionId: Int
 ) {
     constructor(recordOut: RecordOut) : this(
         recordOut.recordId,
