@@ -9,7 +9,7 @@ import retrofit2.http.Path
 
 interface DepartmentService {
     @GET("/api/v1/department")
-    suspend fun getDepartments(): Response<DepartmentBase>
+    suspend fun getDepartments(): Response<List<DepartmentBase>>
 
     @POST("/api/v1/department")
     suspend fun createDepartment(@Body department: DepartmentBase): Response<DepartmentBase>

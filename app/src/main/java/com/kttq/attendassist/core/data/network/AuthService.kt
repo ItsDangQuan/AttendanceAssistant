@@ -18,7 +18,7 @@ interface AuthService {
     suspend fun refreshToken(@Body tokenRefresh: TokenRefresh): Response<Token>
 
     @POST("/api/v1/auth/logout")
-    suspend fun logout(): Response<String?>
+    suspend fun logout(): Response<Unit>
 
     @GET("/api/v1/auth/me/role")
     suspend fun getCurrentUserRole(): Response<Role>
