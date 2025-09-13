@@ -25,9 +25,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class BluetoothComponent {
-    companion object{
-        val SERVICE_UUID: UUID = UUID.fromString("0000F890-0000-1000-8000-00805F9B34FB")
+    companion object {
+        val SERVICE_UUID: UUID = UUID.fromString("bddb0dba-7e7c-4df5-a7bc-cc573d8ce0a9")
     }
+
     @Provides
     @Singleton
     fun provideServiceUuid(): UUID {
@@ -58,7 +59,8 @@ class BluetoothComponent {
     fun provideBluetoothAdapter(
         @ApplicationContext appContext: Context
     ): BluetoothAdapter? {
-        val bluetoothManager = appContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothManager =
+            appContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         return bluetoothManager.adapter
     }
 
@@ -66,7 +68,7 @@ class BluetoothComponent {
     @Singleton
     fun provideBleScanner(
         bluetoothAdapter: BluetoothAdapter?
-    ) : BluetoothLeScanner? {
+    ): BluetoothLeScanner? {
         return bluetoothAdapter?.bluetoothLeScanner
     }
 
@@ -74,7 +76,7 @@ class BluetoothComponent {
     @Singleton
     fun provideBleAdvertiser(
         bluetoothAdapter: BluetoothAdapter?
-    ) : BluetoothLeAdvertiser? {
+    ): BluetoothLeAdvertiser? {
         return bluetoothAdapter?.bluetoothLeAdvertiser
     }
 
