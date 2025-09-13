@@ -11,9 +11,9 @@ data class SessionOut(
     @SerialName("end_time")
     val endTime: String,
     @SerialName("class_id")
-    val classId: String,
+    val classId: Int,
     @SerialName("teacher_id")
     val teacherId: String,
     @SerialName("session_id")
-    val sessionId: String,
+    val sessionId: Int,
 )

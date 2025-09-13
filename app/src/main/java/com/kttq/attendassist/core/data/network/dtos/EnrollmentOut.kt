@@ -4,13 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SessionCreate(
-    @SerialName("start_time")
-    val startTime: String,
-    @SerialName("end_time")
-    val endTime: String,
+data class EnrollmentOut(
+    @SerialName("student_id")
+    val studentId: String,
     @SerialName("class_id")
     val classId: Int,
-    @SerialName("teacher_id")
-    val teacherId: String,
+    @SerialName("enrollment_id")
+    val enrollmentId: Int
 )

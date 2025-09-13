@@ -10,5 +10,5 @@ data class RecordCreate(
     @SerialName("status")
     val status: String,
     @SerialName("session_id")
-    val sessionId: String,
+    val sessionId: Int,
 )

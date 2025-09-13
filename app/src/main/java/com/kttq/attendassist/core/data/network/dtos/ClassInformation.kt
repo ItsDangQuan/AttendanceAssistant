@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClassInformation(
-    @SerialName("class_id")
-    val classId: String,
     @SerialName("course_id")
     val courseId: String,
     @SerialName("teacher_id")
     val teacherId: String,
+    @SerialName("class_id")
+    val classId: Int,
     @SerialName("course_name")
     val courseName: String,
     @SerialName("teacher_name")
@@ -20,5 +20,7 @@ data class ClassInformation(
     @SerialName("department_name")
     val departmentName: String,
     val semester: String?,
-    val year: Int?
+    val year: Int?,
+    @SerialName("class_name")
+    val className: String?
 )

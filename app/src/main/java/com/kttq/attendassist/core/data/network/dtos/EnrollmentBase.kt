@@ -4,8 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AttendanceRequest(
-    @SerialName("session_id")
-    val sessionId: Int,
-    val status: String,
+data class EnrollmentBase(
+    @SerialName("student_id")
+    val studentId: String,
+    @SerialName("class_id")
+    val classId: Int,
 )
