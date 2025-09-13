@@ -1,6 +1,7 @@
 package com.kttq.attendassist.features.student.profile
 
 // Removed App import as it's unused after changes
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,16 +42,26 @@ fun StudentProfileRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val user = viewModel.user.collectAsStateWithLifecycle().value
 
-    StudentProfileScreen(
-        name = if (user != null) user.firstName + " " + user.lastName else "N/A",
-        studentId = user?.studentId ?: "N/A",
-        email = user?.email ?: "N/A",
-        onChangePasswordClicked = viewModel::onChangePasswordClicked,
-        onLogoutClicked = {
-            viewModel.onLogoutClicked()
-        },
-        modifier = modifier
-    )
+    if (user == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center)
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
+        StudentProfileScreen(
+            name = user.firstName + " " + user.lastName,
+            studentId = user.studentId,
+            email = user.email,
+            onChangePasswordClicked = viewModel::onChangePasswordClicked,
+            onLogoutClicked = {
+                viewModel.onLogoutClicked()
+            },
+            modifier = modifier
+        )
+    }
     LaunchedEffect(uiState.isLoggedOut) {
         if (uiState.isLoggedOut) {
             navigateToRedirect()

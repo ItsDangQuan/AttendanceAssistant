@@ -1,5 +1,6 @@
 package com.kttq.attendassist.features.teacher.profile
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,16 +44,27 @@ fun TeacherProfileRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val teacherProfile = viewModel.user.collectAsStateWithLifecycle().value
 
-    TeacherProfileScreen(
-        name = if (teacherProfile != null) teacherProfile.firstName + " " + teacherProfile.lastName else "N/A",
-        teacherId = teacherProfile?.teacherId ?: "N/A",
-        email = teacherProfile?.email ?: "N/A",
-        onChangePasswordClicked = viewModel::onChangePasswordClicked,
-        onLogoutClicked = {
-            viewModel.onLogoutClicked()
-        },
-        modifier = modifier
-    )
+    if (teacherProfile == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center)
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+    else {
+        TeacherProfileScreen(
+            name = teacherProfile.firstName + " " + teacherProfile.lastName,
+            teacherId = teacherProfile.teacherId,
+            email = teacherProfile.email,
+            onChangePasswordClicked = viewModel::onChangePasswordClicked,
+            onLogoutClicked = {
+                viewModel.onLogoutClicked()
+            },
+            modifier = modifier
+        )
+    }
     LaunchedEffect(uiState.isLoggedOut) {
         if (uiState.isLoggedOut) {
             navigateToRedirect()
