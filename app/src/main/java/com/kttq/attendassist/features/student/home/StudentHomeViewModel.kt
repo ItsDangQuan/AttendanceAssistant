@@ -61,7 +61,7 @@ class StudentHomeViewModel @Inject constructor(
         allRecords.map { records ->
             StudentHomeStatSummary(
                 total = records.size,
-                attended = records.count { it.status.equals("presented", ignoreCase = true) },
+                attended = records.count { it.status.equals("present", ignoreCase = true) },
                 absent = records.count { it.status.equals("absent", ignoreCase = true) }
             )
         }.stateIn(

@@ -18,13 +18,9 @@ class StudentClassListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _currentClasses =
-        MutableStateFlow<List<Class>>(emptyList()) // Renamed and type updated
-    val currentClasses: StateFlow<List<Class>> =
+        MutableStateFlow<List<Class>?>(null) // Renamed and type updated
+    val currentClasses: StateFlow<List<Class>?> =
         _currentClasses.asStateFlow() // Renamed and type updated
-
-    private val _pastClasses =
-        MutableStateFlow<List<Class>>(emptyList()) // Renamed and type updated
-    val pastClasses: StateFlow<List<Class>> = _pastClasses.asStateFlow() // Renamed and type updated
 
     init {
         fetchData()
@@ -33,19 +29,12 @@ class StudentClassListViewModel @Inject constructor(
     fun fetchData() {
         viewModelScope.launch {
             _currentClasses.value = getCurrentClasses() // Renamed function call
-            _pastClasses.value = getPastClasses() // Renamed function call
         }
     }
 
-    private suspend fun getCurrentClasses(): List<Class> { // Renamed and return type updated
+    private suspend fun getCurrentClasses(): List<Class>? { // Renamed and return type updated
         // TODO: Implement actual logic to fetch current classes from a repository/API
         // For now, returning an empty list or mock data
-        return studentClassRepository.getAllClass()!!
-    }
-
-    private suspend fun getPastClasses(): List<Class> { // Renamed and return type updated
-        // TODO: Implement actual logic to fetch past classes from a repository/API
-        // For now, returning an empty list or mock data
-        return emptyList()
+        return studentClassRepository.getAllClass()
     }
 }

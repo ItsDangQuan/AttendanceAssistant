@@ -30,7 +30,7 @@ class ClassPastSessionViewModel @Inject constructor(
     private val _studentsList = MutableStateFlow<List<StudentProfile>>(emptyList())
     val studentsList: StateFlow<List<StudentProfile>> = _studentsList.asStateFlow()
 
-    private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>?>(emptyList())
+    private val _currentsStudentsList = MutableStateFlow<List<StudentProfile>?>(null)
     val currentsStudentsList: StateFlow<List<StudentProfile>?> = _currentsStudentsList.asStateFlow()
 
     init {
