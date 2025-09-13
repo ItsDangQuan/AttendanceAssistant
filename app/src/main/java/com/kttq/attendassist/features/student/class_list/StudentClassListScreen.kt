@@ -33,8 +33,9 @@ fun StudentClassListRoute(
     modifier: Modifier = Modifier,
     viewModel: StudentClassListViewModel = hiltViewModel()
 ) {
+    val currentClasses = viewModel.currentClasses.collectAsState().value
     StudentClassListScreen(
-        viewModel.currentClasses.collectAsState().value,
+        currentClasses,
         navigateToClass,
         modifier = modifier
     )
@@ -49,8 +50,7 @@ fun StudentClassListScreen(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_medium))
-            .verticalScroll(rememberScrollState()),
+            .padding(dimensionResource(R.dimen.padding_medium)),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
@@ -67,8 +67,7 @@ fun StudentClassListScreen(
         } else {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {

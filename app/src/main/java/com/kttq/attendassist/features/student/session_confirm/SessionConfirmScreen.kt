@@ -62,7 +62,6 @@ fun SessionConfirmScreen(
 
         AppSectionTitle("Time Details")
         AppLabelPrimary("Start Time: ${uiState.studentSession?.startTime ?: "N/A"}")
-        AppLabelPrimary("End Time: ${uiState.studentSession?.endTime ?: "N/A"}")
 
         if (uiState.attendanceConfirmed) {
             AppSectionTitle("Attendance Confirmation")

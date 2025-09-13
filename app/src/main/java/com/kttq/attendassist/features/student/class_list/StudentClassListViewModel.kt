@@ -1,5 +1,6 @@
 package com.kttq.attendassist.features.student.class_list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kttq.attendassist.core.data.repositories.student.StudentClassRepository
@@ -29,6 +30,7 @@ class StudentClassListViewModel @Inject constructor(
     fun fetchData() {
         viewModelScope.launch {
             _currentClasses.value = getCurrentClasses() // Renamed function call
+            Log.d("StudentClassListViewModel", "Fetched current classes: ${_currentClasses.value}")
         }
     }
 

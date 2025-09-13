@@ -85,7 +85,6 @@ fun ClassSummaryScreen(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = dimensionResource(R.dimen.padding_medium))
-            .verticalScroll(rememberScrollState())
     ) {
         AppSectionTitle("Class Information")
         AppBodyCaption("Course ID: ${classDetail.courseId}")
