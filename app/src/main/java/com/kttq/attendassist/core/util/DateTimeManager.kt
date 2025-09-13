@@ -40,7 +40,7 @@ class DateTimeManager @Inject constructor(
 
         fun serverUtcStringToLocalDisplay(
             server: String,
-            outputPattern: String = "HH:mm"
+            outputPattern: String = "yyyy-MM-dd HH:mm"
         ): String? {
             val parser = DateTimeFormatterBuilder()
                 .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
