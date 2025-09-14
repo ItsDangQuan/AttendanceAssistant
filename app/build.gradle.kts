@@ -28,14 +28,14 @@ android {
             buildConfigField(
                 "String",
                 "BASE_URL",
-                "\"https://e9e8cb4798ff.ngrok-free.app/\""
+                "\"https://attendance-server-2g6t.onrender.com/\""
             )
         }
         release {
             buildConfigField(
                 "String",
                 "BASE_URL",
-                "\"https://e9e8cb4798ff.ngrok-free.app/\""
+                "\"https://attendance-server-2g6t.onrender.com/\""
             )
 
             isMinifyEnabled = false
