@@ -3,6 +3,7 @@ package com.kttq.attendassist.features.student.class_list
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,7 +47,7 @@ fun StudentClassListScreen(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_medium)),
+            .padding(dimensionResource(R.dimen.padding_medium)), 
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
@@ -64,8 +65,9 @@ fun StudentClassListScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth(),
+                contentPadding = PaddingValues(vertical = dimensionResource(R.dimen.padding_small)),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
             ) {
                 items(
                     currentClasses.size
